@@ -8,6 +8,7 @@ class UserEntities  extends Equatable{
   final String brithDate;
   final String gender;
   final String uId;
+  // final bool uId;
 
   const UserEntities({
     required this.name,

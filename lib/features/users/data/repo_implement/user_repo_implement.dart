@@ -23,5 +23,35 @@ class UserRepoImplement extends UserRepo{
 
   }
 
+  @override
+  Future<Either<Faliure, void>> sendNotification({
+    required String message,
+    required String userId
+  }) async{
+    try{
+      return Right(await usersDataSource.sendNotification(message: message, userId: userId));
+    }on FireStoreException catch(e){
+    throw FireStoreFaliure.fromMessage(e);
+    }
+  }
+
+  @override
+  Future<Either<Faliure, void>> blockUser({required String userId})async {
+    try{
+      return Right(await usersDataSource.blockUser(userId: userId));
+    }on FireStoreException catch(e){
+    throw FireStoreFaliure.fromMessage(e);
+    }
+  }
+
+  @override
+  Future<Either<Faliure, void>> deleteUser({required String userId})async {
+    try{
+      return Right(await usersDataSource.deleteUser(userId: userId));
+    }on FireStoreException catch(e){
+    throw FireStoreFaliure.fromMessage(e);
+    }
+  }
+
 
 }
