@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/controller/occasions_cubit.dart';
+import 'package:hadawi_dathboard/features/occasions/presentation/widgets/edit_occasion_screen.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/section_container.dart';
+import 'package:hadawi_dathboard/features/occasions/presentation/widgets/view_occasion_details.dart';
 
 import '../../../../styles/colors/color_manager.dart';
 import '../../../../styles/text_styles/text_styles.dart';
@@ -16,16 +18,28 @@ class OccasionsViewBody extends StatefulWidget {
 class _OccasionsViewBodyState extends State<OccasionsViewBody> {
   @override
   Widget build(BuildContext context) {
-    String? selectedValue;
     return BlocBuilder<OccasionsCubit, OccasionsState>(
       builder: (context, state) {
         final cubit = context.read<OccasionsCubit>();
-        return Column(
-          children: [
+
+        if (state is GetOccasionsLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (cubit.occasions.isEmpty || state is GetOccasionsErrorState) {
+          return Center(
+            child: Text('لا يوجد مناسبات', style: TextStyles.textStyle18Medium),
+          );
+        }
+
+        return Expanded(
+          child: Column(
+            children: [
               Align(
                   alignment: Alignment.centerRight,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12.0),
@@ -33,9 +47,9 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: selectedValue,
+                        value: cubit.selectedValue,
                         hint: Text(
-                          selectedValue ?? 'Filter by',
+                          cubit.selectedValue ?? 'تصنيف حسب',
                           style: TextStyles.textStyle18Medium,
                         ),
                         icon: Icon(Icons.filter_list_alt,
@@ -44,34 +58,29 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                         items: [
                           DropdownMenuItem(
                               value: 'كل المناسبات',
-                              child: Text('All occasions',
-                                  style: TextStyles.textStyle18Medium
-                                       )),
+                              child: Text('كل المناسبات',
+                                  style: TextStyles.textStyle18Medium)),
                           DropdownMenuItem(
                               value: 'مناسبات غير مكتملة',
-                              child: Text('Not completed occasions',
-                                  style: TextStyles.textStyle18Medium
-                                       )),
+                              child: Text('مناسبات غير مكتملة',
+                                  style: TextStyles.textStyle18Medium)),
                           DropdownMenuItem(
                               value: 'مناسبات مكتملة',
-                              child: Text('Completed occasions',
-                                  style: TextStyles.textStyle18Medium
-                                       )),
+                              child: Text('مناسبات مكتملة',
+                                  style: TextStyles.textStyle18Medium)),
                           DropdownMenuItem(
                               value: 'هدية',
-                              child: Text('Gifts',
-                                  style: TextStyles.textStyle18Medium
-                                       )),
+                              child: Text('هدية',
+                                  style: TextStyles.textStyle18Medium)),
                           DropdownMenuItem(
                               value: 'مبلغ مالي',
-                              child: Text('Money',
-                                  style: TextStyles.textStyle18Medium
-                                       )),
+                              child: Text('مبلغ مالي',
+                                  style: TextStyles.textStyle18Medium)),
                         ],
                         onChanged: (value) {
                           if (value == 'هدية') {
                             setState(() {
-                              selectedValue = value;
+                              cubit.selectedValue = value;
                             });
                             cubit.filterOccasionsByType(occasionType: 'هدية');
                           } else if (value == 'مبلغ مالي') {
@@ -88,190 +97,161 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                       ),
                     ),
                   )),
-            SizedBox(
-              height: 20,
-            ),
-            cubit.occasions.isEmpty
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: ColorManager.primaryBlue,
-                    ),
-                  )
-                : Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey[200]!,
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Expanded(
-                        child: Column(
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.02,
+              ),
+              Container(
+                height: MediaQuery.sizeOf(context).height * 0.05,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: ColorManager.primaryBlue,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
+                  ),
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      buildHeaderText('المناسبة'),
+                      buildHeaderText('الرقم المرجعي للمناسبة'),
+                      buildHeaderText('تاريخ المناسبة'),
+                      buildHeaderText('صاحب المناسبة'),
+                      buildHeaderText('نوع المناسبة'),
+                      buildHeaderText('نوع الهدية'),
+                      buildHeaderText('وحدة التحكم'),
+                    ],
+                  ),
+                ),
+              ),
+              // SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: ColorManager.white,
+                      borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15.0),
+                      bottomRight: Radius.circular(15.0),
+                    )
+                  ),
+                  child: ListView.separated(
+                    itemCount: cubit.occasions.length,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    separatorBuilder: (_, __) => Divider(color: Colors.grey),
+                    itemBuilder: (context, index) {
+                      final occasion = cubit.occasions[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
                           children: [
-                            Container(
-                              height: MediaQuery.sizeOf(context).height * 0.05,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: ColorManager.primaryBlue,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15.0),
-                                  topRight: Radius.circular(15.0),
-                                ),
-                              ),
-                              child: Center(
-                                child: Table(
-                                  defaultVerticalAlignment:
-                                      TableCellVerticalAlignment.top,
-                                  children: [
-                                    TableRow(
-                                      children: [
-                                        Expanded(
-                                          child: Text('Occasion Name',
-                                              style: TextStyles
-                                                  .textStyle18Medium
-                                                  .copyWith(
-                                                      color:
-                                                          ColorManager.white)),
-                                        ),
-                                        Expanded(
-                                          child: Text('Occasion Id',
-                                              style: TextStyles
-                                                  .textStyle18Medium
-                                                  .copyWith(
-                                                      color:
-                                                          ColorManager.white)),
-                                        ),
-                                        Expanded(
-                                          child: Text('Occasion Date',
-                                              style: TextStyles
-                                                  .textStyle18Medium
-                                                  .copyWith(
-                                                      color:
-                                                          ColorManager.white)),
-                                        ),
-                                        Expanded(
-                                          child: Text('Person Name',
-                                              style: TextStyles
-                                                  .textStyle18Medium
-                                                  .copyWith(
-                                                      color:
-                                                          ColorManager.white)),
-                                        ),
-                                        Expanded(
-                                          child: Text('Occasion Type',
-                                              style: TextStyles
-                                                  .textStyle18Medium
-                                                  .copyWith(
-                                                      color:
-                                                          ColorManager.white)),
-                                        ),
-                                        Expanded(
-                                          child: Text('Gift Type',
-                                              style: TextStyles
-                                                  .textStyle18Medium
-                                                  .copyWith(
-                                                      color:
-                                                          ColorManager.white)),
-                                        ),
-                                        Expanded(
-                                          child: Text('       Actions',
-                                              style: TextStyles
-                                                  .textStyle18Medium
-                                                  .copyWith(
-                                                      color:
-                                                          ColorManager.white)),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
                             Expanded(
-                              child: ListView.separated(
-                                itemCount: cubit.occasions.length,
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                separatorBuilder: (context, index) {
-                                  return Divider(
-                                    color: Colors.grey,
-                                  );
-                                },
-                                itemBuilder: (context, index) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          child: Text(
-                                        cubit.occasions[index].occasionName,
-                                        style: TextStyles.textStyle18Medium,
-                                      )),
-                                      Expanded(
-                                          child: Text(
-                                        cubit.occasions[index].occasionId,
-                                        style: TextStyles.textStyle18Medium,
-                                      )),
-                                      Expanded(
-                                          child: Text(
-                                        cubit.occasions[index].occasionDate,
-                                        style: TextStyles.textStyle18Medium,
-                                      )),
-                                      Expanded(
-                                          child: Text(
-                                        cubit.occasions[index].personName,
-                                        style: TextStyles.textStyle18Medium,
-                                      )),
-                                      Expanded(
-                                          child: Text(
-                                        cubit.occasions[index].occasionType,
-                                        style: TextStyles.textStyle18Medium,
-                                      )),
-                                      Expanded(
-                                          child: Text(
-                                        cubit.occasions[index].giftType,
-                                        style: TextStyles.textStyle18Medium,
-                                      )),
-                                      Expanded(
-                                        child: Row(
-                                          children: [
-                                            IconButton(
-                                              icon: Icon(Icons.edit,
-                                                  color:
-                                                      ColorManager.primaryBlue),
-                                              onPressed: () {},
-                                            ),
-                                            IconButton(
-                                              icon: Icon(Icons.remove_red_eye,
-                                                  color: Colors.grey),
-                                              onPressed: () {},
-                                            ),
-                                            IconButton(
-                                              icon: Icon(Icons.delete,
-                                                  color: Colors.red),
-                                              onPressed: () {},
-                                            ),
-                                          ],
+                                child: Text(occasion.occasionName,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(occasion.occasionId,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(occasion.occasionDate,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(occasion.personName,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(occasion.occasionType,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(occasion.giftType,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  buildIconButton(
+                                      Icons.edit, ColorManager.primaryBlue, () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => BlocProvider.value(
+                                          value: cubit,
+                                          child: EditOccasionScreen(
+                                              occasionEntity: occasion),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
+                                    );
+                                  }),
+                                  buildIconButton(
+                                      Icons.remove_red_eye, Colors.grey, () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => ViewOccasionDetails(
+                                            occasionEntity: occasion),
+                                      ),
+                                    );
+                                  }),
+                                  buildIconButton(Icons.delete, Colors.red, () {
+                                    showDeleteDialog(
+                                        context, cubit, occasion.occasionId);
+                                  }),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildHeaderText(String text) {
+    return Expanded(
+      child: Text(text,
+          style:
+              TextStyles.textStyle18Medium.copyWith(color: ColorManager.white)),
+    );
+  }
+
+  Widget buildIconButton(IconData icon, Color color, VoidCallback onPressed) {
+    return IconButton(icon: Icon(icon, color: color), onPressed: onPressed);
+  }
+
+  void showDeleteDialog(
+      BuildContext context, OccasionsCubit cubit, String occasionId) {
+    showAdaptiveDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: ColorManager.white,
+          elevation: 2,
+          title: Text(
+            'هل انت متأكد من حذف المناسبة؟',
+            style: TextStyles.textStyle18Medium
+                .copyWith(color: ColorManager.black),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              child: Text('تأكيد',
+                  style: TextStyles.textStyle18Medium
+                      .copyWith(color: ColorManager.red)),
+              onPressed: () {
+                cubit.deleteOccasion(occasionId: occasionId);
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text('إلغاء',
+                  style: TextStyles.textStyle18Medium
+                      .copyWith(color: ColorManager.black)),
+              onPressed: () => Navigator.pop(context),
+            ),
           ],
         );
       },
