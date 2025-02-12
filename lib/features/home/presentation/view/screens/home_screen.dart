@@ -6,10 +6,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-          child: HomeViewBody()
+    return Directionality(
+      textDirection:  TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Colors.grey[200],
+        body: SafeArea(
+            child: HomeViewBody()
+        ),
       ),
     );
   }

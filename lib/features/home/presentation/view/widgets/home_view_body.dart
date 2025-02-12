@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hadawi_dathboard/constants/app_constants.dart';
+import 'package:hadawi_dathboard/features/payments/presentation/view/screens/payments_screen.dart';
 import 'package:hadawi_dathboard/features/users/domain/entities/user_entities.dart';
 import 'package:hadawi_dathboard/features/users/presentation/controller/user_cubit.dart';
 import 'package:hadawi_dathboard/features/users/presentation/controller/user_states.dart';
 import 'package:hadawi_dathboard/features/users/presentation/widgets/users_view_body.dart';
 import 'package:hadawi_dathboard/styles/assets/asset_manager.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
+import 'package:hadawi_dathboard/utiles/helper/material_navigation.dart';
 import 'package:hadawi_dathboard/utiles/services/service_locator.dart';
 import 'package:hadawi_dathboard/widgets/default_text_field.dart';
 
@@ -26,69 +29,70 @@ class HomeViewBody extends StatelessWidget {
               child: Expanded(
                 child: Row(
                   children: [
+
                     Expanded(
                       flex: 1,
                       child: Container(
                         margin:  EdgeInsets.only(
                            left: 15,
-                            right: 5,
+                            right: 10,
                             top: 10,
                             bottom: 10
                         ),
                         decoration: BoxDecoration(
-                          color: ColorManager.primaryBlue,
+                          color: ColorManager.white,
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Column(
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image(
-                                  height:  MediaQuery.sizeOf(context).height*0.15,
-                                  width:  MediaQuery.sizeOf(context).height*0.15,
-                                  image: AssetImage(AssetsManager.darkLogo),
-                                ),
-                                Text("Welcome to \nHadawi Dashboard",style: TextStyle(
-                                    fontSize: MediaQuery.sizeOf(context).height*0.02,
-                                    color: ColorManager.white,
-                                    fontWeight:  FontWeight.bold
-                                ),
-                                  textAlign: TextAlign.center ,
+                            SizedBox(height:  MediaQuery.sizeOf(context).height*0.02,),
 
-                                ),
-                              ],
+                            Image(
+                              height:  MediaQuery.sizeOf(context).height*0.15,
+                              width:  MediaQuery.sizeOf(context).height*0.15,
+                              image: AssetImage(AssetsManager.logoWithoutBackground),
                             ),
+
+                            SizedBox(height:  MediaQuery.sizeOf(context).height*0.02,),
+
                             Divider(
-                              color: ColorManager.white,
+                              color: ColorManager.primaryBlue,
                             ),
 
+                            SizedBox(height:  MediaQuery.sizeOf(context).height*0.02,),
 
                             Expanded(
                               child: Padding(
-                                padding:  EdgeInsets.symmetric(
+                                padding: EdgeInsets.symmetric(
                                     horizontal: MediaQuery.sizeOf(context).height*0.03,
                                     vertical:  MediaQuery.sizeOf(context).height*0.02
                                 ),
                                 child: ListView.separated(
-                                    itemBuilder: (context, index) => Container(
+                                    itemBuilder: (context, index) => GestureDetector(
+                                      onTap: (){
+                                        if(index == 0){
+
+                                        }else if(index == 2){
+                                          customPushNavigator(context, PaymentsScreen());
+                                        }
+                                      },
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.people,
-                                            color: ColorManager.white,
-                                            size:  MediaQuery.sizeOf(context).height*0.03,
+                                          Image(
+                                            color: ColorManager.primaryBlue,
+                                            height:  MediaQuery.sizeOf(context).height*0.03,
+                                            image: AssetImage(AppConstants().dividerIcons[index]),
                                           ),
-                                          SizedBox(width:  MediaQuery.sizeOf(context).height*0.01,),
-                                          Text("Users",style: TextStyle(
-                                              color: ColorManager.white,
+                                          SizedBox(width:  MediaQuery.sizeOf(context).height*0.015,),
+                                          Text(AppConstants().dividerTitles[index],style: TextStyle(
+                                              color: ColorManager.primaryBlue,
                                               fontSize: MediaQuery.sizeOf(context).height*0.02
                                           ))
                                         ],
                                       ),
                                     ),
-                                    separatorBuilder: (context, index) => SizedBox( height:  MediaQuery.sizeOf(context).height*0.03,),
-                                    itemCount: 10
+                                    separatorBuilder: (context, index) => SizedBox( height: MediaQuery.sizeOf(context).height*0.04,),
+                                    itemCount: AppConstants().dividerTitles.length
                                 ),
                               ),
                             )
@@ -100,6 +104,7 @@ class HomeViewBody extends StatelessWidget {
                       flex: 4,
                       child: Column(
                         children: [
+                          SizedBox( height:  MediaQuery.sizeOf(context).height*0.02,),
                           Expanded(
                               flex: 1,
                               child: Container(
@@ -108,7 +113,33 @@ class HomeViewBody extends StatelessWidget {
                                     vertical:  MediaQuery.sizeOf(context).height*0.00
                                 ),
                                 child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text('اهلا وسهلا',style: TextStyle(
+                                              color: ColorManager.primaryBlue,
+                                            ),),
+
+                                            SizedBox( width:  MediaQuery.sizeOf(context).height*0.02,),
+
+                                            Image(
+                                                height:  MediaQuery.sizeOf(context).height*0.05,
+                                                image: AssetImage('assets/images/wave.png')
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox( height:  MediaQuery.sizeOf(context).height*0.01,),
+                                        Text('اهلا بك في لوحة التحكم',style: TextStyle(
+                                          color: ColorManager.primaryBlue,
+                                        ),),
+                                      ],
+                                    ),
+
+                                    SizedBox( width:  MediaQuery.sizeOf(context).height*0.025,),
+
                                     Expanded(
                                       child: DefaultTextField(
                                           onChange: (value){
@@ -120,13 +151,15 @@ class HomeViewBody extends StatelessWidget {
                                           },
                                           keyboardType: TextInputType.text,
                                           textInputAction: TextInputAction.done,
-                                          fillColor: ColorManager.gray
+                                          fillColor: ColorManager.white
                                       ),
                                     ),
 
                                     Spacer(),
 
                                     DropdownButton(
+                                        borderRadius:  BorderRadius.circular(5),
+                                        dropdownColor: ColorManager.white,
                                         hint: Text('المدينه'),
                                         items: [
                                           DropdownMenuItem(
@@ -146,10 +179,64 @@ class HomeViewBody extends StatelessWidget {
 
                                         }
                                     ),
+
                                     SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,),
+
+                                    CircleAvatar(
+                                      radius:  MediaQuery.sizeOf(context).height*0.03,
+                                      backgroundImage: AssetImage('assets/images/person.png'),
+                                    )
 
                                   ],
                                 ),
+                              )
+                          ),
+
+                          Expanded(
+                              flex: 2,
+                              child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) => Container(
+                                    margin:  EdgeInsets.symmetric(
+                                        horizontal: MediaQuery.sizeOf(context).height*0.03,
+                                        vertical:  MediaQuery.sizeOf(context).height*0.00
+                                    ),
+                                    padding:  EdgeInsets.symmetric(
+                                        horizontal: MediaQuery.sizeOf(context).height*0.03,
+                                        vertical:  MediaQuery.sizeOf(context).height*0.00
+                                    ),
+                                    width:MediaQuery.sizeOf(context).height*0.25,
+                                    decoration: BoxDecoration(
+                                      color: ColorManager.white,
+                                      border:Border.all(color: ColorManager.primaryBlue),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image(
+                                          image: AssetImage(AppConstants().dividerIcons[index]),
+                                          height:  MediaQuery.sizeOf(context).height*0.05,
+
+                                        ),
+                                        SizedBox(height:  MediaQuery.sizeOf(context).height*0.025,),
+                                        Text(AppConstants().dividerTitles[index],
+                                          style: TextStyle(color: ColorManager.primaryBlue,
+                                            fontWeight:  FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(height:  MediaQuery.sizeOf(context).height*0.02,),
+                                        Text('100',
+                                            style: TextStyle(color: ColorManager.primaryBlue,
+                                            fontSize: MediaQuery.sizeOf(context).height*0.02
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  separatorBuilder: (context, index) => SizedBox(width:  MediaQuery.sizeOf(context).height*0.0,),
+                                  itemCount: 5
                               )
                           ),
                           Expanded(

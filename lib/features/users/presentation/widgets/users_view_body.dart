@@ -34,8 +34,8 @@ class UsersViewBody extends StatelessWidget {
                   vertical: 10
               ),
               decoration: BoxDecoration(
-                color: ColorManager.primaryBlue,
-                borderRadius: BorderRadius.circular(5),
+                border:  Border.all(color: ColorManager.primaryBlue),
+                color: ColorManager.white,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,9 +54,9 @@ class UsersViewBody extends StatelessWidget {
                             border:  Border.all(color: ColorManager.white),
                           ),
                           child: Text(
-                            'Id',
+                            'رقم المستخدم',
                             style: TextStyle(
-                              color: ColorManager.white,
+                              color: ColorManager.primaryBlue,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -74,13 +74,10 @@ class UsersViewBody extends StatelessWidget {
                               horizontal: SizeConfig.height*0.0,
                               vertical: SizeConfig.height*0.01
                           ),
-                          decoration: BoxDecoration(
-                            border:  Border.all(color: ColorManager.white),
-                          ),
                           child: Text(
-                            'Email',
+                            'البريد الالكتروني',
                             style: TextStyle(
-                              color: ColorManager.white,
+                              color: ColorManager.primaryBlue,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -98,13 +95,10 @@ class UsersViewBody extends StatelessWidget {
                               horizontal: SizeConfig.height*0.01,
                               vertical: SizeConfig.height*0.01
                           ),
-                          decoration: BoxDecoration(
-                            border:  Border.all(color: ColorManager.white),
-                          ),
                           child: Text(
-                            'User Name',
+                            'اسم المستخدم',
                             style: TextStyle(
-                              color: ColorManager.white,
+                              color: ColorManager.primaryBlue,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -123,13 +117,10 @@ class UsersViewBody extends StatelessWidget {
                               horizontal: SizeConfig.height*0.01,
                               vertical: SizeConfig.height*0.01
                           ),
-                          decoration: BoxDecoration(
-                            border:  Border.all(color: ColorManager.white),
-                          ),
                           child: Text(
-                            'Phone Number',
+                            'رقم الهاتف',
                             style: TextStyle(
-                              color: ColorManager.white,
+                              color: ColorManager.primaryBlue,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -147,13 +138,10 @@ class UsersViewBody extends StatelessWidget {
                               horizontal: SizeConfig.height*0.01,
                               vertical: SizeConfig.height*0.01
                           ),
-                          decoration: BoxDecoration(
-                            border:  Border.all(color: ColorManager.white),
-                          ),
                           child: Text(
-                            'Operation',
+                            'العمليات',
                             style: TextStyle(
-                              color: ColorManager.white,
+                              color: ColorManager.primaryBlue,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -168,7 +156,7 @@ class UsersViewBody extends StatelessWidget {
                   Expanded(
                     child: ListView.separated(
                       separatorBuilder: (context,index){
-                        return Divider(color: ColorManager.white,);
+                        return Divider(color: ColorManager.primaryBlue,);
                       },
                       itemCount: cubit.users.length,
                       itemBuilder: (context, index) => Row(
@@ -179,7 +167,7 @@ class UsersViewBody extends StatelessWidget {
                             child: Text(
                               cubit.users[index].uId,
                               style: TextStyle(
-                                color: ColorManager.white,
+                                color: ColorManager.primaryBlue,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -193,7 +181,7 @@ class UsersViewBody extends StatelessWidget {
                             child: Text(
                               cubit.users[index].email,
                               style: TextStyle(
-                                color: ColorManager.white,
+                                color: ColorManager.primaryBlue,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -207,7 +195,7 @@ class UsersViewBody extends StatelessWidget {
                             child: Text(
                               cubit.users[index].name,
                               style: TextStyle(
-                                color: ColorManager.white,
+                                color: ColorManager.primaryBlue,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -220,7 +208,7 @@ class UsersViewBody extends StatelessWidget {
                             child: Text(
                               cubit.users[index].phone,
                               style: TextStyle(
-                                color: ColorManager.white,
+                                color: ColorManager.primaryBlue,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -242,7 +230,7 @@ class UsersViewBody extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Icons.visibility,
-                                    color: ColorManager.white,
+                                    color: ColorManager.primaryBlue,
                                     size: SizeConfig.height*0.03,
                                   ),
                                 ),
@@ -266,7 +254,7 @@ class UsersViewBody extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Icons.send,
-                                    color: ColorManager.white,
+                                    color: ColorManager.primaryBlue,
                                     size: SizeConfig.height*0.03,
                                   ),
                                 ),
