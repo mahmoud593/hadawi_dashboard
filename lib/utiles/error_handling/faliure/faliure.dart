@@ -13,7 +13,7 @@ class Faliure extends Equatable {
 class FirebaseFaliure extends Faliure {
   const FirebaseFaliure({required super.message});
 
-  factory FirebaseFaliure.fromMessage(FirebaseExceptions error) {
+  factory FirebaseFaliure.fromMessage(FirebaseAuthExceptions error) {
     switch (error.firebaseAuthException.code) {
       case "invalid-email":
         return FirebaseFaliure(message: "Invalid email");
@@ -60,7 +60,7 @@ class FirebaseFaliure extends Faliure {
 class GoogleAuthFaliure extends Faliure {
   const GoogleAuthFaliure({required super.message});
 
-  factory GoogleAuthFaliure.fromMessage(FirebaseExceptions error) {
+  factory GoogleAuthFaliure.fromMessage(FirebaseAuthExceptions error) {
     switch (error.firebaseAuthException.code) {
       case "account-exists-with-different-credential":
         return GoogleAuthFaliure(

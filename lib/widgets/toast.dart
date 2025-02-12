@@ -11,7 +11,7 @@ customToast({
       msg: title,
       textColor: ColorManager.white,
       backgroundColor: color,
-      gravity: ToastGravity.BOTTOM,
+      gravity: ToastGravity.CENTER,
       toastLength: Toast.LENGTH_LONG,
   );
 
