@@ -16,6 +16,8 @@ import 'package:hadawi_dathboard/widgets/default_text_field.dart';
 import 'package:hadawi_dathboard/widgets/toast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import '../../../../styles/text_styles/text_styles.dart';
+
 class UserInfoViewBody extends StatelessWidget {
    UserInfoViewBody({super.key,required this.userEntities});
 
@@ -44,57 +46,21 @@ class UserInfoViewBody extends StatelessWidget {
                   vertical: 10
               ),
               decoration: BoxDecoration(
-                color: ColorManager.primaryBlue,
+                color: ColorManager.white,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.people,
-                        color: Colors.white,
-                        size: SizeConfig.height*0.03,
-                      ),
-                      SizedBox( width: SizeConfig.height*0.01,),
-                      Text('User Form Details',
-                        style: TextStyle(color: ColorManager.white,fontSize: 15,fontWeight: FontWeight.bold
-                        ),),
-                      Spacer(),
-                      SizedBox(
-                        width: SizeConfig.height*0.2,
-                        child: DefaultButton(
-                            buttonText: 'Send notification',
-                            onPressed: (){
-                              showDialogWidget(
-                                context: context,
-                                controller: messageController,
-                                buttonText: 'Send notification',
-                                title: 'Send notification',
-                                body: 'Enter notification to send',
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                  cubit.sendNotification(
-                                      message: messageController.text,
-                                      userId: userEntities.uId
-                                  );
-                                }
-                              );
-                            },
-                            buttonColor: ColorManager.success
-                        ),
-                      )
-                    ],
-                  ),
                   SizedBox( height: SizeConfig.height*0.02,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Profile Picture',
-                        style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                        ),),
+
+                      buildUserInfo('صورة المستخدم'),
+
                       SizedBox( height: SizeConfig.height*0.01,),
+
                       Image(
                         fit: BoxFit.cover,
                         width:  SizeConfig.height*0.6,
@@ -106,78 +72,78 @@ class UserInfoViewBody extends StatelessWidget {
 
                       Row(
                         children: [
-                          Text('uId :',
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo('رقم المستخدم :'),
+
                           SizedBox( width: SizeConfig.height*0.025,),
-                          Text(userEntities.uId,
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo(userEntities.uId),
+
                         ],
                       ),
                       SizedBox( height: SizeConfig.height*0.025,),
 
                       Row(
                         children: [
-                          Text('User Name :',
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo('اسم المستخدم :'),
+
                           SizedBox( width: SizeConfig.height*0.025,),
-                          Text(userEntities.name,
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo(userEntities.name),
+
                         ],
                       ),
                       SizedBox( height: SizeConfig.height*0.025,),
 
                       Row(
                         children: [
-                          Text('Email :',
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo('البريد الالكتروني :'),
+
                           SizedBox( width: SizeConfig.height*0.025,),
-                          Text(userEntities.email,
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo(userEntities.email),
+
                         ],
                       ),
                       SizedBox( height: SizeConfig.height*0.025,),
 
                       Row(
                         children: [
-                          Text('Phone :',
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo('رقم الهاتف :'),
+
                           SizedBox( width: SizeConfig.height*0.025,),
-                          Text(userEntities.phone,
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo(userEntities.phone),
+
                         ],
                       ),
                       SizedBox( height: SizeConfig.height*0.025,),
 
                       Row(
                         children: [
-                          Text('Gender :',
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo('الجنس :'),
+
                           SizedBox( width: SizeConfig.height*0.025,),
-                          Text(userEntities.gender,
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo(userEntities.gender),
+
                         ],
                       ),
                       SizedBox( height: SizeConfig.height*0.025,),
 
                       Row(
                         children: [
-                          Text('Birth Date :',
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo(' تاريخ الميلاد :'),
+
                           SizedBox( width: SizeConfig.height*0.025,),
-                          Text(userEntities.brithDate,
-                            style: TextStyle(color: ColorManager.white,fontSize: 13,fontWeight: FontWeight.bold
-                            ),),
+
+                          buildUserInfo(userEntities.brithDate),
+
                         ],
                       ),
                       SizedBox( height: SizeConfig.height*0.025,),
@@ -193,16 +159,42 @@ class UserInfoViewBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         SizedBox(
+                          width: SizeConfig.height*0.2,
+                          child: DefaultButton(
+                              buttonText: 'ارسال الاشعارات',
+                              onPressed: (){
+                                showDialogWidget(
+                                    context: context,
+                                    controller: messageController,
+                                    buttonText: 'ارسال اشعار',
+                                    title: 'ارسال اشعار',
+                                    body: 'ادخل الرسالة التي تريد ارسالها',
+                                    onPressed: (){
+                                      Navigator.pop(context);
+                                      cubit.sendNotification(
+                                          message: messageController.text,
+                                          userId: userEntities.uId
+                                      );
+                                    }
+                                );
+                              },
+                              buttonColor: ColorManager.success
+                          ),
+                        ),
+
+                        SizedBox( width:  SizeConfig.height*0.02,),
+
+                        SizedBox(
                           width:  SizeConfig.height*0.2,
                           child: DefaultButton(
-                              buttonText: 'Delete User',
+                              buttonText: 'حذف المستخدم',
                               onPressed: (){
                                  showDialogWidget(
                                      context: context,
                                      controller: messageController,
-                                     buttonText: 'Delete',
-                                     title: 'Delete User',
-                                     body: 'Enter message to send',
+                                     buttonText: 'حذف',
+                                     title: 'حذف المستخدم',
+                                     body: 'ادخل الرسالة التي تريد ارسالها',
                                      onPressed:  (){
                                        cubit.deleteUser(userId: userEntities.uId);
                                      }
@@ -216,14 +208,14 @@ class UserInfoViewBody extends StatelessWidget {
                         SizedBox(
                           width:  SizeConfig.height*0.2,
                           child: DefaultButton(
-                              buttonText: 'Block User',
+                              buttonText: 'حظر المستخدم',
                               onPressed: (){
                                 showDialogWidget(
                                   context: context,
                                   controller: messageController,
-                                  buttonText: 'Block',
-                                  title: 'Block User',
-                                  body: 'Enter message to send',
+                                  buttonText: 'حظر المستخدم',
+                                  title: 'حظر المستخدم',
+                                  body: 'ادخل الرسالة التي تريد ارسالها',
                                   onPressed:  (){
                                     cubit.blockUser(userId: userEntities.uId);
                                   }
@@ -245,23 +237,30 @@ class UserInfoViewBody extends StatelessWidget {
             customToast(title: state.message, color: ColorManager.error);
           }
           if(state is SendNotificationSuccessState){
-            customToast(title: 'Notification sent successfully', color: ColorManager.success);
+            customToast(title: 'الاشعار تم ارساله بنجاح', color: ColorManager.success);
           }
           if(state is BlockUserErrorState){
             customToast(title: state.message, color: ColorManager.error);
           }
           if(state is BlockUserSuccessState){
             customPushAndRemoveUntil(context, HomeScreen());
-            customToast(title: 'User blocked successfully', color: ColorManager.success);
+            customToast(title: 'المستخدم تم حظر', color: ColorManager.success);
           }
           if(state is DeleteUserErrorState){
             customToast(title: state.message, color: ColorManager.error);
           }
           if(state is DeleteUserSuccessState){
             customPushAndRemoveUntil(context, HomeScreen());
-            customToast(title: 'User Deleted successfully', color: ColorManager.success);
+            customToast(title: 'تم حذف المستخدم', color: ColorManager.success);
           }
         }
     );
   }
+}
+
+Widget buildUserInfo(String text) {
+  return Text('$text ',
+    style: TextStyles. textStyle18Medium.copyWith(
+        color: ColorManager.black,
+  ),);
 }

@@ -16,6 +16,7 @@ class DefaultTextField extends StatefulWidget {
   final int? maxLines;
   final Color? fillColor;
   final void Function()? onTap;
+  final ValueChanged<String>? onChanged;
   final String? initialValue; // ✅ إضافة initialValue
 
     DefaultTextField({
@@ -28,6 +29,7 @@ class DefaultTextField extends StatefulWidget {
     this.withSuffix = false,
     this.isPassword = false,
     this.onTap,
+    this.onChanged,
     this.viewPassword = true,
     this.suffixIcon,
     this.prefix,
@@ -54,11 +56,12 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextFormField(
+        onChanged:widget.onChanged ,
         onTap: widget.onTap,
         enabled: widget.enable,
         style: TextStyle(
           fontSize: MediaQuery.sizeOf(context).height * 0.016,
-          color: ColorManager.black,
+          color: ColorManager.primaryBlue,
         ),
         decoration: InputDecoration(
           prefixIcon: widget.prefix,

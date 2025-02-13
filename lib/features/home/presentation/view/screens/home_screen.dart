@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
     return Directionality(
       textDirection:  TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.grey[100],
         body: SafeArea(
             child: HomeViewBody()
         ),

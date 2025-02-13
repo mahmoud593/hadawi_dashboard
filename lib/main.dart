@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hadawi Dashboard',
       theme: getApplicationTheme(context),
-      home: OccasionsScreen(),
+      home: HomeScreen(),
     );
   }
 }
