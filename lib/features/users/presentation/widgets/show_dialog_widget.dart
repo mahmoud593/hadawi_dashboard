@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 import 'package:hadawi_dathboard/styles/size_config/app_size_config.dart';
+import 'package:hadawi_dathboard/widgets/default_button.dart';
 import 'package:hadawi_dathboard/widgets/default_text_field.dart';
 
 Future showDialogWidget({
@@ -36,17 +37,31 @@ Future showDialogWidget({
               ),
             ),
             actions: [
-              TextButton(
-                child: Text('اغلاق'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton(
-                child: Text(buttonText),
-                onPressed: () {
-                    onPressed();
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: SizeConfig.width*0.1,
+                    child: DefaultButton(
+                        buttonText: 'اغلاق',
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                        buttonColor: Colors.red
+                    ),
+                  ),
+                  SizedBox(width: SizeConfig.width*0.02,),
+                  Container(
+                    width: SizeConfig.width*0.1,
+                    child: DefaultButton(
+                        buttonText: buttonText,
+                        onPressed: (){
+                          onPressed();
+                        },
+                        buttonColor: ColorManager.primaryBlue
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

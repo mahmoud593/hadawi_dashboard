@@ -60,8 +60,8 @@ class _DefaultTextFieldState extends State<DefaultTextField> {
         onTap: widget.onTap,
         enabled: widget.enable,
         style: TextStyle(
-          fontSize: MediaQuery.sizeOf(context).height * 0.016,
-          color: ColorManager.primaryBlue,
+          fontSize: MediaQuery.sizeOf(context).height * 0.02,
+          color: ColorManager.black,
         ),
         decoration: InputDecoration(
           prefixIcon: widget.prefix,

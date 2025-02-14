@@ -116,9 +116,9 @@ class UsersViewBody extends StatelessWidget {
                                       showDialogWidget(
                                           context: context,
                                           controller: whatsController,
-                                          buttonText: 'Send',
-                                          title: 'Send to whatsapp',
-                                          body: 'Enter message to send',
+                                          buttonText: 'ارسال',
+                                          title: 'ارسل رسالة للمستخدم عبر واتساب',
+                                          body: 'ادخل الرساله للمستخدم',
                                           onPressed: (){
                                             cubit.launchWhatsApp(
                                                 phoneNumber: cubit.users[index].phone,

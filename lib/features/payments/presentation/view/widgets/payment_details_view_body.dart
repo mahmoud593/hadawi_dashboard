@@ -10,6 +10,7 @@ import 'package:hadawi_dathboard/features/users/presentation/widgets/show_dialog
 import 'package:hadawi_dathboard/styles/assets/asset_manager.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 import 'package:hadawi_dathboard/styles/size_config/app_size_config.dart';
+import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
 import 'package:hadawi_dathboard/utiles/helper/material_navigation.dart';
 import 'package:hadawi_dathboard/widgets/default_button.dart';
 import 'package:hadawi_dathboard/widgets/default_text_field.dart';
@@ -28,10 +29,11 @@ class PaymentDetailsViewBody extends StatelessWidget {
         builder: (context, state) {
           var cubit = context.read<UserCubit>();
           return Container(
-            height: SizeConfig.height*0.85,
+            alignment: Alignment.center,
+            height: SizeConfig.height*0.6,
             margin: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10
+                horizontal: SizeConfig.height*0.05,
+                vertical: SizeConfig.height*0.13
             ),
             padding: EdgeInsets.symmetric(
                 horizontal: 20,
@@ -42,22 +44,8 @@ class PaymentDetailsViewBody extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.people,
-                      color: Colors.white,
-                      size: SizeConfig.height*0.03,
-                    ),
-                    SizedBox( width: SizeConfig.height*0.01,),
-                    Text('تفاصيل المعاملات المالية',
-                      style: TextStyle(color: ColorManager.primaryBlue,fontSize: 15,fontWeight: FontWeight.bold
-                      ),),
-                  ],
-                ),
-                SizedBox( height: SizeConfig.height*0.02,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -66,65 +54,65 @@ class PaymentDetailsViewBody extends StatelessWidget {
 
                     Row(
                       children: [
-                        Text('رقم العمليه :',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('رقم العمليه :'),
+
                         SizedBox( width: SizeConfig.height*0.025,),
-                        Text('xd520dd5',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('xd520dd5'),
+
                       ],
                     ),
                     SizedBox( height: SizeConfig.height*0.025,),
 
                     Row(
                       children: [
-                        Text('الاسم :',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('الاسم :'),
+
                         SizedBox( width: SizeConfig.height*0.025,),
-                        Text('Mahmoud Reda',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('Mahmoud Reda'),
+
                       ],
                     ),
                     SizedBox( height: SizeConfig.height*0.025,),
 
                     Row(
                       children: [
-                        Text('المبلغ المدفوع :',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('المبلغ المدفوع :'),
+
                         SizedBox( width: SizeConfig.height*0.025,),
-                        Text('150 \$',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('150 \$'),
+
                       ],
                     ),
                     SizedBox( height: SizeConfig.height*0.025,),
 
                     Row(
                       children: [
-                        Text('طريقه الدفع :',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('طريقه الدفع :'),
+
                         SizedBox( width: SizeConfig.height*0.025,),
-                        Text('Cash',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('Cash'),
+
                       ],
                     ),
                     SizedBox( height: SizeConfig.height*0.025,),
 
                     Row(
                       children: [
-                        Text('تاريخ الدفع :',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('تاريخ الدفع :'),
+
                         SizedBox( width: SizeConfig.height*0.025,),
-                        Text('20/1/2022',
-                          style: TextStyle(color: ColorManager.primaryBlue,fontSize: 13,fontWeight: FontWeight.bold
-                          ),),
+
+                        buildUserInfo('20/1/2022'),
+
                       ],
                     ),
                     SizedBox( height: SizeConfig.height*0.025,),
@@ -170,4 +158,11 @@ class PaymentDetailsViewBody extends StatelessWidget {
         }
     );
   }
+}
+
+Widget buildUserInfo(String text) {
+  return Text('$text ',
+    style: TextStyles. textStyle18Medium.copyWith(
+      color: ColorManager.black,
+    ),);
 }

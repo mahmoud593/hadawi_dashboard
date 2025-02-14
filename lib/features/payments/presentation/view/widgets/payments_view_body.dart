@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hadawi_dathboard/features/payments/presentation/view/screens/payment_details_screen.dart';
+import 'package:hadawi_dathboard/features/payments/presentation/view/screens/send_payments_screen.dart';
+import 'package:hadawi_dathboard/features/payments/presentation/view/screens/taxs_screen.dart';
+import 'package:hadawi_dathboard/features/payments/presentation/view/widgets/taxs_view_body.dart';
 import 'package:hadawi_dathboard/features/payments/presentation/view/widgets/title_row_widget_payment_screen.dart';
 import 'package:hadawi_dathboard/features/users/presentation/controller/user_cubit.dart';
 import 'package:hadawi_dathboard/features/users/presentation/controller/user_states.dart';
@@ -12,6 +15,7 @@ import 'package:hadawi_dathboard/styles/size_config/app_size_config.dart';
 import 'package:hadawi_dathboard/utiles/helper/material_navigation.dart';
 import 'package:hadawi_dathboard/utiles/services/service_locator.dart';
 import 'package:hadawi_dathboard/widgets/default_button.dart';
+import 'package:hadawi_dathboard/widgets/default_text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class PaymentsViewBody extends StatelessWidget {
@@ -19,6 +23,8 @@ class PaymentsViewBody extends StatelessWidget {
 
   TextEditingController controller = TextEditingController();
   TextEditingController whatsController = TextEditingController();
+  TextEditingController searchTable1Controller = TextEditingController();
+  TextEditingController searchTable2Controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,25 +44,30 @@ class PaymentsViewBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             Row(
               children: [
                 Spacer(),
-                Container(
+                SizedBox(
                   width: SizeConfig.height*0.3,
                   child: DefaultButton(
                       buttonText: 'الرسوم الادارية',
-                      onPressed: (){},
+                      onPressed: (){
+                        customPushNavigator(context, TaxsScreen());
+                      },
                       buttonColor: ColorManager.warning
                   ),
                 ),
       
                 SizedBox(width:  SizeConfig.height*0.02,),
       
-                Container(
+                SizedBox(
                   width: SizeConfig.height*0.3,
                   child: DefaultButton(
                       buttonText: 'تحويل اموال',
-                      onPressed: (){},
+                      onPressed: (){
+                        customPushNavigator(context, SendPaymentsScreen());
+                      },
                       buttonColor: ColorManager.primaryBlue
                   ),
                 ),
@@ -65,9 +76,27 @@ class PaymentsViewBody extends StatelessWidget {
               ]
             ),
 
-            SizedBox(height:  SizeConfig.height*0.05,),
+            SizedBox(height:  SizeConfig.height*0.03,),
 
             TitleRowWidgetPaymentScreen(image:'assets/images/money.png' ,title: 'المدفوعات',),
+
+            SizedBox(height:  SizeConfig.height*0.03,),
+
+            Container(
+              width: SizeConfig.width*0.5,
+              child: DefaultTextField(
+                  onChanged: (value){
+                  },
+                  controller: searchTable1Controller,
+                  hintText: 'بحث في الجدول (بوابات الدفع) ....',
+                  validator: (value) {
+                  },
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  fillColor: ColorManager.white
+              ),
+            ),
+
 
             SizedBox(height:  SizeConfig.height*0.025,),
 
@@ -95,7 +124,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'رقم العمليه',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -117,7 +146,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'الاسم',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -139,7 +168,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'المبلغ المدفوع',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -162,7 +191,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'طريقه الدفع',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -184,7 +213,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'تاريخ الدفع',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -206,7 +235,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'العمليات',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -218,14 +247,14 @@ class PaymentsViewBody extends StatelessWidget {
                     ],
                   ),
                   Divider(color: ColorManager.white,),
-                  Container(
 
+                  Container(
                     height:  SizeConfig.height*0.5,
                     child: ListView.separated(
                       separatorBuilder: (context,index){
                         return Divider(color: ColorManager.primaryBlue,);
                       },
-                      itemCount: 10,
+                      itemCount: 25,
                       itemBuilder: (context, index) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -248,7 +277,7 @@ class PaymentsViewBody extends StatelessWidget {
                                 Text(
                                   'xfr52dd54',
                                   style: TextStyle(
-                                    color: ColorManager.primaryBlue,
+                                    color: ColorManager.black,
                                     fontSize: 12,
                                     fontWeight: FontWeight.normal,
                                   ),
@@ -264,7 +293,7 @@ class PaymentsViewBody extends StatelessWidget {
                             child: Text(
                               'Mahmoud Reda',
                               style: TextStyle(
-                                color: ColorManager.primaryBlue,
+                                color: ColorManager.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -278,7 +307,7 @@ class PaymentsViewBody extends StatelessWidget {
                             child: Text(
                               '150 \$',
                               style: TextStyle(
-                                color: ColorManager.primaryBlue,
+                                color: ColorManager.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -291,7 +320,7 @@ class PaymentsViewBody extends StatelessWidget {
                             child: Text(
                               'بوابه سداد',
                               style: TextStyle(
-                                color: ColorManager.primaryBlue,
+                                color: ColorManager.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -305,7 +334,7 @@ class PaymentsViewBody extends StatelessWidget {
                             child: Text(
                               '10/11/2022',
                               style: TextStyle(
-                                color: ColorManager.primaryBlue,
+                                color: ColorManager.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -327,7 +356,7 @@ class PaymentsViewBody extends StatelessWidget {
                                     },
                                   icon: Icon(
                                     Icons.visibility,
-                                    color: ColorManager.primaryBlue,
+                                    color: ColorManager.gray,
                                     size: SizeConfig.height*0.03,
                                   ),
                                 ),
@@ -359,7 +388,29 @@ class PaymentsViewBody extends StatelessWidget {
               height:  SizeConfig.height*0.1,
             ),
 
+            SizedBox(height:  SizeConfig.height*0.03,),
+
             TitleRowWidgetPaymentScreen(image:'assets/images/smartphone.png' ,title: 'عمليات السحب',),
+
+            SizedBox(height:  SizeConfig.height*0.03,),
+
+
+            Container(
+              width: SizeConfig.width*0.5,
+              child: DefaultTextField(
+                  onChanged: (value){
+                  },
+                  controller: searchTable2Controller,
+                  hintText: 'بحث في الجدول (بوابات الدفع) ....',
+                  validator: (value) {
+                  },
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  fillColor: ColorManager.white
+              ),
+            ),
+
+
 
             SizedBox(height:  SizeConfig.height*0.025,),
 
@@ -387,7 +438,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'رقم العمليه',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -409,7 +460,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'الاسم',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -431,7 +482,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'المبلغ المدفوع',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -454,7 +505,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'طريقه الدفع',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -476,7 +527,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'تاريخ الدفع',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -498,7 +549,7 @@ class PaymentsViewBody extends StatelessWidget {
                           child: Text(
                             'العمليات',
                             style: TextStyle(
-                              color: ColorManager.primaryBlue,
+                              color: ColorManager.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
@@ -540,7 +591,7 @@ class PaymentsViewBody extends StatelessWidget {
                                 Text(
                                   'xfr52dd54',
                                   style: TextStyle(
-                                    color: ColorManager.primaryBlue,
+                                    color: ColorManager.black,
                                     fontSize: 12,
                                     fontWeight: FontWeight.normal,
                                   ),
@@ -556,7 +607,7 @@ class PaymentsViewBody extends StatelessWidget {
                             child: Text(
                               'Mahmoud Reda',
                               style: TextStyle(
-                                color: ColorManager.primaryBlue,
+                                color: ColorManager.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -570,7 +621,7 @@ class PaymentsViewBody extends StatelessWidget {
                             child: Text(
                               '150 \$',
                               style: TextStyle(
-                                color: ColorManager.primaryBlue,
+                                color: ColorManager.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -583,7 +634,7 @@ class PaymentsViewBody extends StatelessWidget {
                             child: Text(
                               'بوابه سداد',
                               style: TextStyle(
-                                color: ColorManager.primaryBlue,
+                                color: ColorManager.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -597,7 +648,7 @@ class PaymentsViewBody extends StatelessWidget {
                             child: Text(
                               '10/11/2022',
                               style: TextStyle(
-                                color: ColorManager.primaryBlue,
+                                color: ColorManager.black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -618,7 +669,7 @@ class PaymentsViewBody extends StatelessWidget {
                                     },
                                   icon: Icon(
                                     Icons.visibility,
-                                    color: ColorManager.primaryBlue,
+                                    color: ColorManager.gray,
                                     size: SizeConfig.height*0.03,
                                   ),
                                 ),

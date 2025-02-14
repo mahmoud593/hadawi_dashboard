@@ -8,7 +8,10 @@ class AppConstants{
     'المناسبات',
     'إدارة المدفوعات والمحفظة',
     'العروض التروجيه',
-    'الحساب',
+    'الاعدادات',
+    'سياسه الاستخدام و الخصوصيه',
+    'الدعم الفني',
+    'تسجيل الخروج',
   ];
 
 
@@ -17,6 +20,9 @@ class AppConstants{
     'assets/images/gift.png',
     'assets/images/money.png',
     'assets/images/job.png',
+    'assets/images/user2.png',
+    'assets/images/user2.png',
+    'assets/images/user2.png',
     'assets/images/user2.png',
   ];
 
