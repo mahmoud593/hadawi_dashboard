@@ -4,6 +4,7 @@ import 'package:hadawi_dathboard/features/occasions/presentation/controller/occa
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/edit_occasion_screen.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/section_container.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/view_occasion_details.dart';
+import 'package:hadawi_dathboard/widgets/icon_button.dart';
 
 import '../../../../styles/colors/color_manager.dart';
 import '../../../../styles/text_styles/text_styles.dart';
@@ -39,7 +40,7 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                   alignment: Alignment.centerRight,
                   child: Container(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12.0),
@@ -218,9 +219,6 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
     );
   }
 
-  Widget buildIconButton(IconData icon, Color color, VoidCallback onPressed) {
-    return IconButton(icon: Icon(icon, color: color), onPressed: onPressed);
-  }
 
   void showDeleteDialog(
       BuildContext context, OccasionsCubit cubit, String occasionId) {

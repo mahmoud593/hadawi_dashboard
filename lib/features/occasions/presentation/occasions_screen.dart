@@ -5,25 +5,24 @@ import 'package:hadawi_dathboard/features/occasions/presentation/widgets/occasio
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
 
+import '../../../widgets/dashboard_app_bar_widget.dart';
+
 class OccasionsScreen extends StatelessWidget {
   const OccasionsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: ColorManager.primaryBlue,
-        centerTitle: true,
-        title: Text('إدارة المناسبات',
-            style: TextStyles.textStyle18Medium
-                .copyWith(color: ColorManager.white)),
-      ),
-      body: BlocProvider<OccasionsCubit>(
-        create: (context) => OccasionsCubit()..getOccasions(),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: OccasionsViewBody(),
+    return Directionality(
+      textDirection:  TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        appBar: dashboardAppBarWidget('إدارة المناسبات'),
+        body: BlocProvider<OccasionsCubit>(
+          create: (context) => OccasionsCubit()..getOccasions(),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: OccasionsViewBody(),
+          ),
         ),
       ),
     );
