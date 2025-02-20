@@ -4,12 +4,23 @@ import 'package:hadawi_dathboard/features/occasions/presentation/widgets/edit_bu
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/image_container.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/occasion_info_row.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
+import 'package:hadawi_dathboard/styles/size_config/app_size_config.dart';
 import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 
-class ViewOccasionDetails extends StatelessWidget {
+import '../../../../styles/assets/asset_manager.dart';
+
+class ViewOccasionDetails extends StatefulWidget {
   final OccasionEntity occasionEntity;
 
   const ViewOccasionDetails({super.key, required this.occasionEntity});
+
+  @override
+  State<ViewOccasionDetails> createState() => _ViewOccasionDetailsState();
+}
+
+class _ViewOccasionDetailsState extends State<ViewOccasionDetails> {
+  bool haveQrcode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +60,13 @@ class ViewOccasionDetails extends StatelessWidget {
                 Row(
                   children: [
                     DetailsButton(
-                      title: "رجوع",
-                      onPressed: () {
-                        Navigator.pop(context);
+                      title: "انشاء Qr Code",
+                      onPressed: ()async {
+                        setState(() {
+                          haveQrcode = true;
+                        });
                       },
-                      icon: Icons.arrow_back,
+                      icon: Icons.qr_code_2,
                       iconColor: ColorManager.white,
                       backGroundColor: ColorManager.primaryBlue,
                       foregroundColor: ColorManager.white,
@@ -66,6 +79,50 @@ class ViewOccasionDetails extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.04,
                 ),
+
+                haveQrcode==true?
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(onPressed: (){}, icon: Icon(
+                      Icons.send_sharp,
+                      color: ColorManager.primaryBlue,
+                    )),
+                    Text(
+                      "Qr Code الخاص بالمناسبه",
+                      style: TextStyles.textStyle18Bold.copyWith(
+                        color: ColorManager.black,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ):Column(),
+
+                haveQrcode==true?
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.01,
+                ):Container(),
+
+                haveQrcode==true?
+                SizedBox(
+                  height: SizeConfig.height * 0.2,
+                  width: SizeConfig.width * 0.15,
+                  child: PrettyQrView.data(
+                    data: widget.occasionEntity.occasionId,
+                    decoration: const PrettyQrDecoration(
+                      image: PrettyQrDecorationImage(
+                        image: AssetImage(AssetsManager.logoWithoutBackground),
+                      ),
+                    ),
+                  ),
+                ):Container(),
+
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.04,
+                ),
+
+
                 Text(
                   "صورة المناسبة",
                   style: TextStyles.textStyle18Bold.copyWith(
@@ -73,14 +130,16 @@ class ViewOccasionDetails extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                   ),
                 ),
+
+
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
                 ),
 
                 /// gift image
-                occasionEntity.giftImage.isNotEmpty
+                widget.occasionEntity.giftImage.isNotEmpty
                     ? ImageContainer(
-                        imageUrl: occasionEntity.giftImage,
+                        imageUrl: widget.occasionEntity.giftImage,
                       )
                     : Text("لا يوجد صورة", style: TextStyles.textStyle18Bold),
                 SizedBox(
@@ -90,7 +149,7 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// occasion Id
                 OccasionInfoColumn(
                   title: "الرقم المرجعي للمناسبة",
-                  occasionValue: occasionEntity.occasionId,
+                  occasionValue: widget.occasionEntity.occasionId,
                 ),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
@@ -99,7 +158,7 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// occasion name
                 OccasionInfoColumn(
                   title: "اسم المناسبة",
-                  occasionValue: occasionEntity.occasionName,
+                  occasionValue: widget.occasionEntity.occasionName,
                 ),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
@@ -108,7 +167,7 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// person Name
                 OccasionInfoColumn(
                   title: "اسم صاحب المناسبة",
-                  occasionValue: occasionEntity.personName,
+                  occasionValue: widget.occasionEntity.personName,
                 ),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
@@ -117,7 +176,7 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// person email
                 OccasionInfoColumn(
                   title: "حساب صاحب المناسبة",
-                  occasionValue: occasionEntity.personEmail,
+                  occasionValue: widget.occasionEntity.personEmail,
                 ),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
@@ -126,13 +185,13 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// person phone
                 OccasionInfoColumn(
                   title: "رقم جوال صاحب المناسبة",
-                  occasionValue: occasionEntity.personPhone,
+                  occasionValue: widget.occasionEntity.personPhone,
                 ),
 
                 /// occasion date
                 OccasionInfoColumn(
                   title: "تاريخ المناسبة",
-                  occasionValue: occasionEntity.occasionDate,
+                  occasionValue: widget.occasionEntity.occasionDate,
                 ),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
@@ -141,7 +200,7 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// occasion type
                 OccasionInfoColumn(
                   title: "نوع المناسبة",
-                  occasionValue: occasionEntity.occasionType,
+                  occasionValue: widget.occasionEntity.occasionType,
                 ),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
@@ -150,7 +209,7 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// occasion type
                 OccasionInfoColumn(
                   title: "اسم الهدية",
-                  occasionValue: occasionEntity.giftName,
+                  occasionValue: widget.occasionEntity.giftName,
                 ),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
@@ -159,7 +218,7 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// gift type
                 OccasionInfoColumn(
                   title: "نوع الهدية",
-                  occasionValue: occasionEntity.giftType,
+                  occasionValue: widget.occasionEntity.giftType,
                 ),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.01,
@@ -168,7 +227,7 @@ class ViewOccasionDetails extends StatelessWidget {
                 /// gift price
                 OccasionInfoColumn(
                     title: "سعر الهدية",
-                    occasionValue: "${occasionEntity.giftPrice} ريال"),
+                    occasionValue: "${widget.occasionEntity.giftPrice} ريال"),
 
 
               ],

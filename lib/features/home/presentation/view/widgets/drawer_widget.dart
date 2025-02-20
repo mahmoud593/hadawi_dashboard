@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hadawi_dathboard/constants/app_constants.dart';
 import 'package:hadawi_dathboard/features/banners/presentation/banners_screen.dart';
+import 'package:hadawi_dathboard/features/notifications_management/presentation/view/screens/notification_management_screen.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/occasions_screen.dart';
 import 'package:hadawi_dathboard/features/payments/presentation/view/screens/payments_screen.dart';
+import 'package:hadawi_dathboard/features/privacy/presentation/view/screens/privacy_screen.dart';
 import 'package:hadawi_dathboard/styles/assets/asset_manager.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 
@@ -64,6 +66,10 @@ class DrawerWidget extends StatelessWidget {
                         customPushNavigator(context, OccasionsScreen());
                       }else if(index == 3){
                         customPushNavigator(context, BannersScreen());
+                      }else if(index == 4){
+                        customPushNavigator(context, NotificationManagementScreen());
+                      } else if(index == 6){
+                        customPushNavigator(context, PrivacyScreen());
                       }
                     },
                     child: Row(

@@ -1,4 +1,15 @@
 import 'package:get_it/get_it.dart';
+import 'package:hadawi_dathboard/features/notifications_management/data/data_source/notifications_data_source.dart';
+import 'package:hadawi_dathboard/features/notifications_management/data/repo_implement/notification_repo_implement.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/repo/notification_repo.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/use_cases/get_occasion_complete_use_cases.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/use_cases/get_occasion_done_use_cases.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/use_cases/get_occasion_remember_use_cases.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/use_cases/get_occasion_thanks_use_cases.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/use_cases/update_occasion_complete_use_cases.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/use_cases/update_occasion_done_use_cases.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/use_cases/update_occasion_remember_use_cases.dart';
+import 'package:hadawi_dathboard/features/notifications_management/domain/use_cases/update_occasion_thanks_use_cases.dart';
 import 'package:hadawi_dathboard/features/payments/data/data_source/payments_data_source.dart';
 import 'package:hadawi_dathboard/features/payments/data/repo_implement/payments_repo_implemet.dart';
 import 'package:hadawi_dathboard/features/payments/domain/repo/payments_repo.dart';
@@ -33,6 +44,18 @@ class ServiceLocator {
     getIt.registerLazySingleton<PaymentsRepo>(()=> PaymentsRepoImplement(paymentsDataSource: getIt()));
     getIt.registerLazySingleton(()=> TaxUseCases(paymentsRepo: getIt()));
     getIt.registerLazySingleton(()=> UpdateTaxsUseCases(paymentsRepo: getIt()));
+
+    /// Notifications Layer
+    getIt.registerLazySingleton<NotificationsDataSource>(() => NotificationsDataSourceImpl());
+    getIt.registerLazySingleton<NotificationRepo>(()=> NotificationRepoImplement(notificationsDataSource: getIt()));
+    getIt.registerLazySingleton(()=> GetOccasionThanksUseCases(notificationRepo: getIt()));
+    getIt.registerLazySingleton(()=> GetOccasionRememberUseCases(notificationRepo: getIt()));
+    getIt.registerLazySingleton(()=> GetOccasionCompleteUseCases(notificationRepo: getIt()));
+    getIt.registerLazySingleton(()=> GetOccasionDoneUseCases(notificationRepo: getIt()));
+    getIt.registerLazySingleton(()=> UpdateOccasionRememberUseCases(notificationRepo: getIt()));
+    getIt.registerLazySingleton(()=> UpdateOccasionDoneUseCases(notificationRepo: getIt()));
+    getIt.registerLazySingleton(()=> UpdateOccasionThanksUseCases(notificationRepo: getIt()));
+    getIt.registerLazySingleton(()=> UpdateOccasionCompleteUseCases(notificationRepo: getIt()));
 
 
   }
