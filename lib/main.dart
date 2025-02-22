@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hadawi_dathboard/features/auth/presentation/login_screen.dart';
 import 'package:hadawi_dathboard/features/home/presentation/view/screens/home_screen.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/occasions_screen.dart';
 import 'package:hadawi_dathboard/styles/theme_manger/theme_manager.dart';
@@ -9,6 +10,7 @@ import 'package:hadawi_dathboard/utiles/services/service_locator.dart';
 import 'package:hadawi_dathboard/utiles/shared_preferences/shared_preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'features/promocode/presentation/promocode_screen.dart';
 import 'firebase_options.dart';
 
 void main()async {
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Hadawi Dashboard',
       theme: getApplicationTheme(context),
-      home: HomeScreen(),
+      home: UserDataFromStorage.userIsLogin ? const HomeScreen() : const LoginScreen(),
     );
   }
 }
