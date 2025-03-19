@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hadawi_dathboard/features/auth/data/model/emil_pass_model.dart';
 import 'package:hadawi_dathboard/features/auth/data/model/user_model.dart';
 import 'package:hadawi_dathboard/utiles/error_handling/exceptions/exceptions.dart';
 import 'package:hadawi_dathboard/utiles/shared_preferences/shared_preference.dart';
@@ -12,7 +13,7 @@ class AuthDataSource {
   Future<void> login({required String email, required String password}) async {
     try {
       final UserCredential userCredential =
-      await _firebaseAuth.signInWithEmailAndPassword(
+          await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -42,7 +43,6 @@ class AuthDataSource {
     }
   }
 
-
   Future<void> saveUserData({
     required String email,
     required String name,
@@ -67,10 +67,10 @@ class AuthDataSource {
     }
   }
 
-
   Future<UserModel> getUserData({required String uId}) async {
     try {
-      DocumentSnapshot userDoc = await _firestore.collection('users').doc(uId).get();
+      DocumentSnapshot userDoc =
+          await _firestore.collection('admin').doc(uId).get();
 
       if (!userDoc.exists || userDoc.data() == null) {
         throw FireStoreException(
@@ -81,7 +81,8 @@ class AuthDataSource {
         );
       }
 
-      UserModel userModel = UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
+      UserModel userModel =
+          UserModel.fromJson(userDoc.data() as Map<String, dynamic>);
 
       UserDataFromStorage.setUserName(userModel.name);
       UserDataFromStorage.setEmail(userModel.email);
@@ -99,6 +100,31 @@ class AuthDataSource {
     }
   }
 
+  Future<EmailPassModel?> loginWithEmailPass({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      var querySnapshot = await _firestore
+          .collection("admin")
+          .where("email", isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return null;
+      }
+      var userDoc = querySnapshot.docs.first;
+      var userData = userDoc.data();
+      if (userData['password'] == password) {
+        return EmailPassModel.fromJson(userData);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
 
   Future<void> logout() async {
     try {

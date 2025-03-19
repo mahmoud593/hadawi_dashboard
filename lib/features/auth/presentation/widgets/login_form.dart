@@ -70,15 +70,10 @@ class LoginForm extends StatelessWidget {
                     buttonText: 'تسجيل الدخول',
                     onPressed: (){
                       if(formKey.currentState!.validate()){
-                        if(emailController.text =='hadawi' && passwordController.text == '123456') {
-                          customPushAndRemoveUntil(context, HomeScreen());
-                          UserDataFromStorage.setUserIsLogin(true);
-                          // cubit.login(
-                          //     email: emailController.text,
-                          //     password: passwordController.text// );
-                        }else{
-                          customToast(title: 'البريد الإلكتروني أو كلمة المرور غير صحيحة', color: ColorManager.error);
-                        }
+                        cubit.loginWithEmailPass(
+                            email: emailController.text,
+                            password: passwordController.text
+                        );
                       }
                     },
                     buttonColor: ColorManager.primaryBlue

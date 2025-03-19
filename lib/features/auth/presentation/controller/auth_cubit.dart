@@ -11,7 +11,6 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this._userRepoImp) : super(AuthInitial());
 
-  /// 🔹 تسجيل الدخول
   Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());
     final Either<Faliure, void> result =
@@ -23,7 +22,15 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  /// 🔹 حفظ بيانات المستخدم
+  Future<void> loginWithEmailPass({required String email, required String password}) async {
+    emit(LoginLoading());
+    final Either<Faliure, void> result =
+    await _userRepoImp.loginWithEmailPass(email: email, password: password);
+    result.fold(
+          (failure) => emit(UserLoginErrorState(message: failure.message)),
+          (_) => emit(UserLoginSuccessState()),
+    );
+  }
   Future<void> saveUserData({
     required String email,
     required String name,
@@ -39,7 +46,6 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  /// 🔹 جلب بيانات المستخدم
   Future<void> getUserData({required String uId}) async {
     emit(GetUserDataLoading());
     final result = await _userRepoImp.getUserData(uId: uId);
@@ -50,7 +56,6 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  /// 🔹 تسجيل الخروج
   Future<void> logout() async {
     emit(LogOutLoading());
     final result = await _userRepoImp.logout();
