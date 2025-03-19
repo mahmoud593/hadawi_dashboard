@@ -15,5 +15,7 @@ class AssetsManager{
   static const String notificationAccount = "assets/images/notification.png";
   static const String supportAccount = "assets/images/support.png";
   static const String logoutAccount = "assets/images/logout.png";
+  static const String payImage = "assets/images/pay.png";
+  static const String privacyImage = "assets/images/privacy.png";
 
 }

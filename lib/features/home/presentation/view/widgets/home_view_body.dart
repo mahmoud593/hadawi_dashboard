@@ -80,30 +80,42 @@ class HomeViewBody extends StatelessWidget {
 
                                 Spacer(),
 
-                                DropdownButton(
-                                    borderRadius:  BorderRadius.circular(5),
-                                    dropdownColor: ColorManager.white,
-                                    hint: Text('المدينه'),
-                                    items: [
-                                      DropdownMenuItem(
-                                        value: "City 1",
-                                        child: Text("City 1"),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: ColorManager.white,
+                                      borderRadius: BorderRadius.circular(5)
+                                  ),
+                                  child: DropdownButton(
+                                     underline: Container(),
+                                      padding: EdgeInsets.symmetric(horizontal:  MediaQuery.sizeOf(context).height*0.04),
+                                      style: TextStyles.textStyle18Medium.copyWith(color: ColorManager.black),
+                                      icon: Icon(Icons.arrow_drop_down,
+                                        color: ColorManager.black,
                                       ),
-                                      DropdownMenuItem(
-                                        value: "City 2",
-                                        child: Text("City 2"),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: "City 3",
-                                        child: Text("City 3"),
-                                      ),
-                                    ],
-                                    onChanged: (String? newValue) {
+                                      borderRadius:  BorderRadius.circular(5),
+                                      dropdownColor: ColorManager.white,
+                                      hint: Text('المدينه'),
+                                      items: [
+                                        DropdownMenuItem(
+                                          value: "City 1",
+                                          child: Text("City 1"),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: "City 2",
+                                          child: Text("City 2"),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: "City 3",
+                                          child: Text("City 3"),
+                                        ),
+                                      ],
+                                      onChanged: (String? newValue) {
 
-                                    }
+                                      }
+                                  ),
                                 ),
 
-                                SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,),
+                                SizedBox(width: MediaQuery.sizeOf(context).height*0.015,),
 
                                 CircleAvatar(
                                   radius:  MediaQuery.sizeOf(context).height*0.03,
@@ -121,8 +133,8 @@ class HomeViewBody extends StatelessWidget {
                           child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) => AnalysisCardWidget(index: index),
-                              separatorBuilder: (context, index) => SizedBox(width:  MediaQuery.sizeOf(context).height*0.0,),
-                              itemCount: 5
+                              separatorBuilder: (context, index) => SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,),
+                              itemCount: 4
                           )
                       ),
 

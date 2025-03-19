@@ -14,7 +14,7 @@ class BannersScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        appBar: dashboardAppBarWidget('إدارة التسويق والإعلانات'),
+        appBar: dashboardAppBarWidget(context: context, text:'إدارة التسويق والإعلانات'),
         body: BlocProvider<BannersCubit>(
           create: (context) => BannersCubit()..getBanners(),
           child: BannersScreenBody(),

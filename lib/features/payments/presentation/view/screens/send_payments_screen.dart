@@ -10,7 +10,7 @@ class SendPaymentsScreen extends StatelessWidget {
     return Directionality(
       textDirection:TextDirection.rtl,
       child: Scaffold(
-        appBar: dashboardAppBarWidget('تحويل اموال'),
+        appBar: dashboardAppBarWidget(context: context, text:'تحويل اموال'),
         backgroundColor: Colors.grey[100],
         body: SendPaymentsViewBody() ,
       ),

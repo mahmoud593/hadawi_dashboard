@@ -9,9 +9,8 @@ class AppConstants{
     'إدارة المدفوعات والمحفظة',
     'العروض التروجيه',
     'إدارة التنبيهات',
-    'الاعدادات',
+    'اكواد الخصم',
     'سياسه الاستخدام و الخصوصيه',
-    'الدعم الفني',
     'تسجيل الخروج',
   ];
 
@@ -19,13 +18,12 @@ class AppConstants{
   List<String> dividerIcons=[
     'assets/images/home.png',
     'assets/images/gift.png',
-    'assets/images/money.png',
+    'assets/images/pay.png',
     'assets/images/job.png',
-    'assets/images/job.png',
-    'assets/images/user2.png',
-    'assets/images/user2.png',
-    'assets/images/user2.png',
-    'assets/images/user2.png',
+    'assets/images/notification.png',
+    'assets/images/coupon.png',
+    'assets/images/privacy.png',
+    'assets/images/logout.png',
   ];
 
 

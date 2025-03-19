@@ -53,7 +53,7 @@ class AddBannersScreen extends StatelessWidget {
           textDirection: TextDirection.rtl,
           child: Scaffold(
             backgroundColor: Colors.grey[200],
-            appBar: dashboardAppBarWidget('إضافة إعلان'),
+            appBar: dashboardAppBarWidget(context: context, text:'إضافة إعلان'),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(

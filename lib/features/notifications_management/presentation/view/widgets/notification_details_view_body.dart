@@ -52,8 +52,8 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
           inAsyncCall: state is UpdateOccasionsCompleteSuccessState || state is UpdateOccasionsDoneSuccessState || state is UpdateOccasionsRememberSuccessState || state is UpdateOccasionsThanksSuccessState,
           child: Container(
             margin:  EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10
+                horizontal: SizeConfig.height*0.05,
+                vertical: SizeConfig.height*0.05
             ),
             padding:  EdgeInsets.symmetric(
                 horizontal: 20,
@@ -83,6 +83,7 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
                 SizedBox( height: SizeConfig.height*0.01,),
 
                 DefaultTextField(
+                    maxLines: 3,
                     enable: widget.isEdit==true?true:false,
                     controller: purposeController,
                     hintText: 'ادخل الهدف من الاشعار',
@@ -99,6 +100,7 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
                 SizedBox( height: SizeConfig.height*0.01,),
 
                 DefaultTextField(
+                    maxLines: 3,
                     enable: widget.isEdit==true?true:false,
                     controller: messageController,
                     hintText: 'ادخل الرساله',

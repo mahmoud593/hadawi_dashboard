@@ -20,7 +20,7 @@ class PrivacyScreen extends StatelessWidget {
               var cubit = context.read<PrivacyCubit>();
               return Scaffold(
                   backgroundColor: Colors.grey[200],
-                  appBar: dashboardAppBarWidget('سياسه الاستخدام و الخصوصيه'),
+                  appBar: dashboardAppBarWidget(context: context, text:'سياسه الاستخدام و الخصوصيه'),
                   body: cubit.privacy !=''? PrivacyViewBody():Center(child:  CircularProgressIndicator(),)
               );
             },

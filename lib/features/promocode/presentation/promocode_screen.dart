@@ -15,7 +15,7 @@ class PromoCodeScreen extends StatelessWidget {
           create: (context) => PromoCodeCubit()..getPromoCodes(),
           child: Scaffold(
             backgroundColor: Colors.grey[100],
-            appBar: dashboardAppBarWidget('إدارة أكواد الخصم'),
+            appBar: dashboardAppBarWidget(context: context, text: 'إدارة أكواد الخصم'),
             body: PromoCodeBodyView(),
           ),
         ));

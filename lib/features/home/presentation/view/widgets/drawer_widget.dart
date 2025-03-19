@@ -5,6 +5,7 @@ import 'package:hadawi_dathboard/features/notifications_management/presentation/
 import 'package:hadawi_dathboard/features/occasions/presentation/occasions_screen.dart';
 import 'package:hadawi_dathboard/features/payments/presentation/view/screens/payments_screen.dart';
 import 'package:hadawi_dathboard/features/privacy/presentation/view/screens/privacy_screen.dart';
+import 'package:hadawi_dathboard/features/promocode/presentation/promocode_screen.dart';
 import 'package:hadawi_dathboard/styles/assets/asset_manager.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 
@@ -70,6 +71,8 @@ class DrawerWidget extends StatelessWidget {
                         customPushNavigator(context, NotificationManagementScreen());
                       } else if(index == 6){
                         customPushNavigator(context, PrivacyScreen());
+                      } else if(index == 5){
+                        customPushNavigator(context, PromoCodeScreen());
                       }
                     },
                     child: Row(

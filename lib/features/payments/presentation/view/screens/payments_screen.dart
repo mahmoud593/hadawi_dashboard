@@ -11,7 +11,7 @@ class PaymentsScreen extends StatelessWidget {
       textDirection:  TextDirection.rtl,
       child: Scaffold(
         backgroundColor: Colors.grey[200],
-        appBar: dashboardAppBarWidget('اداره المدفوعات و المحفظه'),
+        appBar: dashboardAppBarWidget(context: context, text:'اداره المدفوعات و المحفظه'),
         body: PaymentsViewBody(),
       ),
     );

@@ -22,7 +22,7 @@ class NotificationManagementScreen extends StatelessWidget {
             var cubit = context.read<NotificationCubit>();
             return Scaffold(
               backgroundColor: Colors.grey[200],
-              appBar: dashboardAppBarWidget('إدارة التنبيهات والرسائل المرسلة للمستخدمين'),
+              appBar: dashboardAppBarWidget(context: context, text:'إدارة التنبيهات والرسائل المرسلة للمستخدمين'),
               body: cubit.notificationThanksEntities == null ||
                   cubit.notificationCompleteEntities == null ||
                   cubit.notificationDoneEntities == null ||

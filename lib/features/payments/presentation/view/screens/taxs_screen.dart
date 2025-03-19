@@ -20,7 +20,7 @@ class TaxsScreen extends StatelessWidget {
             textDirection:  TextDirection.rtl,
             child: Scaffold(
               backgroundColor: Colors.grey[300],
-              appBar: dashboardAppBarWidget('الرسوم الاداريه'),
+              appBar: dashboardAppBarWidget(context: context, text:'الرسوم الاداريه'),
               body: Directionality(
                   textDirection: TextDirection.rtl,
                   child: context.read<PaymentsCubit>().taxEntities !=null?

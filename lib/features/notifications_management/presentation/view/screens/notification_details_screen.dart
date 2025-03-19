@@ -25,7 +25,7 @@ class NotificationDetailsScreen extends StatelessWidget {
             textDirection:  TextDirection.rtl,
             child: Scaffold(
               backgroundColor: Colors.grey[300],
-              appBar: dashboardAppBarWidget(''),
+              appBar: dashboardAppBarWidget(context: context, text:''),
               body: Directionality(
                   textDirection: TextDirection.rtl,
                   child: NotificationDetailsViewBody(

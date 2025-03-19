@@ -16,7 +16,7 @@ class OccasionsScreen extends StatelessWidget {
       textDirection:  TextDirection.rtl,
       child: Scaffold(
         backgroundColor: Colors.grey[100],
-        appBar: dashboardAppBarWidget('إدارة المناسبات'),
+        appBar: dashboardAppBarWidget(context: context, text:'إدارة المناسبات'),
         body: BlocProvider<OccasionsCubit>(
           create: (context) => OccasionsCubit()..getOccasions(),
           child: Padding(
