@@ -39,6 +39,7 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
               Align(
                   alignment: Alignment.centerRight,
                   child: Container(
+                    height: MediaQuery.sizeOf(context).height * 0.05,
                     padding:
                         EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                     decoration: BoxDecoration(
@@ -53,7 +54,7 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                           cubit.selectedValue ?? 'تصنيف حسب',
                           style: TextStyles.textStyle18Medium,
                         ),
-                        icon: Icon(Icons.filter_list_alt,
+                        icon: Icon(Icons.sort,
                             color: ColorManager.primaryBlue),
                         borderRadius: BorderRadius.circular(12.0),
                         items: [
@@ -63,7 +64,7 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                                   style: TextStyles.textStyle18Medium)),
                           DropdownMenuItem(
                               value: 'مناسبات غير مكتملة',
-                              child: Text('مناسبات غير مكتملة',
+                              child: Text('مناسبات نشطة',
                                   style: TextStyles.textStyle18Medium)),
                           DropdownMenuItem(
                               value: 'مناسبات مكتملة',

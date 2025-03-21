@@ -40,7 +40,7 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
     emit(AddPromoCodeLoadingState());
     final result = await PromoCodeRepoImp().addPromoCode(
       code: codeController.text,
-      discount: int.parse(discountController.text),
+      discount: double.parse(discountController.text),
       expireDate: expirationDateController.text,
       maxUsage: int.parse(maxUseController.text),
       used: 0,

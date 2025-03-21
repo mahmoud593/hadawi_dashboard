@@ -10,7 +10,7 @@ class PromoCodeDataSource {
 
   Future<CodeModel> addPromoCode({
     required String code,
-    required int discount,
+    required double discount,
     required String expireDate,
     required int maxUsage,
     required int used,

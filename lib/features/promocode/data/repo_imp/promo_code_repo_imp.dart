@@ -32,7 +32,7 @@ class PromoCodeRepoImp extends PromoCodeRepo {
   @override
   Future<Either<Faliure, CodeEntity>> addPromoCode(
       {required String code,
-      required int discount,
+      required double discount,
       required String expireDate,
       required int maxUsage,
       required int used,

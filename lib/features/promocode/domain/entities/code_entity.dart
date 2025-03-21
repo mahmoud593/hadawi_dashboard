@@ -1,6 +1,6 @@
 class CodeEntity {
   final String id;
-  final int discount;
+  final double discount;
   final String code;
   final int used;
   final int maxUsage;

@@ -5,7 +5,7 @@ import 'package:hadawi_dathboard/utiles/error_handling/faliure/faliure.dart';
 abstract class PromoCodeRepo {
   Future<Either<Faliure, CodeEntity>> addPromoCode({
     required String code,
-    required int discount,
+    required double discount,
     required String expireDate,
     required int maxUsage,
     required int used,

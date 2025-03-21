@@ -66,10 +66,9 @@ class PromoCodeBodyView extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: Container(
-                      width: MediaQuery.sizeOf(context).height * 0.24,
-                      height: MediaQuery.sizeOf(context).height * 0.08,
+                      height: MediaQuery.sizeOf(context).height * 0.05,
                       padding:
-                      EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(12.0),
