@@ -55,18 +55,26 @@ class OccasionRepoImp extends OccasionRepo {
   @override
   Future<Either<Faliure, bool>> editOccasion({
     required String occasionId,
-     String? occasionName,
-     String? occasionDate,
-     String? occasionType,
-     dynamic moneyGiftAmount,
-     String? personName,
-     String? personPhone,
-     String? personEmail,
-     String? giftName,
-     String? giftLink,
-     dynamic giftPrice,
-     String? giftType,}
-  ) async {
+    String? occasionName,
+    String? occasionDate,
+    String? occasionType,
+    dynamic moneyGiftAmount,
+    String? personName,
+    String? personPhone,
+    String? personEmail,
+    String? giftName,
+    String? giftLink,
+    dynamic giftPrice,
+    String? giftType,
+    String? bankName,
+    String? city,
+    String? district,
+    String? giftCard,
+    String? ibanNumber,
+    String? receiverName,
+    String? receiverPhone,
+    String? receivingDate,
+  }) async {
     try {
       final result = await _dataSource.updateOccasion(
         occasionId: occasionId,
@@ -81,6 +89,14 @@ class OccasionRepoImp extends OccasionRepo {
         giftLink: giftLink,
         giftPrice: giftPrice,
         giftType: giftType,
+        bankName: bankName,
+        city: city,
+        district: district,
+        giftCard: giftCard,
+        ibanNumber: ibanNumber,
+        receiverName: receiverName,
+        receiverPhone: receiverPhone,
+        receivingDate: receivingDate,
       );
       return Right(true);
     } catch (e) {
@@ -89,7 +105,8 @@ class OccasionRepoImp extends OccasionRepo {
   }
 
   @override
-  Future<Either<Faliure, bool>> deleteOccasion({required String occasionId}) async{
+  Future<Either<Faliure, bool>> deleteOccasion(
+      {required String occasionId}) async {
     try {
       final result = await _dataSource.deleteOccasion(occasionId: occasionId);
       return Right(true);
@@ -97,5 +114,4 @@ class OccasionRepoImp extends OccasionRepo {
       return Left(Faliure(message: e.toString()));
     }
   }
-
 }

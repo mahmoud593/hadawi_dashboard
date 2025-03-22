@@ -16,14 +16,19 @@ class OccasionsCubit extends Cubit<OccasionsState> {
   TextEditingController giftTypeController = TextEditingController();
   TextEditingController giftLinkController = TextEditingController();
   TextEditingController moneyAmountController = TextEditingController();
-
   TextEditingController giftPriceController = TextEditingController();
-
   TextEditingController occasionTypeController = TextEditingController();
-
   TextEditingController giftNameController = TextEditingController();
   TextEditingController personEmailController = TextEditingController();
   TextEditingController personPhoneController = TextEditingController();
+  TextEditingController bankNameController = TextEditingController();
+  TextEditingController ibanController = TextEditingController();
+  TextEditingController receiverNameController = TextEditingController();
+  TextEditingController receiverPhoneController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController districtController = TextEditingController();
+  TextEditingController giftCardController = TextEditingController();
+  TextEditingController receivingDateController = TextEditingController();
 String? selectedValue;
   List<OccasionEntity> occasions = [];
 
@@ -99,6 +104,14 @@ String? selectedValue;
       giftName: giftNameController.text,
       giftLink: giftLinkController.text,
       giftPrice:  giftPriceController.text,
+      bankName: bankNameController.text,
+      city: cityController.text,
+      district: districtController.text,
+      ibanNumber: ibanController.text,
+      receiverName: receiverNameController.text,
+      receiverPhone: receiverPhoneController.text,
+      giftCard: giftCardController.text,
+      receivingDate: receivingDateController.text,
     );
     result.fold((failure) {
       emit(UpdateOccasionsErrorState(error: failure.message));

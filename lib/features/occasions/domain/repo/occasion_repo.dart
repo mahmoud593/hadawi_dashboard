@@ -26,6 +26,14 @@ abstract class OccasionRepo {
     String? giftLink,
     dynamic giftPrice,
     String? giftType,
+    String bankName,
+    String city,
+    String district,
+    String giftCard,
+    String ibanNumber,
+    String receiverName,
+    String receiverPhone,
+    String receivingDate,
   });
 
   Future<Either<Faliure, bool>> deleteOccasion({required String occasionId});

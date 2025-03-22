@@ -402,6 +402,194 @@ class EditOccasionScreen extends StatelessWidget {
                       enable: true,
                     ),
                     SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.02,
+                    ),
+
+                    /// bank name
+                    Text(
+                      "اسم البنك",
+                      style: TextStyles.textStyle18Bold.copyWith(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    DefaultTextField(
+                      controller: cubit.bankNameController,
+                      initialValue: occasionEntity.bankName.toString(),
+                      hintText: '',
+                      validator: (value) {
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      fillColor: ColorManager.gray,
+                      enable: true,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.02,
+                    ),
+
+                    /// iban number
+                    Text(
+                      "رقم الآيبان",
+                      style: TextStyles.textStyle18Bold.copyWith(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    DefaultTextField(
+                      controller: cubit.ibanController,
+                      initialValue: occasionEntity.ibanNumber.toString(),
+                      hintText: '',
+                      validator: (value) {
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      fillColor: ColorManager.gray,
+                      enable: true,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.02,
+                    ),
+
+                    /// bank name
+                    Text(
+                      "اسم المستلم",
+                      style: TextStyles.textStyle18Bold.copyWith(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    DefaultTextField(
+                      controller: cubit.receiverNameController,
+                      initialValue: occasionEntity.receiverName.toString(),
+                      hintText: '',
+                      validator: (value) {
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      fillColor: ColorManager.gray,
+                      enable: true,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.02,
+                    ),
+
+                    /// bank name
+                    Text(
+                      "رقم جوال المستلم",
+                      style: TextStyles.textStyle18Bold.copyWith(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    DefaultTextField(
+                      controller: cubit.receiverPhoneController,
+                      initialValue: occasionEntity.receiverPhone.toString(),
+                      hintText: '',
+                      validator: (value) {
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      fillColor: ColorManager.gray,
+                      enable: true,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.02,
+                    ),
+
+                    /// bank name
+                    Text(
+                      "المدينة",
+                      style: TextStyles.textStyle18Bold.copyWith(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    DefaultTextField(
+                      controller: cubit.cityController,
+                      initialValue: occasionEntity.city.toString(),
+                      hintText: '',
+                      validator: (value) {
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      fillColor: ColorManager.gray,
+                      enable: true,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.02,
+                    ),
+
+                    /// bank name
+                    Text(
+                      "الحي",
+                      style: TextStyles.textStyle18Bold.copyWith(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    DefaultTextField(
+                      controller: cubit.districtController,
+                      initialValue: occasionEntity.district.toString(),
+                      hintText: '',
+                      validator: (value) {
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      fillColor: ColorManager.gray,
+                      enable: true,
+                    ),
+                    /// bank name
+                    Text(
+                      "بطاقة الهداية",
+                      style: TextStyles.textStyle18Bold.copyWith(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    DefaultTextField(
+                      controller: cubit.giftCardController,
+                      initialValue: occasionEntity.giftCard.toString(),
+                      hintText: '',
+                      validator: (value) {
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      fillColor: ColorManager.gray,
+                      enable: true,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.02,
+                    ),
+                    /// bank name
+                    Text(
+                      "تاريخ الاستلام",
+                      style: TextStyles.textStyle18Bold.copyWith(),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.01,
+                    ),
+                    DefaultTextField(
+                      controller: cubit.receivingDateController,
+                      initialValue: occasionEntity.receivingDate.toString(),
+                      hintText: '',
+                      validator: (value) {
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      fillColor: ColorManager.gray,
+                      enable: true,
+                    ),
+
+                    SizedBox(
                       height: MediaQuery.sizeOf(context).height * 0.03,
                     ),
 

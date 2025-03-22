@@ -85,6 +85,14 @@ class OccasionDataSource {
      String? giftLink,
      dynamic giftPrice,
      String? giftType,
+    String? bankName,
+    String? city,
+    String? district,
+    String? giftCard,
+    String? ibanNumber,
+    String? receiverName,
+    String? receiverPhone,
+    String? receivingDate,
   }) async {
     try {
       await fireStore.collection('Occasions').doc(occasionId).update({
@@ -99,6 +107,14 @@ class OccasionDataSource {
         'giftLink': giftLink,
         'giftPrice': giftPrice,
         'giftType': giftType,
+        'bankName': bankName,
+        'city': city,
+        'district': district,
+        'giftCard': giftCard,
+        'ibanNumber': ibanNumber,
+        'receiverName': receiverName,
+        'receiverPhone': receiverPhone,
+        'receivingDate': receivingDate
       });
 
       return const Right(true);

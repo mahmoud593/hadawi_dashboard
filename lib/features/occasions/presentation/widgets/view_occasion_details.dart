@@ -140,87 +140,168 @@ class _ViewOccasionDetailsState extends State<ViewOccasionDetails> {
               ),
 
               /// occasion Id
-              OccasionInfoColumn(
-                title: "الرقم المرجعي للمناسبة",
-                occasionValue: widget.occasionEntity.occasionId,
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.01,
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        OccasionInfoColumn(
+                          title: "اسم البنك",
+                          occasionValue: widget.occasionEntity.bankName,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
 
-              /// occasion name
-              OccasionInfoColumn(
-                title: "اسم المناسبة",
-                occasionValue: widget.occasionEntity.occasionName,
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.01,
-              ),
+                        /// occasion name
+                        OccasionInfoColumn(
+                          title: "رقم الآيبان",
+                          occasionValue: widget.occasionEntity.ibanNumber,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
 
-              /// person Name
-              OccasionInfoColumn(
-                title: "اسم صاحب المناسبة",
-                occasionValue: widget.occasionEntity.personName,
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.01,
-              ),
+                        /// person Name
+                        OccasionInfoColumn(
+                          title: "اسم المستلم",
+                          occasionValue: widget.occasionEntity.receiverName,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
 
-              /// person email
-              OccasionInfoColumn(
-                title: "حساب صاحب المناسبة",
-                occasionValue: widget.occasionEntity.personEmail,
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.01,
-              ),
+                        /// person email
+                        OccasionInfoColumn(
+                          title: "رقم جوال المستلم",
+                          occasionValue: widget.occasionEntity.receiverPhone,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
 
-              /// person phone
-              OccasionInfoColumn(
-                title: "رقم جوال صاحب المناسبة",
-                occasionValue: widget.occasionEntity.personPhone,
-              ),
+                        /// person phone
+                        OccasionInfoColumn(
+                          title: "المدينة",
+                          occasionValue: widget.occasionEntity.city,
+                        ),
 
-              /// occasion date
-              OccasionInfoColumn(
-                title: "تاريخ المناسبة",
-                occasionValue: widget.occasionEntity.occasionDate,
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.01,
-              ),
+                        /// occasion date
+                        OccasionInfoColumn(
+                          title: "الحي",
+                          occasionValue: widget.occasionEntity.district,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
 
-              /// occasion type
-              OccasionInfoColumn(
-                title: "نوع المناسبة",
-                occasionValue: widget.occasionEntity.occasionType,
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.01,
-              ),
+                        /// occasion type
+                        OccasionInfoColumn(
+                          title: "بطاقة الهداية",
+                          occasionValue: widget.occasionEntity.giftCard,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
 
-              /// occasion type
-              OccasionInfoColumn(
-                title: "اسم الهدية",
-                occasionValue: widget.occasionEntity.giftName,
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.01,
-              ),
+                        /// occasion type
+                        OccasionInfoColumn(
+                          title: "تاريخ الاستلام",
+                          occasionValue: widget.occasionEntity.receivingDate,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        OccasionInfoColumn(
+                          title: "الرقم المرجعي للمناسبة",
+                          occasionValue: widget.occasionEntity.occasionId,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
 
-              /// gift type
-              OccasionInfoColumn(
-                title: "نوع الهدية",
-                occasionValue: widget.occasionEntity.giftType,
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.01,
-              ),
+                        /// occasion name
+                        OccasionInfoColumn(
+                          title: "اسم المناسبة",
+                          occasionValue: widget.occasionEntity.occasionName,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
 
-              /// gift price
-              OccasionInfoColumn(
-                  title: "سعر الهدية",
-                  occasionValue: "${widget.occasionEntity.giftPrice} ريال"),
+                        /// person Name
+                        OccasionInfoColumn(
+                          title: "اسم صاحب المناسبة",
+                          occasionValue: widget.occasionEntity.personName,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
+
+                        /// person email
+                        OccasionInfoColumn(
+                          title: "حساب صاحب المناسبة",
+                          occasionValue: widget.occasionEntity.personEmail,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
+
+                        /// person phone
+                        OccasionInfoColumn(
+                          title: "رقم جوال صاحب المناسبة",
+                          occasionValue: widget.occasionEntity.personPhone,
+                        ),
+
+                        /// occasion date
+                        OccasionInfoColumn(
+                          title: "تاريخ المناسبة",
+                          occasionValue: widget.occasionEntity.occasionDate,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
+
+                        /// occasion type
+                        OccasionInfoColumn(
+                          title: "نوع المناسبة",
+                          occasionValue: widget.occasionEntity.occasionType,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
+
+                        /// occasion type
+                        OccasionInfoColumn(
+                          title: "اسم الهدية",
+                          occasionValue: widget.occasionEntity.giftName,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
+
+                        /// gift type
+                        OccasionInfoColumn(
+                          title: "نوع الهدية",
+                          occasionValue: widget.occasionEntity.giftType,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.01,
+                        ),
+
+                        /// gift price
+                        OccasionInfoColumn(
+                            title: "سعر الهدية",
+                            occasionValue: "${widget.occasionEntity.giftPrice} ريال"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
 
 
             ],
