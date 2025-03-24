@@ -8,7 +8,8 @@ abstract class PaymentsDataSource{
   Future<void> updateTaxs({
     required String deliveryTax,
     required String serviceTax,
-    required String packageTax,
+    required List<String> packageTax,
+    required List<String> pakaging_image,
   });
 
 } 
@@ -32,7 +33,8 @@ class PaymentsDataSourceImplement extends PaymentsDataSource{
   Future<void> updateTaxs({
     required String deliveryTax,
     required String serviceTax,
-    required String packageTax,
+    required List<String> packageTax,
+    required List<String> pakaging_image,
   })async {
     try{
 
@@ -40,6 +42,7 @@ class PaymentsDataSourceImplement extends PaymentsDataSource{
         'delivery_tax': deliveryTax,
         'packaging_tax': packageTax,
         'service_tax': serviceTax,
+        'pakaging_image': pakaging_image,
       });
 
     }on FirebaseException catch(e){

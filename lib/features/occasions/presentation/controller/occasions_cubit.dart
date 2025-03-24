@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,6 +11,10 @@ part 'occasions_state.dart';
 
 class OccasionsCubit extends Cubit<OccasionsState> {
   OccasionsCubit() : super(OccasionsInitial());
+
+  static OccasionsCubit get(context) => BlocProvider.of(context);
+
+
   TextEditingController occasionNameController = TextEditingController();
   TextEditingController personNameController = TextEditingController();
   TextEditingController occasionDateController = TextEditingController();
@@ -32,7 +37,11 @@ class OccasionsCubit extends Cubit<OccasionsState> {
 String? selectedValue;
   List<OccasionEntity> occasions = [];
 
+  int occasionCountClose = 0;
+  int occasionCountOpen = 0;
   Future<void> getOccasions() async {
+    occasionCountClose=0;
+    occasionCountOpen=0;
     occasions.clear();
     emit(GetOccasionsLoadingState());
     final result = await OccasionRepoImp().getOccasions();
@@ -40,6 +49,13 @@ String? selectedValue;
       emit(GetOccasionsErrorState(error: failure.message));
     }, (occasion) {
       occasions.addAll(occasion);
+      occasions.forEach((element) {
+        if(element.giftPrice<=element.moneyGiftAmount){
+          occasionCountClose++;
+        }else{
+          occasionCountOpen++;
+        }
+      });
       emit(GetOccasionsSuccessState(occasions: occasions));
     });
   }

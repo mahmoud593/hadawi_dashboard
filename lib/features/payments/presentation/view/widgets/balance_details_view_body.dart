@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hadawi_dathboard/features/home/presentation/view/screens/home_screen.dart';
 import 'package:hadawi_dathboard/features/home/presentation/view/widgets/home_view_body.dart';
+import 'package:hadawi_dathboard/features/payments/data/models/balance_model.dart';
 import 'package:hadawi_dathboard/features/payments/data/models/payment_model.dart';
 import 'package:hadawi_dathboard/features/payments/presentation/controller/payments_cubit.dart';
 import 'package:hadawi_dathboard/features/payments/presentation/controller/payments_states.dart';
@@ -24,10 +25,10 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:toastification/toastification.dart';
 
-class PaymentDetailsViewBody extends StatelessWidget {
-  PaymentDetailsViewBody({super.key,required this.paymentModel});
+class BalanceDetailsViewBody extends StatelessWidget {
+  BalanceDetailsViewBody({super.key,required this.balanceModel});
 
-  final PaymentModel paymentModel;
+  final BalanceModel balanceModel;
 
 
   TextEditingController messageController = TextEditingController();
@@ -36,14 +37,14 @@ class PaymentDetailsViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<PaymentsCubit,PaymentsStates>(
        listener: (context, state){
-         if(state is DeletePaymentSuccessState){
+         if(state is DeleteBalanceSuccessState){
            toastificationWidget(context: context, title: 'حذف المعامله', body: 'تم حذف المعامله بنجاح', type: ToastificationType.success);
          }
        },
         builder: (context, state) {
           var cubit = context.read<PaymentsCubit>();
           return ModalProgressHUD(
-            inAsyncCall: state is DeletePaymentLoadingState,
+            inAsyncCall: state is DeleteBalanceLoadingState,
             child: Container(
               alignment: Alignment.center,
               height: SizeConfig.height*0.6,
@@ -75,7 +76,7 @@ class PaymentDetailsViewBody extends StatelessWidget {
 
                           SizedBox( width: SizeConfig.height*0.025,),
 
-                          buildUserInfo(paymentModel.occasionId.toString()),
+                          buildUserInfo(balanceModel.balanceId.toString()),
 
                         ],
                       ),
@@ -88,7 +89,7 @@ class PaymentDetailsViewBody extends StatelessWidget {
 
                           SizedBox( width: SizeConfig.height*0.025,),
 
-                          buildUserInfo(paymentModel.personName.toString()),
+                          buildUserInfo(balanceModel.userName.toString()),
 
                         ],
                       ),
@@ -101,7 +102,7 @@ class PaymentDetailsViewBody extends StatelessWidget {
 
                           SizedBox( width: SizeConfig.height*0.025,),
 
-                          buildUserInfo(paymentModel.personPhone.toString()),
+                          buildUserInfo(balanceModel.phone.toString()),
 
                         ],
                       ),
@@ -110,37 +111,11 @@ class PaymentDetailsViewBody extends StatelessWidget {
                       Row(
                         children: [
 
-                          buildUserInfo('البريد الالكتروني :'),
+                          buildUserInfo('رقم الحساب :'),
 
                           SizedBox( width: SizeConfig.height*0.025,),
 
-                          buildUserInfo(paymentModel.personEmail.toString()),
-
-                        ],
-                      ),
-                      SizedBox( height: SizeConfig.height*0.025,),
-
-                      Row(
-                        children: [
-
-                          buildUserInfo('المبلغ المدفوع :'),
-
-                          SizedBox( width: SizeConfig.height*0.025,),
-
-                          buildUserInfo('${paymentModel.paymentAmount} \$'),
-
-                        ],
-                      ),
-                      SizedBox( height: SizeConfig.height*0.025,),
-
-                      Row(
-                        children: [
-
-                          buildUserInfo('اسم المناسبه :'),
-
-                          SizedBox( width: SizeConfig.height*0.025,),
-
-                          buildUserInfo(paymentModel.occasionName.toString()),
+                          buildUserInfo(balanceModel.accountNumber.toString()),
 
                         ],
                       ),
@@ -153,7 +128,7 @@ class PaymentDetailsViewBody extends StatelessWidget {
 
                           SizedBox( width: SizeConfig.height*0.025,),
 
-                          buildUserInfo(DateFormat('yyyy-MM-dd').format(DateTime.parse(paymentModel.paymentDate!)).toString()),
+                          buildUserInfo('${balanceModel.date} \$'),
 
                         ],
                       ),
@@ -162,11 +137,37 @@ class PaymentDetailsViewBody extends StatelessWidget {
                       Row(
                         children: [
 
-                          buildUserInfo('حاله الدفع :'),
+                          buildUserInfo('رقم ال IBAN :'),
 
                           SizedBox( width: SizeConfig.height*0.025,),
 
-                          buildUserInfo(paymentModel.paymentStatus.toString()),
+                          buildUserInfo(balanceModel.iban.toString()),
+
+                        ],
+                      ),
+                      SizedBox( height: SizeConfig.height*0.025,),
+
+                      Row(
+                        children: [
+
+                          buildUserInfo('المبلغ المدفوع :'),
+
+                          SizedBox( width: SizeConfig.height*0.025,),
+
+                          buildUserInfo(balanceModel.paymentAccount.toString()),
+
+                        ],
+                      ),
+                      SizedBox( height: SizeConfig.height*0.025,),
+
+                      Row(
+                        children: [
+
+                          buildUserInfo('وصف العمليه :'),
+
+                          SizedBox( width: SizeConfig.height*0.025,),
+
+                          buildUserInfo(balanceModel.paymentDescription.toString()),
 
                         ],
                       ),
@@ -205,8 +206,8 @@ class PaymentDetailsViewBody extends StatelessWidget {
                                             child: Text('تأكيد',
                                                 style: TextStyles.textStyle18Medium
                                                     .copyWith(color: ColorManager.red)),
-                                            onPressed: ()async {
-                                              await cubit.deletePayment(paymentId: paymentModel.paymentId.toString());
+                                            onPressed: () async{
+                                              await cubit.deleteBalance(balanceId: balanceModel.balanceId.toString());
                                               customPushAndRemoveUntil(context, PaymentsScreen());
                                             },
                                           ),

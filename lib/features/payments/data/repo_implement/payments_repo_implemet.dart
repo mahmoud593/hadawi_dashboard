@@ -27,12 +27,14 @@ class PaymentsRepoImplement extends PaymentsRepo{
   Future<Either<Faliure, void>> updateTaxs({
     required String deliveryTax,
     required String serviceTax,
-    required String packageTax
+    required List<String> packageTax,
+    required List<String> pakaging_image
   }) async{
     try{
       return Right(await paymentsDataSource.updateTaxs(
           deliveryTax: deliveryTax,
           serviceTax: serviceTax,
+          pakaging_image: pakaging_image,
           packageTax: packageTax
       ));
     }on FireStoreException catch(e){

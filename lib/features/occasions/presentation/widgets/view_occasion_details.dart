@@ -9,7 +9,6 @@ import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 import '../../../../styles/assets/asset_manager.dart';
-import '../../../../widgets/dashboard_app_bar_widget.dart';
 
 class ViewOccasionDetails extends StatefulWidget {
   final OccasionEntity occasionEntity;
@@ -27,8 +26,16 @@ class _ViewOccasionDetailsState extends State<ViewOccasionDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: dashboardAppBarWidget(context: context, text:'تفاصيل المناسبة'),
-
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: ColorManager.white),
+        backgroundColor: ColorManager.primaryBlue,
+        centerTitle: true,
+        title: Text(
+          'تفاصيل المناسبة',
+          style:
+              TextStyles.textStyle18Medium.copyWith(color: ColorManager.white),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Container(
@@ -50,28 +57,28 @@ class _ViewOccasionDetailsState extends State<ViewOccasionDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Row(
-                  children: [
-                    DetailsButton(
-                      title: "انشاء Qr Code",
-                      onPressed: ()async {
-                        setState(() {
-                          haveQrcode = true;
-                        });
-                      },
-                      icon: Icons.qr_code_2,
-                      iconColor: ColorManager.white,
-                      backGroundColor: ColorManager.primaryBlue,
-                      foregroundColor: ColorManager.white,
-                      textColor: ColorManager.white,
-                    ),
-
-
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.04,
-              ),
+                // Row(
+                //   children: [
+                //     DetailsButton(
+                //       title: "انشاء Qr Code",
+                //       onPressed: ()async {
+                //         setState(() {
+                //           haveQrcode = true;
+                //         });
+                //       },
+                //       icon: Icons.qr_code_2,
+                //       iconColor: ColorManager.white,
+                //       backGroundColor: ColorManager.primaryBlue,
+                //       foregroundColor: ColorManager.white,
+                //       textColor: ColorManager.white,
+                //     ),
+                //
+                //
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: MediaQuery.sizeOf(context).height * 0.04,
+                // ),
 
               haveQrcode==true?
 
