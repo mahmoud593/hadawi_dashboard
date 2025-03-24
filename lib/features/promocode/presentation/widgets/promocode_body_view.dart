@@ -90,141 +90,139 @@ class PromoCodeBodyView extends StatelessWidget {
           );
         }
 
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    createPromoCodeBottomSheet(
-                      context: context,
-                      cubit: cubit,
-                      onGenerateCode: () {
-                        cubit.generateRandomCode(length: 6);
-                      },
-                      addPromoCode: () {
-                        cubit.addPromoCode();
-                      },
-                      onChooseDate: () {
-                        showDatePicker(
-                          helpText: 'اختر تاريخ انتهاء الكود',
-                          context: context,
-                          firstDate: DateTime(1920),
-                          lastDate:
-                              DateTime.now().add(const Duration(days: 365)),
-                        ).then((value) => cubit.setCodeExpirationDate(
-                            expirationDate: value!));
-                      },
-                    );
-                  },
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      width: MediaQuery.sizeOf(context).height * 0.24,
-                      height: MediaQuery.sizeOf(context).height * 0.08,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        border: Border.all(color: ColorManager.primaryBlue),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.sync, color: ColorManager.primaryBlue),
-                          SizedBox(width: 10),
-                          Text('انشاء كود خصم',
-                              style: TextStyles.textStyle18Medium),
-                        ],
-                      ),
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  createPromoCodeBottomSheet(
+                    context: context,
+                    cubit: cubit,
+                    onGenerateCode: () {
+                      cubit.generateRandomCode(length: 6);
+                    },
+                    addPromoCode: () {
+                      cubit.addPromoCode();
+                    },
+                    onChooseDate: () {
+                      showDatePicker(
+                        helpText: 'اختر تاريخ انتهاء الكود',
+                        context: context,
+                        firstDate: DateTime(1920),
+                        lastDate:
+                            DateTime.now().add(const Duration(days: 365)),
+                      ).then((value) => cubit.setCodeExpirationDate(
+                          expirationDate: value!));
+                    },
+                  );
+                },
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).height * 0.24,
+                    height: MediaQuery.sizeOf(context).height * 0.08,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(color: ColorManager.primaryBlue),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.02,
-                ),
-                Container(
-                  height: MediaQuery.sizeOf(context).height * 0.05,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: ColorManager.primaryBlue,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                    ),
-                  ),
-                  child: Center(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        buildHeaderText('كود الخصم'),
-                        buildHeaderText('الرقم المرجعي لكود الخصم'),
-                        buildHeaderText('عدد مرات استخدام الكود'),
-                        buildHeaderText('أقصي عدد مرات الاستخدام'),
-                        buildHeaderText('تاريخ الانتهاء'),
-                        buildHeaderText('المناسبات'),
-                        buildHeaderText('وحدة التحكم'),
+                        Icon(Icons.sync, color: ColorManager.primaryBlue),
+                        SizedBox(width: 10),
+                        Text('انشاء كود خصم',
+                            style: TextStyles.textStyle18Medium),
                       ],
                     ),
                   ),
                 ),
-                // SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: ColorManager.white,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15.0),
-                          bottomRight: Radius.circular(15.0),
-                        )),
-                    child: ListView.separated(
-                      itemCount: cubit.promoCodes.length,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      separatorBuilder: (_, __) => Divider(color: Colors.grey),
-                      itemBuilder: (context, index) {
-                        final promoCodesList = cubit.promoCodes[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: Text(promoCodesList.code,
-                                      style: TextStyles.textStyle18Medium)),
-                              Expanded(
-                                  child: Text(promoCodesList.id,
-                                      style: TextStyles.textStyle18Medium)),
-                              Expanded(
-                                  child: Text(promoCodesList.used.toString(),
-                                      style: TextStyles.textStyle18Medium)),
-                              Expanded(
-                                  child: Text(promoCodesList.maxUsage.toString(),
-                                      style: TextStyles.textStyle18Medium)),
-                              Expanded(
-                                  child: Text(promoCodesList.expiryDate ,
-                                      style: TextStyles.textStyle18Medium)),
-                              Expanded(
-                                  child: Text(promoCodesList.occasions.join(',') ,
-                                      style: TextStyles.textStyle18Medium)),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: buildIconButton(
-                                      Icons.delete, Colors.red, () {
-                                    showDeleteDialog(
-                                        context, cubit, promoCodesList.id);
-                                  }),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+              ),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.02,
+              ),
+              Container(
+                height: MediaQuery.sizeOf(context).height * 0.05,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: ColorManager.primaryBlue,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
                   ),
                 ),
-              ],
-            ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      buildHeaderText('كود الخصم'),
+                      buildHeaderText('الرقم المرجعي لكود الخصم'),
+                      buildHeaderText('عدد مرات استخدام الكود'),
+                      buildHeaderText('أقصي عدد مرات الاستخدام'),
+                      buildHeaderText('تاريخ الانتهاء'),
+                      buildHeaderText('المناسبات'),
+                      buildHeaderText('وحدة التحكم'),
+                    ],
+                  ),
+                ),
+              ),
+              // SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: ColorManager.white,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15.0),
+                        bottomRight: Radius.circular(15.0),
+                      )),
+                  child: ListView.separated(
+                    itemCount: cubit.promoCodes.length,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    separatorBuilder: (_, __) => Divider(color: Colors.grey),
+                    itemBuilder: (context, index) {
+                      final promoCodesList = cubit.promoCodes[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: Text(promoCodesList.code,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(promoCodesList.id,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(promoCodesList.used.toString(),
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(promoCodesList.maxUsage.toString(),
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(promoCodesList.expiryDate ,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                                child: Text(promoCodesList.occasions.join(',') ,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: buildIconButton(
+                                    Icons.delete, Colors.red, () {
+                                  showDeleteDialog(
+                                      context, cubit, promoCodesList.id);
+                                }),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },

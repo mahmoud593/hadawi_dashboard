@@ -64,7 +64,7 @@ class PaymentsViewBody extends StatelessWidget {
                             onPressed: (){
                               customPushNavigator(context,
                                   BlocProvider(
-                                      create:  (context) => PaymentsCubit(getIt(),getIt()),
+                                      create:  (context) => PaymentsCubit(getIt(),getIt())..getTaxs(),
                                       child: BlocBuilder<PaymentsCubit,PaymentsStates>(builder: (context, state) {
                                         return TaxsScreen();
                                       })

@@ -28,6 +28,7 @@ class PaymentsRepoImplement extends PaymentsRepo{
     required String deliveryTax,
     required String serviceTax,
     required List<String> packageTax,
+    required List<String> occasionType,
     required List<String> pakaging_image
   }) async{
     try{
@@ -35,6 +36,7 @@ class PaymentsRepoImplement extends PaymentsRepo{
           deliveryTax: deliveryTax,
           serviceTax: serviceTax,
           pakaging_image: pakaging_image,
+          occasionType: occasionType,
           packageTax: packageTax
       ));
     }on FireStoreException catch(e){

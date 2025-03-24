@@ -5,12 +5,14 @@ class TaxEntities extends Equatable{
   final String delivery_tax;
   final List<String> packaging_tax;
   final List<String> pakaging_image;
+  final List<String> occasionType;
   final String service_tax;
 
   const TaxEntities({
     required this.delivery_tax,
     required this.packaging_tax,
     required this.pakaging_image,
+    required this.occasionType,
     required this.service_tax
   });
 
@@ -19,6 +21,7 @@ class TaxEntities extends Equatable{
     delivery_tax,
     packaging_tax,
     pakaging_image,
+    occasionType,
     service_tax
   ];
 

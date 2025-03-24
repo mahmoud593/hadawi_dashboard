@@ -13,11 +13,13 @@ class UpdateTaxsUseCases {
     required String deliveryTax,
     required String serviceTax,
     required List<String> pakaging_image,
+    required List<String> occasionType,
     required List<String> packageTax,
   }) async{
     return paymentsRepo.updateTaxs(
         deliveryTax: deliveryTax,
         serviceTax: serviceTax,
+        occasionType: occasionType,
         pakaging_image: pakaging_image,
         packageTax: packageTax
     );

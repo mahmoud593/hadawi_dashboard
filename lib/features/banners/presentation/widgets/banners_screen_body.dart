@@ -26,133 +26,132 @@ class BannersScreenBody extends StatelessWidget {
                 style: TextStyles.textStyle18Medium),
           );
         }
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    customPushNavigator(
-                        context,
-                        BlocProvider.value(
-                          value: cubit,
-                          child: AddBannersScreen(),
-                        ));
-                  },
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        width: MediaQuery.sizeOf(context).height * 0.2,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: ColorManager.primaryBlue,
-                          borderRadius: BorderRadius.circular(12.0),
-                          border: Border.all(color: ColorManager.primaryBlue),
-                        ),
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  customPushNavigator(
+                      context,
+                      BlocProvider.value(
+                        value: cubit,
+                        child: AddBannersScreen(),
+                      ));
+                },
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).height * 0.2,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: ColorManager.primaryBlue,
+                        borderRadius: BorderRadius.circular(12.0),
+                        border: Border.all(color: ColorManager.primaryBlue),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_a_photo_outlined,
+                            color: ColorManager.white,
+                            size: MediaQuery.sizeOf(context).height * 0.03,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).height * 0.02,
+                          ),
+                          Text(
+                            'إضافة إعلان',
+                            style: TextStyles.textStyle18Bold
+                                .copyWith(color: ColorManager.white),
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.02,
+              ),
+
+              Container(
+                height: MediaQuery.sizeOf(context).height * 0.05,
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                decoration: BoxDecoration(
+                  color: ColorManager.primaryBlue,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
+                  ),
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      buildHeaderText('صورة الاعلان'),
+                      buildHeaderText('الرقم المرجعي للإعلان'),
+                      buildHeaderText('وحدة التحكم'),
+                    ],
+                  ),
+                ),
+              ),
+              // SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: ColorManager.white,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15.0),
+                        bottomRight: Radius.circular(15.0),
+                      )),
+                  child: ListView.separated(
+                    itemCount: cubit.banners.length,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    separatorBuilder: (_, __) => Divider(color: Colors.grey),
+                    itemBuilder: (context, index) {
+                      // final occasion = cubit.occasions[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.add_a_photo_outlined,
-                              color: ColorManager.white,
-                              size: MediaQuery.sizeOf(context).height * 0.03,
+                            Expanded(
+                              child: Container(
+                                height: MediaQuery.sizeOf(context).height * 0.1,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: CachedNetworkImage(
+                                  imageUrl: cubit.banners[index].image,
+                                  placeholder: (context, url) => Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                              ),
                             ),
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).height * 0.02,
-                            ),
-                            Text(
-                              'إضافة إعلان',
-                              style: TextStyles.textStyle18Bold
-                                  .copyWith(color: ColorManager.white),
+                            Expanded(
+                                child: Text(cubit.banners[index].id,
+                                    style: TextStyles.textStyle18Medium)),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  buildIconButton(Icons.delete, Colors.red,
+                                      () {
+                                    showDeleteDialog(context, cubit,
+                                        cubit.banners[index].id);
+                                  }),
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                      )),
-                ),
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.02,
-                ),
-
-                Container(
-                  height: MediaQuery.sizeOf(context).height * 0.05,
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  decoration: BoxDecoration(
-                    color: ColorManager.primaryBlue,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                    ),
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        buildHeaderText('صورة الاعلان'),
-                        buildHeaderText('الرقم المرجعي للإعلان'),
-                        buildHeaderText('وحدة التحكم'),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
-                // SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: ColorManager.white,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15.0),
-                          bottomRight: Radius.circular(15.0),
-                        )),
-                    child: ListView.separated(
-                      itemCount: cubit.banners.length,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      separatorBuilder: (_, __) => Divider(color: Colors.grey),
-                      itemBuilder: (context, index) {
-                        // final occasion = cubit.occasions[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl: cubit.banners[index].image,
-                                    placeholder: (context, url) => Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                  child: Text(cubit.banners[index].id,
-                                      style: TextStyles.textStyle18Medium)),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    buildIconButton(Icons.delete, Colors.red,
-                                        () {
-                                      showDeleteDialog(context, cubit,
-                                          cubit.banners[index].id);
-                                    }),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

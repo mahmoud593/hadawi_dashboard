@@ -33,180 +33,178 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
           );
         }
 
-        return Expanded(
-          child: Column(
-            children: [
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    height: MediaQuery.sizeOf(context).height * 0.05,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                      border: Border.all(color: ColorManager.primaryBlue),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: cubit.selectedValue,
-                        hint: Text(
-                          cubit.selectedValue ?? 'تصنيف حسب',
-                          style: TextStyles.textStyle18Medium,
-                        ),
-                        icon: Icon(Icons.sort,
-                            color: ColorManager.primaryBlue),
-                        borderRadius: BorderRadius.circular(12.0),
-                        items: [
-                          DropdownMenuItem(
-                              value: 'كل المناسبات',
-                              child: Text('كل المناسبات',
-                                  style: TextStyles.textStyle18Medium)),
-                          DropdownMenuItem(
-                              value: 'مناسبات غير مكتملة',
-                              child: Text('مناسبات نشطة',
-                                  style: TextStyles.textStyle18Medium)),
-                          DropdownMenuItem(
-                              value: 'مناسبات مكتملة',
-                              child: Text('مناسبات مكتملة',
-                                  style: TextStyles.textStyle18Medium)),
-                          DropdownMenuItem(
-                              value: 'هدية',
-                              child: Text('هدية',
-                                  style: TextStyles.textStyle18Medium)),
-                          DropdownMenuItem(
-                              value: 'مبلغ مالي',
-                              child: Text('مبلغ مالي',
-                                  style: TextStyles.textStyle18Medium)),
-                        ],
-                        onChanged: (value) {
-                          if (value == 'هدية') {
-                            setState(() {
-                              cubit.selectedValue = value;
-                            });
-                            cubit.filterOccasionsByType(occasionType: 'هدية');
-                          } else if (value == 'مبلغ مالي') {
-                            cubit.filterOccasionsByType(
-                                occasionType: 'مبلغ مالي');
-                          } else if (value == 'مناسبات غير مكتملة') {
-                            cubit.filterNotCompletedOccasions();
-                          } else if (value == 'مناسبات مكتملة') {
-                            cubit.filterCompletedOccasions();
-                          } else {
-                            cubit.getOccasions();
-                          }
-                        },
-                      ),
-                    ),
-                  )),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.02,
-              ),
-              Container(
-                height: MediaQuery.sizeOf(context).height * 0.05,
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: ColorManager.primaryBlue,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.0),
-                    topRight: Radius.circular(15.0),
-                  ),
-                ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      buildHeaderText('المناسبة'),
-                      buildHeaderText('الرقم المرجعي للمناسبة'),
-                      buildHeaderText('تاريخ المناسبة'),
-                      buildHeaderText('صاحب المناسبة'),
-                      buildHeaderText('نوع المناسبة'),
-                      buildHeaderText('نوع الهدية'),
-                      buildHeaderText('وحدة التحكم'),
-                    ],
-                  ),
-                ),
-              ),
-              // SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
-              Expanded(
+        return Column(
+          children: [
+            Align(
+                alignment: Alignment.centerRight,
                 child: Container(
+                  height: MediaQuery.sizeOf(context).height * 0.05,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                   decoration: BoxDecoration(
-                      color: ColorManager.white,
-                      borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15.0),
-                      bottomRight: Radius.circular(15.0),
-                    )
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.0),
+                    border: Border.all(color: ColorManager.primaryBlue),
                   ),
-                  child: ListView.separated(
-                    itemCount: cubit.occasions.length,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    separatorBuilder: (_, __) => Divider(color: Colors.grey),
-                    itemBuilder: (context, index) {
-                      final occasion = cubit.occasions[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Text(occasion.occasionName,
-                                    style: TextStyles.textStyle18Medium)),
-                            Expanded(
-                                child: Text(occasion.occasionId,
-                                    style: TextStyles.textStyle18Medium)),
-                            Expanded(
-                                child: Text(occasion.occasionDate,
-                                    style: TextStyles.textStyle18Medium)),
-                            Expanded(
-                                child: Text(occasion.personName,
-                                    style: TextStyles.textStyle18Medium)),
-                            Expanded(
-                                child: Text(occasion.occasionType,
-                                    style: TextStyles.textStyle18Medium)),
-                            Expanded(
-                                child: Text(occasion.giftType,
-                                    style: TextStyles.textStyle18Medium)),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  buildIconButton(
-                                      Icons.edit, ColorManager.primaryBlue, () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => BlocProvider.value(
-                                          value: cubit,
-                                          child: EditOccasionScreen(
-                                              occasionEntity: occasion),
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                                  buildIconButton(
-                                      Icons.remove_red_eye, Colors.grey, () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => ViewOccasionDetails(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: cubit.selectedValue,
+                      hint: Text(
+                        cubit.selectedValue ?? 'تصنيف حسب',
+                        style: TextStyles.textStyle18Medium,
+                      ),
+                      icon: Icon(Icons.sort,
+                          color: ColorManager.primaryBlue),
+                      borderRadius: BorderRadius.circular(12.0),
+                      items: [
+                        DropdownMenuItem(
+                            value: 'كل المناسبات',
+                            child: Text('كل المناسبات',
+                                style: TextStyles.textStyle18Medium)),
+                        DropdownMenuItem(
+                            value: 'مناسبات غير مكتملة',
+                            child: Text('مناسبات نشطة',
+                                style: TextStyles.textStyle18Medium)),
+                        DropdownMenuItem(
+                            value: 'مناسبات مكتملة',
+                            child: Text('مناسبات مكتملة',
+                                style: TextStyles.textStyle18Medium)),
+                        DropdownMenuItem(
+                            value: 'هدية',
+                            child: Text('هدية',
+                                style: TextStyles.textStyle18Medium)),
+                        DropdownMenuItem(
+                            value: 'مبلغ مالي',
+                            child: Text('مبلغ مالي',
+                                style: TextStyles.textStyle18Medium)),
+                      ],
+                      onChanged: (value) {
+                        if (value == 'هدية') {
+                          setState(() {
+                            cubit.selectedValue = value;
+                          });
+                          cubit.filterOccasionsByType(occasionType: 'هدية');
+                        } else if (value == 'مبلغ مالي') {
+                          cubit.filterOccasionsByType(
+                              occasionType: 'مبلغ مالي');
+                        } else if (value == 'مناسبات غير مكتملة') {
+                          cubit.filterNotCompletedOccasions();
+                        } else if (value == 'مناسبات مكتملة') {
+                          cubit.filterCompletedOccasions();
+                        } else {
+                          cubit.getOccasions();
+                        }
+                      },
+                    ),
+                  ),
+                )),
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.02,
+            ),
+            Container(
+              height: MediaQuery.sizeOf(context).height * 0.05,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: ColorManager.primaryBlue,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15.0),
+                  topRight: Radius.circular(15.0),
+                ),
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    buildHeaderText('المناسبة'),
+                    buildHeaderText('الرقم المرجعي للمناسبة'),
+                    buildHeaderText('تاريخ المناسبة'),
+                    buildHeaderText('صاحب المناسبة'),
+                    buildHeaderText('نوع المناسبة'),
+                    buildHeaderText('نوع الهدية'),
+                    buildHeaderText('وحدة التحكم'),
+                  ],
+                ),
+              ),
+            ),
+            // SizedBox(height: MediaQuery.sizeOf(context).height * 0.01),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: ColorManager.white,
+                    borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15.0),
+                    bottomRight: Radius.circular(15.0),
+                  )
+                ),
+                child: ListView.separated(
+                  itemCount: cubit.occasions.length,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  separatorBuilder: (_, __) => Divider(color: Colors.grey),
+                  itemBuilder: (context, index) {
+                    final occasion = cubit.occasions[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Text(occasion.occasionName,
+                                  style: TextStyles.textStyle18Medium)),
+                          Expanded(
+                              child: Text(occasion.occasionId,
+                                  style: TextStyles.textStyle18Medium)),
+                          Expanded(
+                              child: Text(occasion.occasionDate,
+                                  style: TextStyles.textStyle18Medium)),
+                          Expanded(
+                              child: Text(occasion.personName,
+                                  style: TextStyles.textStyle18Medium)),
+                          Expanded(
+                              child: Text(occasion.occasionType,
+                                  style: TextStyles.textStyle18Medium)),
+                          Expanded(
+                              child: Text(occasion.giftType,
+                                  style: TextStyles.textStyle18Medium)),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                buildIconButton(
+                                    Icons.edit, ColorManager.primaryBlue, () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => BlocProvider.value(
+                                        value: cubit,
+                                        child: EditOccasionScreen(
                                             occasionEntity: occasion),
                                       ),
-                                    );
-                                  }),
-                                  buildIconButton(Icons.delete, Colors.red, () {
-                                    showDeleteDialog(
-                                        context, cubit, occasion.occasionId);
-                                  }),
-                                ],
-                              ),
+                                    ),
+                                  );
+                                }),
+                                buildIconButton(
+                                    Icons.remove_red_eye, Colors.grey, () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ViewOccasionDetails(
+                                          occasionEntity: occasion),
+                                    ),
+                                  );
+                                }),
+                                buildIconButton(Icons.delete, Colors.red, () {
+                                  showDeleteDialog(
+                                      context, cubit, occasion.occasionId);
+                                }),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

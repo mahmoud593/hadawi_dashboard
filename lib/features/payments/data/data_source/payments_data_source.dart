@@ -10,6 +10,7 @@ abstract class PaymentsDataSource{
     required String serviceTax,
     required List<String> packageTax,
     required List<String> pakaging_image,
+    required List<String> occasionType,
   });
 
 } 
@@ -22,8 +23,10 @@ class PaymentsDataSourceImplement extends PaymentsDataSource{
     
     try{
       var res = await FirebaseFirestore.instance.collection('taxs').doc('7Nk2W2zeMTlX4djL1C3K').get();
+      print('Tax Data ${res.data()}');
       return TaxModels.fromJson(res.data()!);
     }on FirebaseException catch(e){
+      print('Error in get tax ${e.toString()}');
       throw FireStoreException(firebaseException:  e);
     }
 
@@ -35,6 +38,7 @@ class PaymentsDataSourceImplement extends PaymentsDataSource{
     required String serviceTax,
     required List<String> packageTax,
     required List<String> pakaging_image,
+    required List<String> occasionType,
   })async {
     try{
 
@@ -43,6 +47,7 @@ class PaymentsDataSourceImplement extends PaymentsDataSource{
         'packaging_tax': packageTax,
         'service_tax': serviceTax,
         'pakaging_image': pakaging_image,
+        'occasionType': occasionType,
       });
 
     }on FirebaseException catch(e){

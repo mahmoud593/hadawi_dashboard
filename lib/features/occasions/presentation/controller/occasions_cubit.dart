@@ -49,13 +49,7 @@ String? selectedValue;
       emit(GetOccasionsErrorState(error: failure.message));
     }, (occasion) {
       occasions.addAll(occasion);
-      occasions.forEach((element) {
-        if(element.giftPrice<=element.moneyGiftAmount){
-          occasionCountClose++;
-        }else{
-          occasionCountOpen++;
-        }
-      });
+
       emit(GetOccasionsSuccessState(occasions: occasions));
     });
   }

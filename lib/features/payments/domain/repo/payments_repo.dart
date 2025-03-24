@@ -10,6 +10,7 @@ abstract class PaymentsRepo {
     required String serviceTax,
     required List<String> packageTax,
     required List<String> pakaging_image,
+    required List<String> occasionType,
   });
 
 }

@@ -12,6 +12,7 @@ import 'package:hadawi_dathboard/features/payments/domain/entities/taxs_entities
 import 'package:hadawi_dathboard/features/payments/domain/use_cases/taxs_use_cases.dart';
 import 'package:hadawi_dathboard/features/payments/domain/use_cases/update_taxs_use_cases.dart';
 import 'package:hadawi_dathboard/features/payments/presentation/controller/payments_states.dart';
+import 'package:hadawi_dathboard/utiles/error_handling/exceptions/exceptions.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -28,8 +29,12 @@ class PaymentsCubit extends Cubit<PaymentsStates>{
     emit(GetTaxsLoadingState());
     var result = await taxUseCases.getTaxs();
     result.fold(
-            (l) => emit(GetTaxsErrorState(error:  l.message)),
+            (l) {
+              print('hhjfhd ${l.message}');
+              emit(GetTaxsErrorState(error:  l.message));
+            },
             (r) {
+              print('hhjfhd ${r}');
               taxEntities = r;
               emit(GetTaxsSuccessState());
             }
@@ -40,13 +45,30 @@ class PaymentsCubit extends Cubit<PaymentsStates>{
     required String deliveryTax,
     required String serviceTax,
     required List<String> packageTax,
-    required List<String> pakaging_image,
+    required List<Uint8List> pakaging_image,
+    required List<String> occasionType,
   })async{
     emit(UpdateTaxsLoadingState());
+    String image1 = '';
+    String image2 = '';
+    if(pakaging_image != []){
+      if(webImageBytes1 != null){
+        image1 = await uploadPackagingImage1();
+      }else{
+        image1 = taxEntities!.pakaging_image[0];
+      }
+      if(webImageBytes2 != null){
+        image2 = await uploadPackagingImage2();
+      }else{
+        image2 = taxEntities!.pakaging_image[1];
+      }
+    }
+
     var result = await updateTaxsUseCases.updateTaxs(
         deliveryTax: deliveryTax,
+        occasionType: occasionType,
         serviceTax: serviceTax,
-        pakaging_image: pakaging_image,
+        pakaging_image: [image1,image2],
         packageTax: packageTax
     );
     result.fold(
@@ -57,25 +79,24 @@ class PaymentsCubit extends Cubit<PaymentsStates>{
     );
   }
 
+  /// upload packaging image
 
-  var picker = ImagePicker();
+  var picker1 = ImagePicker();
 
-  File? imageFile;
-  File? imageFile2;
-  Uint8List? webImageBytes;
-  Uint8List? webImageBytes2;
+  File? imageFile1; // For mobile
+  Uint8List? webImageBytes1; // For web
 
-  Future<void> pickBannerImage() async {
+  Future<void> pickPackagingImage1() async {
     emit(PickImageLoadingState());
 
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    final pickedImage = await picker1.pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
       if (kIsWeb) {
-        webImageBytes = await pickedImage.readAsBytes();
-        emit(PickImageSuccessState());
+        webImageBytes1 = await pickedImage.readAsBytes();
+        emit(PickImageLoadingState());
       } else {
-        imageFile = File(pickedImage.path);
+        imageFile1 = File(pickedImage.path);
         emit(PickImageSuccessState());
       }
     } else {
@@ -83,46 +104,42 @@ class PaymentsCubit extends Cubit<PaymentsStates>{
     }
   }
 
-  Future<void> pickBannerImage2() async {
-    emit(PickImageLoadingState2());
-
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      if (kIsWeb) {
-        webImageBytes2 = await pickedImage.readAsBytes();
-        emit(PickImageSuccessState2());
-      } else {
-        imageFile2 = File(pickedImage.path);
-        emit(PickImageSuccessState2());
-      }
-    } else {
-      emit(PickImageErrorState2());
-    }
-  }
-
-  String downloadUrl ='';
-
-  Future<String> uploadImage() async {
+  Future<String> uploadPackagingImage1() async {
     emit(UploadImageLoadingState());
+
     try {
-      firebase_storage.FirebaseStorage.instance
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
           .ref()
-          .child(
-          'gifts/1//${Uri.dataFromBytes(webImageBytes!).pathSegments.last}')
-          .putData(webImageBytes!).then((value) {
-        value.ref.getDownloadURL().then((value) {
-          debugPrint('Upload Success');
-          downloadUrl = value;
-          // if (kIsWeb) {
-          //   // Web: Upload from Uint8List
-          //   uploadTask = ref.putData(webImageBytes!);
-          // } else {
-          //   // Mobile: Upload from File
-          //   uploadTask = ref.putFile(imageFile!);
-          // }
-        });
-      });
+          .child('packaging/1/${DateTime.now().millisecondsSinceEpoch}');
+
+      firebase_storage.UploadTask uploadTask;
+
+      if (kIsWeb) {
+        // Web: Upload from Uint8List
+        uploadTask = ref.putData(webImageBytes1!);
+      } else {
+        // Mobile: Upload from File
+        uploadTask = ref.putFile(imageFile1!);
+      }
+
+      final snapshot = await uploadTask;
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      DocumentReference docRef = FirebaseFirestore.instance.collection('taxs').doc('7Nk2W2zeMTlX4djL1C3K');
+
+      DocumentSnapshot docSnapshot = await docRef.get();
+
+      List<dynamic> packagingTax = docSnapshot.get('packaging_tax');
+
+      packagingTax[0] = downloadUrl;
+      try{
+
+          await FirebaseFirestore.instance.collection('taxs').doc('7Nk2W2zeMTlX4djL1C3K').update({
+            'pakaging_image': [],
+          });
+
+        }on FirebaseException catch(e){
+          throw FireStoreException(firebaseException:  e);
+        }
 
       emit(UploadImageSuccessState());
       return downloadUrl;
@@ -132,26 +149,75 @@ class PaymentsCubit extends Cubit<PaymentsStates>{
     }
   }
 
+  /// upload image 2
 
-  String downloadUrl2 ='';
-  Future<String> uploadImage2() async {
+  /// upload packaging image
+
+  var picker2 = ImagePicker();
+
+  File? imageFile2; // For mobile
+  Uint8List? webImageBytes2; // For web
+
+  Future<void> pickPackagingImage2() async {
+    emit(PickImageLoadingState2());
+
+    final pickedImage = await picker2.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      if (kIsWeb) {
+        webImageBytes2 = await pickedImage.readAsBytes();
+        emit(PickImageLoadingState2());
+      } else {
+        imageFile2 = File(pickedImage.path);
+        emit(PickImageSuccessState2());
+      }
+    } else {
+      emit(PickImageErrorState2());
+    }
+  }
+
+  Future<String> uploadPackagingImage2() async {
     emit(UploadImageLoadingState2());
+
     try {
-      firebase_storage.FirebaseStorage.instance
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
           .ref()
-          .child(
-          'gifts/2//${Uri.dataFromBytes(webImageBytes2!).pathSegments.last}')
-          .putData(webImageBytes2!).then((value) {
-        value.ref.getDownloadURL().then((value) {
-          debugPrint('Upload Success');
-          downloadUrl2 = value;
+          .child('packaging/2/${DateTime.now().millisecondsSinceEpoch}');
+
+      firebase_storage.UploadTask uploadTask;
+
+      if (kIsWeb) {
+        // Web: Upload from Uint8List
+        uploadTask = ref.putData(webImageBytes2!);
+      } else {
+        // Mobile: Upload from File
+        uploadTask = ref.putFile(imageFile2!);
+      }
+
+      final snapshot = await uploadTask;
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      DocumentReference docRef = FirebaseFirestore.instance.collection('taxs').doc('7Nk2W2zeMTlX4djL1C3K');
+
+      DocumentSnapshot docSnapshot = await docRef.get();
+
+      List<dynamic> packagingTax = docSnapshot.get('packaging_tax');
+
+      packagingTax[1] = downloadUrl;
+      try{
+
+        await FirebaseFirestore.instance.collection('taxs').doc('7Nk2W2zeMTlX4djL1C3K').update({
+          'pakaging_image': packagingTax[1],
         });
-      });
+
+      }on FirebaseException catch(e){
+        throw FireStoreException(firebaseException:  e);
+      }
+
       emit(UploadImageSuccessState2());
-      return downloadUrl2;
+      return downloadUrl;
     } catch (error) {
-      emit(UploadImageErrorState2());
-      throw Exception("Failed to upload image2: $error");
+      emit(UploadImageErrorState());
+      throw Exception("Failed to upload image: $error");
     }
   }
 
