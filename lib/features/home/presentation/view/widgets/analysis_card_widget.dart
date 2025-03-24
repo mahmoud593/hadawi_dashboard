@@ -3,9 +3,13 @@ import 'package:hadawi_dathboard/constants/app_constants.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 
 class AnalysisCardWidget extends StatelessWidget {
-   AnalysisCardWidget({super.key,required this.index});
+   AnalysisCardWidget({super.key,required this.index,required this.usersCount,required this.occusionsCountOpen,required this.occusionsCountClose,required this.paymentCount});
 
   final int index;
+  final String usersCount;
+  final String occusionsCountOpen;
+  final String occusionsCountClose;
+  final String paymentCount;
 
   List images = [
     'assets/images/active.png',
@@ -15,9 +19,9 @@ class AnalysisCardWidget extends StatelessWidget {
   ];
 
    List strings = [
-     'المستخدمين النشطين من اجمالي 50',
-     'المناسبات النشطه من اجمالي 30',
-     'المناسبات المغلقه من اجمالي 30',
+     'المستخدمين النشطين',
+     'المناسبات النشطه',
+     'المناسبات المغلقه',
      'اجمالي الدفوعات',
    ];
 
@@ -49,7 +53,14 @@ class AnalysisCardWidget extends StatelessWidget {
            mainAxisAlignment: MainAxisAlignment.center,
            crossAxisAlignment: CrossAxisAlignment.start,
            children: [
-             Text(values[index],
+             Text(
+              index==0?
+              usersCount:
+              index==1?
+              occusionsCountOpen:
+              index==2?
+              occusionsCountClose:
+              paymentCount,
                style: TextStyle(color: ColorManager.primaryBlue,
                  fontSize: MediaQuery.sizeOf(context).height*0.04,
                  fontWeight:  FontWeight.bold,

@@ -57,28 +57,28 @@ class _ViewOccasionDetailsState extends State<ViewOccasionDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Row(
-                  children: [
-                    DetailsButton(
-                      title: "انشاء Qr Code",
-                      onPressed: ()async {
-                        setState(() {
-                          haveQrcode = true;
-                        });
-                      },
-                      icon: Icons.qr_code_2,
-                      iconColor: ColorManager.white,
-                      backGroundColor: ColorManager.primaryBlue,
-                      foregroundColor: ColorManager.white,
-                      textColor: ColorManager.white,
-                    ),
-
-
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.04,
-                ),
+                // Row(
+                //   children: [
+                //     DetailsButton(
+                //       title: "انشاء Qr Code",
+                //       onPressed: ()async {
+                //         setState(() {
+                //           haveQrcode = true;
+                //         });
+                //       },
+                //       icon: Icons.qr_code_2,
+                //       iconColor: ColorManager.white,
+                //       backGroundColor: ColorManager.primaryBlue,
+                //       foregroundColor: ColorManager.white,
+                //       textColor: ColorManager.white,
+                //     ),
+                //
+                //
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: MediaQuery.sizeOf(context).height * 0.04,
+                // ),
 
                 haveQrcode==true?
 

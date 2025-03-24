@@ -12,11 +12,13 @@ class UpdateTaxsUseCases {
   Future<Either<Faliure, void>> updateTaxs({
     required String deliveryTax,
     required String serviceTax,
-    required String packageTax,
+    required List<String> pakaging_image,
+    required List<String> packageTax,
   }) async{
     return paymentsRepo.updateTaxs(
         deliveryTax: deliveryTax,
         serviceTax: serviceTax,
+        pakaging_image: pakaging_image,
         packageTax: packageTax
     );
   }

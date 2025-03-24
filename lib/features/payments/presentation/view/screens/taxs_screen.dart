@@ -12,24 +12,21 @@ class TaxsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create:  (context) => PaymentsCubit(getIt(),getIt())..getTaxs(),
-      child: BlocBuilder<PaymentsCubit,PaymentsStates>(
-        builder: (context, state) {
-          return Directionality(
-            textDirection:  TextDirection.rtl,
-            child: Scaffold(
-              backgroundColor: Colors.grey[300],
-              appBar: dashboardAppBarWidget(context: context, text:'الرسوم الاداريه'),
-              body: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: context.read<PaymentsCubit>().taxEntities !=null?
-                  TaxsViewBody():Center(child: CircularProgressIndicator(),)
-              ),
+    return BlocBuilder<PaymentsCubit,PaymentsStates>(
+      builder: (context, state) {
+        return Directionality(
+          textDirection:  TextDirection.rtl,
+          child: Scaffold(
+            backgroundColor: Colors.grey[300],
+            appBar: dashboardAppBarWidget(context: context, text:'الرسوم الاداريه'),
+            body: Directionality(
+                textDirection: TextDirection.rtl,
+                child: context.read<PaymentsCubit>().taxEntities !=null?
+                TaxsViewBody():Center(child: CircularProgressIndicator(),)
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

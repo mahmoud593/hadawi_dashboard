@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hadawi_dathboard/features/banners/presentation/banners_screen.dart';
 import 'package:hadawi_dathboard/features/auth/presentation/login_screen.dart';
 import 'package:hadawi_dathboard/features/home/presentation/view/screens/home_screen.dart';
+import 'package:hadawi_dathboard/features/occasions/presentation/controller/occasions_cubit.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/occasions_screen.dart';
 import 'package:hadawi_dathboard/styles/theme_manger/theme_manager.dart';
 import 'package:hadawi_dathboard/utiles/cashe_helper/cashe_helper.dart';
@@ -35,11 +37,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Hadawi Dashboard',
-      theme: getApplicationTheme(context),
-      home: UserDataFromStorage.userIsLogin ? const HomeScreen() : const LoginScreen(),
+    return BlocProvider(
+      create:  (context) => OccasionsCubit()..getOccasions(),
+      child: BlocConsumer<OccasionsCubit, OccasionsState>(
+          listener: (context, state) {},
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Hadawi Dashboard',
+            theme: getApplicationTheme(context),
+            home: UserDataFromStorage.userIsLogin ? const HomeScreen() : const LoginScreen(),
+          );
+        },
+      ),
     );
   }
 }

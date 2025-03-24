@@ -24,13 +24,19 @@ class _TaxsViewBodyState extends State<TaxsViewBody> {
   TextEditingController serviceController = TextEditingController();
   TextEditingController deliveryController = TextEditingController();
   TextEditingController packingController = TextEditingController();
+  TextEditingController packing2Controller = TextEditingController();
+  String image1='';
+  String image2='';
 
   @override
   void initState() {
     super.initState();
     serviceController.text= context.read<PaymentsCubit>().taxEntities!.service_tax;
     deliveryController.text= context.read<PaymentsCubit>().taxEntities!.delivery_tax;
-    packingController.text= context.read<PaymentsCubit>().taxEntities!.packaging_tax;
+    packingController.text= context.read<PaymentsCubit>().taxEntities!.packaging_tax[0];
+    packing2Controller.text= context.read<PaymentsCubit>().taxEntities!.packaging_tax[1];
+    image1= context.read<PaymentsCubit>().taxEntities!.pakaging_image[0];
+    image2= context.read<PaymentsCubit>().taxEntities!.pakaging_image[1];
   }
 
 
@@ -40,7 +46,8 @@ class _TaxsViewBodyState extends State<TaxsViewBody> {
       builder:  (context, state) {
         var cubit = context.read<PaymentsCubit>();
         return ModalProgressHUD(
-          inAsyncCall: context.read<PaymentsCubit>().taxEntities ==null || state is UpdateTaxsLoadingState,
+          inAsyncCall: context.read<PaymentsCubit>().taxEntities ==null || state is UpdateTaxsLoadingState
+          || state is UploadImageLoadingState || state is UploadImageLoadingState2,
           child: Container(
             margin:  EdgeInsets.symmetric(
                 horizontal: 20,
@@ -57,15 +64,6 @@ class _TaxsViewBodyState extends State<TaxsViewBody> {
             child: Column(
               crossAxisAlignment:  CrossAxisAlignment.start,
               children: [
-                SizedBox( height: SizeConfig.height*0.02,),
-
-                Align(
-                  alignment: Alignment.center,
-                  child: Image(
-                    image: AssetImage(AssetsManager.logoWithoutBackground),
-                    height: SizeConfig.height*0.15,
-                  ),
-                ),
 
                 SizedBox( height: SizeConfig.height*0.02,),
 
@@ -112,6 +110,73 @@ class _TaxsViewBodyState extends State<TaxsViewBody> {
                     fillColor: ColorManager.gray
                 ),
 
+
+                SizedBox( height: SizeConfig.height*0.03,),
+
+                DefaultTextField(
+                    controller: packing2Controller,
+                    hintText: 'ادخل رسوم التغليف',
+                    validator: (value) {},
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    fillColor: ColorManager.gray
+                ),
+
+                SizedBox( height: SizeConfig.height*0.03,),
+
+                buildTextField('صور التغليف'),
+
+                SizedBox( height: SizeConfig.height*0.02,),
+
+                Row(
+                  children: [
+                    Container(
+                      height:  SizeConfig.height*0.15,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(SizeConfig.height*0.01),
+                        border: Border.all(
+                          color: ColorManager.black
+                        )
+                      ),
+                      child: cubit.webImageBytes!=null?
+                      Image.memory(cubit.webImageBytes!):
+                      Image(
+                        image: NetworkImage(image1),
+                      ),
+                    ),
+                    SizedBox( width:  SizeConfig.height*0.01,),
+                    IconButton(
+                        onPressed:()async{
+                          cubit.pickBannerImage().then((value) => cubit.uploadImage());
+                        } ,
+                        icon: Icon(Icons.upload)
+                    ),
+                    SizedBox( width:  SizeConfig.height*0.08,),
+                    Container(
+                      height:  SizeConfig.height*0.15,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(SizeConfig.height*0.01),
+                          border: Border.all(
+                              color: ColorManager.black
+                          )
+                      ),
+                      child: cubit.webImageBytes2!=null?
+                      Image.memory(cubit.webImageBytes2!):
+                      Image(
+                        image: NetworkImage(image2),
+                      ),
+                    ),
+                    SizedBox( width:  SizeConfig.height*0.01,),
+                    IconButton(
+                        onPressed:()async{
+                          cubit.pickBannerImage2().then((value) => cubit.uploadImage2());
+                        } ,
+                        icon: Icon(Icons.upload)
+                    ),
+                  ],
+                ),
                 Spacer(),
 
                 Align(
@@ -120,18 +185,21 @@ class _TaxsViewBodyState extends State<TaxsViewBody> {
                     width: SizeConfig.height*0.5,
                     child: DefaultButton(
                         buttonText: 'حفظ',
-                        onPressed: (){
+                        onPressed: ()async{
                           cubit.updateTaxs(
+                              pakaging_image: cubit.downloadUrl !='' && cubit.downloadUrl2 !=''?
+                              [cubit.downloadUrl,cubit.downloadUrl2] :cubit.downloadUrl ==''?
+                              [image1,cubit.downloadUrl2]:cubit.downloadUrl2 ==''?
+                              [cubit.downloadUrl,image2]:[image1,image2],
                               deliveryTax: deliveryController.text,
                               serviceTax: serviceController.text,
-                              packageTax: packingController.text
+                              packageTax: [packingController.text, packing2Controller.text]
                           );
                         },
                         buttonColor: ColorManager.primaryBlue
                     ),
                   ),
                 )
-
               ],
             ),
           ),

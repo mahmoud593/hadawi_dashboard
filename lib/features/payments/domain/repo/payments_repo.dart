@@ -8,7 +8,8 @@ abstract class PaymentsRepo {
   Future<Either<Faliure, void>> updateTaxs({
     required String deliveryTax,
     required String serviceTax,
-    required String packageTax,
+    required List<String> packageTax,
+    required List<String> pakaging_image,
   });
 
 }
