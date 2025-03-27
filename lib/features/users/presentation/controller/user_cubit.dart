@@ -86,6 +86,7 @@ class UserCubit extends Cubit<UserStates>{
     required String message
   })async{
     emit(DeleteUserLoadingState());
+
     var result = await deleteUserUseCases.call(userId:  userId,message: message);
     result.fold(
             (l) => emit(DeleteUserErrorState(l.message)),
