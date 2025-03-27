@@ -9,6 +9,7 @@ class UserModel extends UserEntities{
     required super.email,
     required super.brithDate,
     required super.gender,
+    required super.date,
     required super.uId
   });
 
@@ -18,6 +19,7 @@ class UserModel extends UserEntities{
       email: json['email'],
       brithDate: json['brithDate'],
       gender: json['gender'],
+      date: json['date'],
       uId: json['uId']
   );
 
@@ -27,6 +29,7 @@ class UserModel extends UserEntities{
     'email': email,
     'brithDate': brithDate,
     'gender': gender,
+    'date': date,
     'uId': uId,
   };
 

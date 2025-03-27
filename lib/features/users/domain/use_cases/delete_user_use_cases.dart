@@ -9,8 +9,8 @@ class DeleteUserUseCases{
 
   DeleteUserUseCases({required this.userRepo});
 
-  Future<Either<Faliure, void>> call({ required String userId}) async {
-    return await userRepo.deleteUser(userId: userId);
+  Future<Either<Faliure, void>> call({ required String userId,required String message}) async {
+    return await userRepo.deleteUser(userId: userId,message: message);
   }
 
 }

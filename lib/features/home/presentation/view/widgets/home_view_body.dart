@@ -19,6 +19,7 @@ import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
 import 'package:hadawi_dathboard/utiles/helper/material_navigation.dart';
 import 'package:hadawi_dathboard/utiles/services/service_locator.dart';
 import 'package:hadawi_dathboard/widgets/default_text_field.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeViewBody extends StatefulWidget {
    HomeViewBody({super.key});
@@ -40,7 +41,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserCubit(getIt(),getIt(),getIt(),getIt())..getAllUsers(),
+      create: (context) => UserCubit(getIt(),getIt(),getIt(),getIt())..getAllUsers(desending: false)..getAnalysis(),
       child: BlocConsumer<UserCubit,UserStates>(
         builder: (context, state) {
           var cubit = context.read<UserCubit>();
@@ -86,7 +87,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
                               child: DefaultTextField(
                                   onChanged: (value){
-                                    cubit.filterName(value);
+                                    cubit.filterName(value,false);
                                   },
                                   controller: searchController,
                                   hintText: 'بحث في الجدول (الاسم - البريد الالكتروني - رقم الهاتف) ....',
@@ -152,6 +153,75 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       ),
 
                       /// analysis cards
+                      cubit.analysisModel == null ? Row(
+                        children: [
+                          SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,),
+                          Container(
+                            height:  MediaQuery.sizeOf(context).height*0.2,
+                            width:  MediaQuery.sizeOf(context).width*0.15,
+                            child: Shimmer.fromColors(
+                              baseColor:  Colors.grey.shade300,
+                              highlightColor:  Colors.grey.shade100,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: ColorManager.white,
+                                  border:Border.all(color: ColorManager.primaryBlue),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,),
+                          Container(
+                            height:  MediaQuery.sizeOf(context).height*0.2,
+                            width:  MediaQuery.sizeOf(context).width*0.15,
+                            child: Shimmer.fromColors(
+                              baseColor:  Colors.grey.shade300,
+                              highlightColor:  Colors.grey.shade100,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: ColorManager.white,
+                                  border:Border.all(color: ColorManager.primaryBlue),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,),
+                          Container(
+                            height:  MediaQuery.sizeOf(context).height*0.2,
+                            width:  MediaQuery.sizeOf(context).width*0.15,
+                            child: Shimmer.fromColors(
+                              baseColor:  Colors.grey.shade300,
+                              highlightColor:  Colors.grey.shade100,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: ColorManager.white,
+                                  border:Border.all(color: ColorManager.primaryBlue),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,),
+                          Container(
+                            height:  MediaQuery.sizeOf(context).height*0.2,
+                            width:  MediaQuery.sizeOf(context).width*0.15,
+                            child: Shimmer.fromColors(
+                              baseColor:  Colors.grey.shade300,
+                              highlightColor:  Colors.grey.shade100,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: ColorManager.white,
+                                  border:Border.all(color: ColorManager.primaryBlue),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,)
+                        ],
+                      ) :
                       Container(
                         height:  MediaQuery.sizeOf(context).height*0.2,
                         width:  MediaQuery.sizeOf(context).width,
@@ -160,8 +230,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                             itemBuilder: (context, index) => AnalysisCardWidget(
                               index: index,
                               usersCount: cubit.users.length.toString(),
-                              occusionsCountClose: OccasionsCubit.get(context).occasionCountClose.toString(),
-                              occusionsCountOpen:  OccasionsCubit.get(context).occasionCountOpen.toString(),
+                              occusionsCountClose: cubit.analysisModel!.closeOccasions.toString(),
+                              occusionsCountOpen:  cubit.analysisModel!.openOccasions.toString(),
                               paymentCount: 0.toString(),
                             ),
                             separatorBuilder: (context, index) => SizedBox(width:  MediaQuery.sizeOf(context).height*0.02,),
@@ -175,7 +245,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       Container(
                           height:  MediaQuery.sizeOf(context).height*0.6,
                           width:  MediaQuery.sizeOf(context).width,
-                          child: UsersViewBody()
+                          child: UsersViewBody(isScreen: false,)
                       ),
                     ],
                   ),

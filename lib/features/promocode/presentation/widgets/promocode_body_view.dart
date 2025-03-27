@@ -23,7 +23,6 @@ class PromoCodeBodyView extends StatelessWidget {
           cubit.getPromoCodes().then((value) {
             Navigator.pop(context);
           },);
-
         }
       },
       builder: (context, state) {

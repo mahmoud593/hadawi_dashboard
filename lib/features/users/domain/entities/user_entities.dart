@@ -8,6 +8,7 @@ class UserEntities  extends Equatable{
   final String brithDate;
   final String gender;
   final String uId;
+  final String date;
   // final bool uId;
 
   const UserEntities({
@@ -17,10 +18,11 @@ class UserEntities  extends Equatable{
     required this.brithDate,
     required this.gender,
     required this.uId,
+    required this.date,
   });
 
   @override
   // TODO: implement props
-  List<Object?> get props => [name,phone,email,brithDate,gender,uId];
+  List<Object?> get props => [name,phone,email,brithDate,gender,uId,date];
 
 }

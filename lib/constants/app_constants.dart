@@ -5,6 +5,7 @@ class AppConstants{
 
   List<String> dividerTitles=[
     'الرئيسية',
+    'المستخدمين',
     'المناسبات',
     'إدارة المدفوعات والمحفظة',
     'العروض التروجيه',
@@ -17,6 +18,7 @@ class AppConstants{
 
   List<String> dividerIcons=[
     'assets/images/home.png',
+    'assets/images/friends.png',
     'assets/images/gift.png',
     'assets/images/pay.png',
     'assets/images/job.png',
