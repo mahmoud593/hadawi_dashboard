@@ -85,12 +85,15 @@ Future createPromoCodeBottomSheet({
                             child: DefaultTextField(
                                 controller: cubit.codeController,
                                 hintText: 'أدخل كود الخصم',
-                                enable: false,
+                                enable: true,
                                 validator: (value) {
-                                  if (value!.trim().isEmpty) {
-                                    return 'الرجاء الضغط علي الزر لانشاء كود الخصم';
+                                  if (!cubit.validateCode(value: value ?? '')) {
+                                    return cubit.state is ValidateCodeFailureState
+                                        ? (cubit.state as ValidateCodeFailureState).message
+                                        : null;
                                   }
-                                  return null;},
+                                  return null;
+                                },
                                 keyboardType: TextInputType.text,
                                 textInputAction: TextInputAction.next,
                                 fillColor: Colors.transparent),
@@ -175,7 +178,11 @@ Future createPromoCodeBottomSheet({
                         height: MediaQuery.sizeOf(context).height * 0.06,
                         child: DefaultButton(
                           buttonText: 'اضافة',
-                          onPressed: addPromoCode,
+                          onPressed: () {
+                            if (cubit.bottomSheetFormKey.currentState!.validate()) {
+                              cubit.addPromoCode();
+                            }
+                          },
                           buttonColor: ColorManager.primaryBlue,
                         ),
                       ),

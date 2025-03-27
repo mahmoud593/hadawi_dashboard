@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hadawi_dathboard/features/banners/data/banners_repo_imp/banners_repo_imp.dart';
 import 'package:hadawi_dathboard/features/banners/domain/banners_entity/banners_entity.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +17,9 @@ class BannersCubit extends Cubit<BannersState> {
 
   File? imageFile; // For mobile
   Uint8List? webImageBytes; // For web
+
+    TextEditingController bannerNameController = TextEditingController();
+    GlobalKey<FormState>bannerFormKey = GlobalKey<FormState>();
 
   Future<void> pickBannerImage() async {
     emit(PickImageLoadingState());
@@ -64,16 +68,23 @@ class BannersCubit extends Cubit<BannersState> {
     }
   }
 
+ void clearImage() {
+    imageFile = null;
+    webImageBytes = null;
+    emit(ClearImageState());
+  }
+
   Future<void> addBanner() async {
     emit(AddBannersLoadingState());
     try {
       final imageUrl = await uploadImage();
-      final result = await BannersRepoImp().addBanner(image: imageUrl);
+      final result = await BannersRepoImp().addBanner(image: imageUrl, bannerName: bannerNameController.text);
       result.fold(
         (failure) {
           emit(AddBannersErrorState(error: failure.message));
         },
         (banners) {
+          bannersList.add(banners);
           emit(AddBannersSuccessState());
         },
       );
@@ -82,7 +93,7 @@ class BannersCubit extends Cubit<BannersState> {
     }
   }
 
-  List<BannersEntity> banners = [];
+  List<BannersEntity> bannersList = [];
 
   Future<void> getBanners() async {
     emit(GetBannersLoadingState());
@@ -91,7 +102,7 @@ class BannersCubit extends Cubit<BannersState> {
       result.fold(
         (l) {},
         (r) {
-          banners = r;
+          bannersList = r;
           emit(GetBannersSuccessState());
         },
       );
@@ -107,8 +118,22 @@ class BannersCubit extends Cubit<BannersState> {
     result.fold((failure) {
       emit(DeleteBannerErrorState(error: failure.message));
     }, (banner) {
-      banners.removeWhere((element) => element.id == bannerId);
-      emit(DeleteBannerSuccessState(banners: banners));
+      bannersList.removeWhere((element) => element.id == bannerId);
+      emit(DeleteBannerSuccessState(banners: bannersList));
+    });
+  }
+
+  Future<void> editBanner({required String bannerId,String? image}) async {
+    emit(EditBannerLoadingState());
+    final result = await BannersRepoImp().editBanner(
+      bannerId: bannerId,
+      bannerName: bannerNameController.text,
+      bannerImage: webImageBytes != null ? await uploadImage() : image,
+    );
+    result.fold((failure) {
+      emit(EditBannerErrorState(error: failure.message));
+    }, (banner) {
+      emit(EditBannerSuccess(banner: banner));
     });
   }
 

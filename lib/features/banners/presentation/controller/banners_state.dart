@@ -7,7 +7,7 @@ final class BannersInitial extends BannersState {}
 final class PickImageLoadingState extends BannersState {}
 final class PickImageSuccessState extends BannersState {}
 final class PickImageErrorState extends BannersState {}
-final class RemovePickedImageSuccessState extends BannersState {}
+final class ClearImageState extends BannersState {}
 final class UploadImageLoadingState extends BannersState {}
 final class UploadImageSuccessState extends BannersState {}
 final class UploadImageErrorState extends BannersState {}
@@ -28,5 +28,16 @@ final class DeleteBannerErrorState extends BannersState {
 final class DeleteBannerSuccessState extends BannersState {
   final List<BannersEntity> banners;
   DeleteBannerSuccessState({required this.banners});
+
+}
+
+final class EditBannerLoadingState extends BannersState {}
+final class EditBannerErrorState extends BannersState {
+  final String error;
+  EditBannerErrorState({required this.error});
+}
+final class EditBannerSuccess extends BannersState {
+  final bool banner;
+  EditBannerSuccess({required this.banner});
 
 }

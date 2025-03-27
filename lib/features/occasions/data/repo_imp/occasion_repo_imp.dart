@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:hadawi_dathboard/features/occasions/domain/entities/recieved_occastions_entity.dart';
 
 import '../../../../utiles/error_handling/faliure/faliure.dart';
 import '../../domain/entities/occastion_entity.dart';
@@ -111,6 +113,51 @@ class OccasionRepoImp extends OccasionRepo {
       final result = await _dataSource.deleteOccasion(occasionId: occasionId);
       return Right(true);
     } catch (e) {
+      return Left(Faliure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Faliure, ReceivedOccasionsEntities>> addReceivedOccasions({
+    required String occasionId,
+    required List<String> images,
+    required String finalPrice,
+  }) async {
+    final result = await _dataSource.addReceivedOccasion(
+      occasionId: occasionId,
+      imagesUrl: images,
+      finalPrice: finalPrice,
+    );
+
+    return result.fold((failure) {
+      debugPrint("errorrrrrrrrrrrrrrr ${failure.message}");
+      return Left(failure);
+    }, (right) {
+      return Right(right);
+    });
+  }
+
+  @override
+  Future<Either<Faliure, bool>> editReceivedOccasions(
+      {required String occasionId, List<String>? images, String? finalPrice}) async {
+    try {
+      final result = await _dataSource.editReceivedOccasions(
+        occasionId: occasionId,
+        imagesUrl: images,
+        finalPrice: finalPrice,
+      );
+      return Right(true);
+    } catch (e) {
+      return Left(Faliure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Faliure, ReceivedOccasionsEntities>> getReceivedOccasions({required String occasionId})async {
+    final result = await _dataSource.getReceivedOccasions(occasionId: occasionId);
+    try {
+      return Right(result);
+    } on Exception catch (e) {
       return Left(Faliure(message: e.toString()));
     }
   }

@@ -4,6 +4,12 @@ part of 'promocode_cubit.dart';
 sealed class PromoCodeState {}
 
 final class PromoCodeInitial extends PromoCodeState {}
+final class ValidateCodeSuccessState extends PromoCodeState {}
+final class ValidateCodeFailureState extends PromoCodeState {
+  final String message;
+
+  ValidateCodeFailureState(this.message);
+}
 final class GenerateCodeSuccessState extends PromoCodeState {}
 final class SetExpirationDate extends PromoCodeState {}
 final class GetPromoCodesLoadingState extends PromoCodeState {}

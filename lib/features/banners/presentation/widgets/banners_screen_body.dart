@@ -8,6 +8,7 @@ import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
 import 'package:hadawi_dathboard/utiles/helper/material_navigation.dart';
 import '../../../../widgets/icon_button.dart';
 import '../../../users/presentation/widgets/users_view_body.dart';
+import 'edit_banner_screen.dart';
 
 class BannersScreenBody extends StatelessWidget {
   const BannersScreenBody({super.key});
@@ -20,10 +21,56 @@ class BannersScreenBody extends StatelessWidget {
         if (state is GetBannersLoadingState) {
           return Center(child: CircularProgressIndicator());
         }
-        if (cubit.banners.isEmpty || state is GetBannersErrorState) {
-          return Center(
-            child: Text('لا يوجد إعلانات حالياً\n يرجى اضافة إعلان',
-                style: TextStyles.textStyle18Medium),
+        if (cubit.bannersList.isEmpty || state is GetBannersErrorState) {
+          return Column(
+            mainAxisAlignment:  MainAxisAlignment.center,
+            children: [
+              Text('لا يوجد إعلانات حالياً\n يرجى اضافة إعلان',
+                  style: TextStyles.textStyle18Medium),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.02,
+              ),
+              GestureDetector(
+                onTap: () {
+                  customPushNavigator(
+                      context,
+                      BlocProvider.value(
+                        value: cubit,
+                        child: AddBannersScreen(),
+                      ));
+                },
+                child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).height * 0.2,
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: ColorManager.white,
+                        borderRadius: BorderRadius.circular(12.0),
+                        border: Border.all(color: ColorManager.primaryBlue),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_a_photo_outlined,
+                            color: ColorManager.primaryBlue,
+                            size: MediaQuery.sizeOf(context).height * 0.03,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).height * 0.02,
+                          ),
+                          Text(
+                            'إضافة إعلان',
+                            style: TextStyles.textStyle18Bold
+                                .copyWith(color: ColorManager.primaryBlue),
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
+            ],
           );
         }
         return Padding(
@@ -89,7 +136,7 @@ class BannersScreenBody extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       buildHeaderText('صورة الاعلان'),
-                      buildHeaderText('الرقم المرجعي للإعلان'),
+                      buildHeaderText('اسم الاعلان'),
                       buildHeaderText('وحدة التحكم'),
                     ],
                   ),
@@ -105,7 +152,7 @@ class BannersScreenBody extends StatelessWidget {
                         bottomRight: Radius.circular(15.0),
                       )),
                   child: ListView.separated(
-                    itemCount: cubit.banners.length,
+                    itemCount: cubit.bannersList.length,
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     separatorBuilder: (_, __) => Divider(color: Colors.grey),
                     itemBuilder: (context, index) {
@@ -121,7 +168,7 @@ class BannersScreenBody extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(12.0),
                                 ),
                                 child: CachedNetworkImage(
-                                  imageUrl: cubit.banners[index].image,
+                                  imageUrl: cubit.bannersList[index].image,
                                   placeholder: (context, url) => Center(
                                     child: CircularProgressIndicator(),
                                   ),
@@ -131,15 +178,25 @@ class BannersScreenBody extends StatelessWidget {
                               ),
                             ),
                             Expanded(
-                                child: Text(cubit.banners[index].id,
+                                child: Text(cubit.bannersList[index].bannerName,
                                     style: TextStyles.textStyle18Medium)),
                             Expanded(
                               child: Row(
                                 children: [
+                                  buildIconButton(Icons.edit, ColorManager.primaryBlue, () {
+                                    customPushNavigator(
+                                        context,
+                                        BlocProvider.value(
+                                          value: cubit,
+                                          child: EditBannerScreen(
+                                            bannersEntity: cubit.bannersList[index],
+                                          ),
+                                        ));
+                                  }),
                                   buildIconButton(Icons.delete, Colors.red,
                                       () {
                                     showDeleteDialog(context, cubit,
-                                        cubit.banners[index].id);
+                                        cubit.bannersList[index].id);
                                   }),
                                 ],
                               ),
