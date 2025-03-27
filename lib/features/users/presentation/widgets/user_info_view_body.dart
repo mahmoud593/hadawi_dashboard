@@ -172,6 +172,7 @@ class UserInfoViewBody extends StatelessWidget {
                                     context: context,
                                     controller: messageController,
                                     buttonText: 'ارسال اشعار',
+
                                     title: 'ارسال اشعار',
                                     body: 'ادخل الرسالة التي تريد ارسالها',
                                     onPressed: () async {
