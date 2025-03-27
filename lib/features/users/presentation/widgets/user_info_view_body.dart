@@ -21,7 +21,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../styles/text_styles/text_styles.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class UserInfoViewBody extends StatelessWidget {
    UserInfoViewBody({super.key,required this.userEntities});
