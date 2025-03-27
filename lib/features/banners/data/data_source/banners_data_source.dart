@@ -10,6 +10,7 @@ class BannersDataSource {
 
   Future<BannersModel> addBanners({
     required String image,
+    required String bannerName,
   }) async {
     final docRef = fireStore.collection('Banners').doc();
     final bannerId = docRef.id;
@@ -17,6 +18,7 @@ class BannersDataSource {
     BannersModel bannersModel = BannersModel(
       image: image,
       id: bannerId,
+      bannerName: bannerName,
     );
 
     try {
@@ -43,6 +45,19 @@ class BannersDataSource {
       {required String bannerId}) async {
     try {
       await fireStore.collection('Banners').doc(bannerId).delete();
+      return const Right(true);
+    } catch (e) {
+      return Left(Faliure(message: e.toString()));
+    }
+  }
+
+  Future<Either<Faliure, bool>> editBanner({required String bannerId,String? bannerImage,String? bannerName}) async {
+    try {
+      await fireStore.collection('Banners').doc(bannerId).update({
+        'image': bannerImage,
+        'bannerName': bannerName,
+      });
+
       return const Right(true);
     } catch (e) {
       return Left(Faliure(message: e.toString()));

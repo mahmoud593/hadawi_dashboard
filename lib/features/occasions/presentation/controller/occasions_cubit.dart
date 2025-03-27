@@ -1,9 +1,12 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart' as Uint8List;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:hadawi_dathboard/features/occasions/domain/entities/recieved_occastions_entity.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import '../../data/repo_imp/occasion_repo_imp.dart';
 import '../../domain/entities/occastion_entity.dart';
 
@@ -34,6 +37,8 @@ class OccasionsCubit extends Cubit<OccasionsState> {
   TextEditingController districtController = TextEditingController();
   TextEditingController giftCardController = TextEditingController();
   TextEditingController receivingDateController = TextEditingController();
+
+  TextEditingController finalPriceController = TextEditingController();
 String? selectedValue;
   List<OccasionEntity> occasions = [];
 
@@ -158,5 +163,111 @@ String? selectedValue;
       debugPrint('Error launching $url: $e');
     }
   }
+  var picker = ImagePicker();
+
+  List<File> imageFiles = []; // For mobile (changed to List)
+  List<Uint8List.Uint8List> webImageBytes = []; // For web (changed to List)
+
+  Future<void> pickGiftImage() async {
+    emit(PickGiftImageLoadingState());
+
+    // Use pickMultiImage to allow selecting multiple images
+    final List<XFile> pickedImages = await picker.pickMultiImage();
+
+    if (pickedImages.isNotEmpty) {
+      if (kIsWeb) {
+        // Web: Read bytes for each image
+        webImageBytes = [];
+        for (var image in pickedImages) {
+          final bytes = await image.readAsBytes();
+          webImageBytes.add(bytes);
+        }
+        emit(PickGiftImageSuccessState());
+      } else {
+        // Mobile: Convert paths to File objects
+        imageFiles = pickedImages.map((image) => File(image.path)).toList();
+        emit(PickGiftImageSuccessState());
+      }
+    } else {
+      emit(PickGiftImageErrorState());
+    }
+  }
+
+  Future<List<String>> uploadImage() async {
+    emit(UploadGiftImageLoadingState());
+
+    try {
+      List<String> downloadUrls = [];
+
+      if (kIsWeb) {
+        // Web: Upload each Uint8List
+        for (var bytes in webImageBytes) {
+          firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+              .ref()
+              .child('doneOccasions/${DateTime.now().millisecondsSinceEpoch}');
+          firebase_storage.UploadTask uploadTask = ref.putData(bytes);
+          final snapshot = await uploadTask;
+          final downloadUrl = await snapshot.ref.getDownloadURL();
+          downloadUrls.add(downloadUrl);
+        }
+      } else {
+        for (var file in imageFiles) {
+          firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+              .ref()
+              .child('doneOccasions/${DateTime.now().millisecondsSinceEpoch}');
+          firebase_storage.UploadTask uploadTask = ref.putFile(file);
+          final snapshot = await uploadTask;
+          final downloadUrl = await snapshot.ref.getDownloadURL();
+          downloadUrls.add(downloadUrl);
+        }
+      }
+
+      emit(UploadGiftImageSuccessState());
+      return downloadUrls;
+    } catch (error) {
+      emit(UploadGiftImageErrorState());
+      throw Exception("Failed to upload images: $error");
+    }
+  }
+
+  void clearImage() {
+    imageFiles = [];
+    webImageBytes = [];
+    emit(ClearImageState());
+  }
+
+Future<void> addReceivedOccasions({required String occasionId}) async {
+     emit(AddReceivedOccasionsLoadingState());
+    try {
+      final List<String> imageUrls = await uploadImage();
+      final result = await OccasionRepoImp().addReceivedOccasions(
+        occasionId: occasionId,
+        images: imageUrls,
+        finalPrice: finalPriceController.text,
+      );
+      result.fold(
+            (failure){
+              debugPrint("cubit errorrrrrrrrrrrrrrr ${failure.message}");
+              return emit(AddReceivedOccasionsErrorState( error: failure.message));
+            },
+            (entity) => emit(AddReceivedOccasionsSuccessState()),
+      );
+    } catch (e) {
+      emit(AddReceivedOccasionsErrorState(error:e.toString()));
+    }
+}
+
+ReceivedOccasionsEntities? receivedOccasions;
+
+Future<void> getReceivedOccasions({ required String occasionId}) async {
+    emit(GetReceivedOccasionsLoadingState());
+    final result = await OccasionRepoImp().getReceivedOccasions(occasionId: occasionId);
+    result.fold((failure) {
+      emit(GetReceivedOccasionsErrorState(error: failure.message));
+    }, (entity) {
+      receivedOccasions = entity;
+      emit(GetReceivedOccasionsSuccessState(receivedOccasionsEntities: receivedOccasions!));
+    });
+}
 
 }

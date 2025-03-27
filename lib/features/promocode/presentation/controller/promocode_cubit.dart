@@ -30,6 +30,20 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
     return code;
   }
 
+  bool validateCode({required String value}) {
+    final trimmedValue = value.trim();
+    if (trimmedValue.isEmpty) {
+      emit(ValidateCodeFailureState('الكود لا يمكن أن يكون فارغًا'));
+      return false;
+    }
+    if (trimmedValue.length != 6) {
+      emit(ValidateCodeFailureState('يجب أن يكون الكود 6 أحرف'));
+      return false;
+    }
+    emit(ValidateCodeSuccessState());
+    return true;
+  }
+
   void setCodeExpirationDate({required DateTime expirationDate}) {
     expirationDateController.text =
         DateFormat('yyyy-MM-dd').format(expirationDate);
@@ -54,6 +68,7 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
   }
 
   List<CodeEntity> promoCodes = [];
+
   Future<void> getPromoCodes() async {
     emit(GetPromoCodesLoadingState());
     final result = await PromoCodeRepoImp().getPromoCodes();
@@ -68,7 +83,7 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
   Future<void> deletePromoCode({required String codeId}) async {
     emit(DeleteCodeLoadingState());
     final result =
-    await PromoCodeRepoImp().deletePromoCode(promoCodeId: codeId);
+        await PromoCodeRepoImp().deletePromoCode(promoCodeId: codeId);
     result.fold((failure) {
       emit(DeleteCodeErrorState(message: failure.message));
     }, (occasion) {
@@ -76,7 +91,6 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
       emit(DeleteCodeSuccessState(promoCodes: promoCodes));
     });
   }
-
 
   void clearControllers() {
     codeController.clear();

@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:hadawi_dathboard/features/auth/data/repo_imp/user_repo_imp.dart';
 import 'package:hadawi_dathboard/utiles/error_handling/faliure/faliure.dart';
+import 'package:hadawi_dathboard/utiles/shared_preferences/shared_preference.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_state.dart';
@@ -11,6 +13,10 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this._userRepoImp) : super(AuthInitial());
 
+  TextEditingController  emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool rememberMe = false;
   Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());
     final Either<Faliure, void> result =
@@ -64,5 +70,42 @@ class AuthCubit extends Cubit<AuthState> {
           (failure) => emit(LogOutErrorState(message: failure.message)),
           (_) => emit(LogOutSuccessState()),
     );
+  }
+
+  Future<void> loadSavedCredentials() async {
+    emit(AuthLoadingState());
+    try {
+      final isRemembered = UserDataFromStorage.rememberMe;
+      if (isRemembered) {
+        rememberMe = true;
+        emailController.text = UserDataFromStorage.emailFromStorage;
+        passwordController.text = UserDataFromStorage.password;
+      }
+      else {
+        rememberMe = false;
+        emailController.text = '';
+        passwordController.text = '';
+      }
+      emit(AuthLoadedState());
+    } catch (e) {
+      emit(AuthErrorState('فشل تحميل بيانات المستخدم'));
+    }
+  }
+
+  Future<void> saveCredentials(String email, String password) async {
+    try {
+      if (rememberMe) {
+        await UserDataFromStorage.setRememberMe(true);
+        await UserDataFromStorage.setEmail(email);
+        await UserDataFromStorage.setPassword(password);
+      } else {
+        await UserDataFromStorage.setRememberMe(false);
+        await UserDataFromStorage.setEmail('');
+        await UserDataFromStorage.setPassword('');
+      }
+      emit(AuthSavedState());
+    } catch (e) {
+      emit(AuthErrorState('فشل حفظ بيانات المستخدم'));
+    }
   }
 }

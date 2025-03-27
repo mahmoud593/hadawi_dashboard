@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/controller/occasions_cubit.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/edit_occasion_screen.dart';
+import 'package:hadawi_dathboard/features/occasions/presentation/widgets/recieved_packages_screen.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/section_container.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/widgets/view_occasion_details.dart';
 import 'package:hadawi_dathboard/widgets/icon_button.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../styles/colors/color_manager.dart';
 import '../../../../styles/text_styles/text_styles.dart';
@@ -39,8 +41,7 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                 alignment: Alignment.centerRight,
                 child: Container(
                   height: MediaQuery.sizeOf(context).height * 0.05,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12.0),
@@ -53,8 +54,7 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                         cubit.selectedValue ?? 'تصنيف حسب',
                         style: TextStyles.textStyle18Medium,
                       ),
-                      icon: Icon(Icons.sort,
-                          color: ColorManager.primaryBlue),
+                      icon: Icon(Icons.sort, color: ColorManager.primaryBlue),
                       borderRadius: BorderRadius.circular(12.0),
                       items: [
                         DropdownMenuItem(
@@ -132,10 +132,9 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                 decoration: BoxDecoration(
                     color: ColorManager.white,
                     borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15.0),
-                    bottomRight: Radius.circular(15.0),
-                  )
-                ),
+                      bottomLeft: Radius.circular(15.0),
+                      bottomRight: Radius.circular(15.0),
+                    )),
                 child: ListView.separated(
                   itemCount: cubit.occasions.length,
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -194,6 +193,29 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                                   showDeleteDialog(
                                       context, cubit, occasion.occasionId);
                                 }),
+                                // cubit.occasions[index].moneyGiftAmount == 0
+                                //     ?  buildIconButton(Icons.wallet_giftcard_rounded,
+                                //   ColorManager.warning, () {
+                                //       cubit.receivedOccasions == null? Navigator.push(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //           builder: (_) => ReceivedPackagesScreen(
+                                //             occasionId:  occasion.occasionId,
+                                //           ),
+                                //         ),
+                                //       ):
+                                //       cubit.getReceivedOccasions(occasionId: occasion.occasionId).then((value) {
+                                //         Navigator.push(
+                                //           context,
+                                //           MaterialPageRoute(
+                                //             builder: (_) => ReceivedPackagesScreen(
+                                //               occasionId:  occasion.occasionId,
+                                //             ),
+                                //           ),
+                                //         );
+                                //       },);
+                                //
+                                //   },): SizedBox.shrink(),
                               ],
                             ),
                           ),
@@ -217,7 +239,6 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
               TextStyles.textStyle18Medium.copyWith(color: ColorManager.white)),
     );
   }
-
 
   void showDeleteDialog(
       BuildContext context, OccasionsCubit cubit, String occasionId) {

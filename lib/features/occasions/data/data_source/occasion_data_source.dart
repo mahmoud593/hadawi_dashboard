@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:hadawi_dathboard/features/occasions/data/models/received_occasions_model.dart';
 import '../../../../utiles/error_handling/faliure/faliure.dart';
 import '../models/occasion_model.dart';
 
@@ -74,17 +75,17 @@ class OccasionDataSource {
 
   Future<Either<Faliure, bool>> updateOccasion({
     required String occasionId,
-     String? occasionName,
-     String? occasionDate,
-     String? occasionType,
-     dynamic moneyGiftAmount,
-     String? personName,
-     String? personPhone,
-     String? personEmail,
-     String? giftName,
-     String? giftLink,
-     dynamic giftPrice,
-     String? giftType,
+    String? occasionName,
+    String? occasionDate,
+    String? occasionType,
+    dynamic moneyGiftAmount,
+    String? personName,
+    String? personPhone,
+    String? personEmail,
+    String? giftName,
+    String? giftLink,
+    dynamic giftPrice,
+    String? giftType,
     String? bankName,
     String? city,
     String? district,
@@ -119,7 +120,6 @@ class OccasionDataSource {
 
       return const Right(true);
     } catch (e) {
-      // throw Exception("Failed to update occasion: $e");
       return Left(Faliure(message: e.toString()));
     }
   }
@@ -131,6 +131,77 @@ class OccasionDataSource {
       return const Right(true);
     } catch (e) {
       return Left(Faliure(message: e.toString()));
+    }
+  }
+
+  Future<Either<Faliure, ReceivedOccasionsModel>> addReceivedOccasion({
+    required String occasionId,
+    required List<String> imagesUrl,
+    required String finalPrice,
+  }) async {
+    try {
+      if (occasionId.isEmpty || finalPrice.isEmpty || imagesUrl.isEmpty) {
+        return Left(Faliure(message: 'Invalid input: Fields cannot be empty'));
+      }
+      final data = {
+        'occasionId': occasionId,
+        'imagesUrl': imagesUrl,
+        'finalPrice': finalPrice,
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+
+      final docRef = fireStore
+          .collection('Occasions')
+          .doc(occasionId)
+          .collection('receivedOccasions')
+          .doc(occasionId);
+      await docRef.set(data);
+      final model = ReceivedOccasionsModel(
+        id: occasionId,
+        imageUrls: imagesUrl,
+        finalPrice: finalPrice,
+      );
+
+      return Right(model);
+    } catch (e) {
+      return Left(Faliure(message: 'Failed to add received occasion: $e'));
+    }
+  }
+
+  Future<Either<Faliure, bool>> editReceivedOccasions({
+    required String occasionId,
+    List<String>? imagesUrl,
+    String? finalPrice,
+  }) async {
+    try {
+      final docRef = fireStore
+          .collection('Occasions')
+          .doc(occasionId)
+          .collection('receivedOccasions')
+          .doc(occasionId);
+      await docRef.update({
+        'imagesUrl': imagesUrl,
+        'finalPrice': finalPrice,
+      });
+      return const Right(true);
+    } catch (e) {
+      return Left(Faliure(message: 'Failed to update received occasion: $e'));
+    }
+  }
+
+  Future<ReceivedOccasionsModel> getReceivedOccasions(
+      {required String occasionId}) async {
+    try {
+      final querySnapshot = await  fireStore.collection('Occasions')
+          .doc(occasionId)
+          .collection('receivedOccasions')
+          .doc(occasionId).get();
+
+      final occasions = ReceivedOccasionsModel.fromJson(querySnapshot.data()!);
+
+      return occasions;
+    } catch (e) {
+      throw Exception("Failed to fetch occasions: $e");
     }
   }
 }

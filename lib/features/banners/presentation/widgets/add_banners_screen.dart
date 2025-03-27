@@ -9,6 +9,7 @@ import '../../../../styles/size_config/app_size_config.dart';
 import '../../../../styles/text_styles/text_styles.dart';
 import '../../../../widgets/dashboard_app_bar_widget.dart';
 import '../../../../widgets/default_button.dart';
+import '../../../../widgets/default_text_field.dart';
 
 class AddBannersScreen extends StatelessWidget {
   const AddBannersScreen({super.key});
@@ -21,19 +22,23 @@ class AddBannersScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is AddBannersSuccessState) {
           cubit.webImageBytes = null;
-          cubit.getBanners().then((value) {
-            toastification.show(
-              context: context,
-              type: ToastificationType.success,
-              autoCloseDuration: const Duration(seconds: 3),
-              title: Text(
-                'تم اضافة البنر بنجاح',
-                style: TextStyles.textStyle18Medium
-                    .copyWith(color: ColorManager.success),
-              ),
-            );
-            Navigator.pop(context);
-          },);
+          cubit.getBanners().then(
+            (value) {
+              toastification.show(
+                context: context,
+                type: ToastificationType.success,
+                autoCloseDuration: const Duration(seconds: 3),
+                title: Text(
+                  'تم اضافة البنر بنجاح',
+                  style: TextStyles.textStyle18Medium
+                      .copyWith(color: ColorManager.success),
+                ),
+              );
+              Navigator.pop(context);
+              cubit.imageFile = null;
+              cubit.webImageBytes = null;
+            },
+          );
         }
         if (state is AddBannersErrorState) {
           toastification.show(
@@ -53,7 +58,8 @@ class AddBannersScreen extends StatelessWidget {
           textDirection: TextDirection.rtl,
           child: Scaffold(
             backgroundColor: Colors.grey[200],
-            appBar: dashboardAppBarWidget(context: context, text:'إضافة إعلان'),
+            appBar:
+                dashboardAppBarWidget(context: context, text: 'إضافة إعلان'),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
@@ -67,113 +73,175 @@ class AddBannersScreen extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'صورة الإعلان',
-                        style: TextStyles.textStyle18Bold
-                            .copyWith(color: ColorManager.black),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.sizeOf(context).height * 0.02,
-                      ),
-                      cubit.webImageBytes == null
-                          ? Row(
-                              children: [
-                                Container(
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.3,
-                                  width:
-                                      MediaQuery.sizeOf(context).height * 0.6,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        Assets.imagesEmptyImage,
-                                        height:
-                                            MediaQuery.sizeOf(context).height *
-                                                0.3,
-                                        width:
-                                            MediaQuery.sizeOf(context).height *
-                                                0.3,
-                                      ),
-                                      Text(
-                                        ' قم بإرفاق صورة الإعلان',
-                                        style: TextStyles.textStyle18Medium
-                                            .copyWith(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.sizeOf(context).height * 0.02,
-                                ),
-                                IconButton(
-                                    onPressed: () {
-                                      cubit.pickBannerImage();
-                                    },
-                                    icon: Icon(
-                                      Icons.upload,
-                                      color: ColorManager.primaryBlue,
-                                    ))
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                Container(
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.3,
-                                  width:
-                                      MediaQuery.sizeOf(context).height * 0.6,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Image.memory(
-                                    cubit.webImageBytes!,
-                                    fit: BoxFit.fill,
+                  child: Form(
+                    key:  cubit.bannerFormKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'صورة الإعلان',
+                          style: TextStyles.textStyle18Bold
+                              .copyWith(color: ColorManager.black),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.02,
+                        ),
+                        cubit.webImageBytes == null
+                            ? Row(
+                                children: [
+                                  Container(
                                     height:
-                                        MediaQuery.sizeOf(context).height * .3,
+                                        MediaQuery.sizeOf(context).height * 0.3,
                                     width:
                                         MediaQuery.sizeOf(context).height * 0.6,
-                                  ),
-                                )
-                              ],
-                            ),
-                      Spacer(),
-                      state is AddBannersLoadingState
-                          ? CircularProgressIndicator(): Align(
-                           alignment:  AlignmentDirectional.bottomEnd,
-                            child: SizedBox(
-                              width: SizeConfig.height * 0.2,
-                              child: DefaultButton(
-                                  buttonText: 'إضافة الاعلان',
-                                  onPressed: () {
-                                    if(cubit.webImageBytes!=null){
-                                      cubit.addBanner();
-                                    }else{
-                                      toastification.show(
-                                        context: context,
-                                        type: ToastificationType.error,
-                                        autoCloseDuration: const Duration(seconds: 5),
-                                        title: Text(
-                                          'قم باختيار صورة الإعلان',
-                                          style: TextStyles.textStyle18Medium
-                                              .copyWith(color: ColorManager.error),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Image.asset(
+                                          Assets.imagesEmptyImage,
+                                          height:
+                                              MediaQuery.sizeOf(context).height *
+                                                  0.3,
+                                          width:
+                                              MediaQuery.sizeOf(context).height *
+                                                  0.3,
                                         ),
-                                      );
-                                    }
-                                  },
-                                  buttonColor: ColorManager.primaryBlue),
-                            ),
-                          )
-                    ],
+                                        Text(
+                                          ' قم بإرفاق صورة الإعلان',
+                                          style: TextStyles.textStyle18Medium
+                                              .copyWith(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.sizeOf(context).height * 0.02,
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        cubit.pickBannerImage();
+                                      },
+                                      icon: Icon(
+                                        Icons.upload,
+                                        color: ColorManager.primaryBlue,
+                                      ))
+                                ],
+                              )
+                            : Row(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.3,
+                                            width: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.6,
+                                            decoration: BoxDecoration(
+                                              border:
+                                                  Border.all(color: Colors.grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            child: Image.memory(
+                                              cubit.webImageBytes!,
+                                              fit: BoxFit.fill,
+                                              height: MediaQuery.sizeOf(context)
+                                                      .height *
+                                                  .3,
+                                              width: MediaQuery.sizeOf(context)
+                                                      .height *
+                                                  0.6,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.02,
+                                          ),
+                                          IconButton(
+                                              onPressed: () {
+                                                cubit.pickBannerImage();
+                                              },
+                                              icon: Icon(
+                                                Icons.upload,
+                                                color: ColorManager.primaryBlue,
+                                              ))
+                                        ],
+                                      ),
+                                      IconButton(
+                                          onPressed: () {
+                                            cubit.clearImage();
+                                          },
+                                          icon: Icon(
+                                            Icons.close,
+                                            color: ColorManager.black,
+                                          )),
+                                    ],
+                                  )
+                                ],
+                              ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.02,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.35,
+                          height: MediaQuery.sizeOf(context).height * 0.1,
+                          child: DefaultTextField(
+                              controller: cubit.bannerNameController,
+                              hintText: 'أدخل اسم الإعلان',
+                              enable: true,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'الرجاء ادخال اسم الإعلان';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              fillColor: Colors.transparent),
+                        ),
+                        Spacer(),
+                        state is AddBannersLoadingState
+                            ? CircularProgressIndicator()
+                            : Align(
+                                alignment: AlignmentDirectional.bottomEnd,
+                                child: SizedBox(
+                                  width: SizeConfig.height * 0.2,
+                                  child: DefaultButton(
+                                      buttonText: 'إضافة الاعلان',
+                                      onPressed: () {
+                                        if (cubit.bannerFormKey.currentState!.validate()) {
+                                          if (cubit.webImageBytes != null) {
+                                            cubit.addBanner();
+                                          } else {
+                                            toastification.show(
+                                              context: context,
+                                              type: ToastificationType.error,
+                                              autoCloseDuration: const Duration(seconds: 5),
+                                              title: Text(
+                                                'قم باختيار صورة الإعلان',
+                                                style: TextStyles.textStyle18Medium.copyWith(
+                                                  color: ColorManager.error,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                      buttonColor: ColorManager.primaryBlue),
+                                ),
+                              )
+                      ],
+                    ),
                   ),
                 ),
               ),
