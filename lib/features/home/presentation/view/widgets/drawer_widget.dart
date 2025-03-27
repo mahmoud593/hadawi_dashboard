@@ -6,6 +6,7 @@ import 'package:hadawi_dathboard/features/occasions/presentation/occasions_scree
 import 'package:hadawi_dathboard/features/payments/presentation/view/screens/payments_screen.dart';
 import 'package:hadawi_dathboard/features/privacy/presentation/view/screens/privacy_screen.dart';
 import 'package:hadawi_dathboard/features/promocode/presentation/promocode_screen.dart';
+import 'package:hadawi_dathboard/features/users/presentation/widgets/show_users_view_body.dart';
 import 'package:hadawi_dathboard/styles/assets/asset_manager.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 
@@ -60,19 +61,21 @@ class DrawerWidget extends StatelessWidget {
               child: ListView.separated(
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: (){
-                      if(index == 0){
-
-                      }else if(index == 2){
+                      if(index == 0){}
+                      else if(index == 1){
+                        customPushNavigator(context, ShowUsersViewBodyScreen());
+                      }
+                      else if(index == 3){
                         customPushNavigator(context, PaymentsScreen());
-                      }else if(index == 1){
+                      }else if(index == 2){
                         customPushNavigator(context, OccasionsScreen());
-                      }else if(index == 3){
-                        customPushNavigator(context, BannersScreen());
                       }else if(index == 4){
+                        customPushNavigator(context, BannersScreen());
+                      }else if(index == 5){
                         customPushNavigator(context, NotificationManagementScreen());
-                      } else if(index == 6){
+                      } else if(index == 7){
                         customPushNavigator(context, PrivacyScreen());
-                      } else if(index == 5){
+                      } else if(index == 6){
                         customPushNavigator(context, PromoCodeScreen());
                       }
                     },

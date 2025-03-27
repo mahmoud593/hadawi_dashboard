@@ -10,13 +10,26 @@ import 'package:hadawi_dathboard/styles/size_config/app_size_config.dart';
 import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
 import 'package:hadawi_dathboard/utiles/helper/material_navigation.dart';
 import 'package:hadawi_dathboard/utiles/services/service_locator.dart';
+import 'package:hadawi_dathboard/widgets/default_text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class UsersViewBody extends StatelessWidget {
-  UsersViewBody({super.key});
+class UsersViewBody extends StatefulWidget {
+  UsersViewBody({super.key,required this.isScreen});
 
+  final bool isScreen;
+
+  @override
+  State<UsersViewBody> createState() => _UsersViewBodyState();
+}
+
+class _UsersViewBodyState extends State<UsersViewBody> {
   TextEditingController controller = TextEditingController();
+
   TextEditingController whatsController = TextEditingController();
+
+  TextEditingController searchController = TextEditingController();
+
+  bool desending =false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +54,47 @@ class UsersViewBody extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if(widget.isScreen)
+                  Container(
+                    width:  MediaQuery.sizeOf(context).width*0.4,
+                    child: DefaultTextField(
+                        onChanged: (value){
+                          cubit.filterName(value,desending);
+                        },
+                        controller: searchController,
+                        hintText: 'بحث في الجدول (الاسم - البريد الالكتروني - رقم الهاتف) ....',
+                        validator: (value) {},
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        fillColor: ColorManager.white
+                    ),
+                  ),
+
+                  SizedBox( height:  SizeConfig.height*0.02,),
+
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            desending = !desending;
+                          });
+                          cubit.getAllUsers(desending: desending);
+                        },
+                        child: Image(
+                          color: ColorManager.primaryBlue,
+                          height:  SizeConfig.height*0.035,
+                          image: AssetImage('assets/images/sort.png'),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox( height:  SizeConfig.height*0.02,),
+
+
                   Container(
                     height: MediaQuery.sizeOf(context).height * 0.05,
                     padding: EdgeInsets.symmetric(horizontal: 20),
@@ -82,8 +136,18 @@ class UsersViewBody extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
 
-                            buildContentText(cubit.users[index].uId),
-                            SizedBox( width:  SizeConfig.height*0.02,),
+                            Container(
+                              width:  SizeConfig.height*0.05,
+                              height:  SizeConfig.height*0.05,
+                              decoration: BoxDecoration(
+                                  color: ColorManager.primaryBlue,
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              child: Center(
+                                child: Text('${index+1}',style: TextStyles.textStyle18Medium.copyWith(color: ColorManager.white),),
+                              ),
+                            ),
+                            SizedBox( width:  SizeConfig.height*0.2,),
                             buildContentText(cubit.users[index].phone),
                             buildContentText(cubit.users[index].name),
                             buildContentText(cubit.users[index].email),

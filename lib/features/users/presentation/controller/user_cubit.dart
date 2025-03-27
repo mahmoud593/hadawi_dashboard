@@ -1,4 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:hadawi_dathboard/features/users/data/models/analysis_model.dart';
 import 'package:hadawi_dathboard/features/users/domain/entities/user_entities.dart';
 import 'package:hadawi_dathboard/features/users/domain/use_cases/block_user_use_cases.dart';
 import 'package:hadawi_dathboard/features/users/domain/use_cases/delete_user_use_cases.dart';
@@ -23,10 +26,10 @@ class UserCubit extends Cubit<UserStates>{
 
   List<UserEntities> users = [];
 
-  Future<void> getAllUsers()async{
+  Future<void> getAllUsers({required bool desending})async{
     users = [];
     emit(GetUserLoadingState());
-    var result = await getAllUsersUseCases.call();
+    var result = await getAllUsersUseCases.call(desending: desending);
     result.fold(
             (l) => emit(GetUserErrorState(l.message)),
             (r) {
@@ -62,9 +65,9 @@ class UserCubit extends Cubit<UserStates>{
     }
   }
 
-  void filterName(String value){
+  void filterName(String value, bool desending){
     if(value.isEmpty){
-      getAllUsers();
+      getAllUsers(desending: desending);
     }else{
       Set<UserEntities> items = users.where((item)=> item.name.toLowerCase().
       contains(value.toLowerCase())).toSet();
@@ -79,10 +82,11 @@ class UserCubit extends Cubit<UserStates>{
   }
 
   Future<void> deleteUser({
-    required String userId
+    required String userId,
+    required String message
   })async{
     emit(DeleteUserLoadingState());
-    var result = await deleteUserUseCases.call(userId:  userId,);
+    var result = await deleteUserUseCases.call(userId:  userId,message: message);
     result.fold(
             (l) => emit(DeleteUserErrorState(l.message)),
             (r) {
@@ -92,16 +96,32 @@ class UserCubit extends Cubit<UserStates>{
   }
 
   Future<void> blockUser({
-    required String userId
+    required String userId,
+    required String message
   })async{
     emit(BlockUserLoadingState());
-    var result = await blockUserUseCases.call(userId:  userId,);
+    var result = await blockUserUseCases.call(userId:  userId,message: message);
     result.fold(
             (l) => emit(BlockUserErrorState(l.message)),
             (r) {
           emit(BlockUserSuccessState());
         }
     );
+  }
+
+  AnalysisModel ?analysisModel ;
+  Future<void> getAnalysis()async{
+
+    emit(GetAnalysisLoadingState());
+
+    await FirebaseFirestore.instance.collection('analysis').doc('x6cWwImrRB3PIdVfcHnP').get().then((value) {
+      analysisModel = AnalysisModel.fromMap(value.data()!);
+      emit(GetAnalysisSuccessState());
+    }).catchError((error){
+      debugPrint("error in getting analysis: $error");
+      emit(GetAnalysisErrorState());
+    });
+
   }
 
 }

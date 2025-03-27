@@ -30,5 +30,8 @@ class BlockUserErrorState extends UserStates{
   BlockUserErrorState(this.message);
 }
 
+class GetAnalysisLoadingState extends UserStates{}
+class GetAnalysisSuccessState extends UserStates{}
+class GetAnalysisErrorState extends UserStates{}
 
 

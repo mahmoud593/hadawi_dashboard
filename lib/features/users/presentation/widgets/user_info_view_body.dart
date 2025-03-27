@@ -11,12 +11,17 @@ import 'package:hadawi_dathboard/styles/assets/asset_manager.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 import 'package:hadawi_dathboard/styles/size_config/app_size_config.dart';
 import 'package:hadawi_dathboard/utiles/helper/material_navigation.dart';
+import 'package:hadawi_dathboard/utiles/services/notification_services.dart';
+import 'package:hadawi_dathboard/utiles/shared_preferences/shared_preference.dart';
 import 'package:hadawi_dathboard/widgets/default_button.dart';
 import 'package:hadawi_dathboard/widgets/default_text_field.dart';
 import 'package:hadawi_dathboard/widgets/toast.dart';
+import 'package:hadawi_dathboard/widgets/toastification_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../styles/text_styles/text_styles.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class UserInfoViewBody extends StatelessWidget {
    UserInfoViewBody({super.key,required this.userEntities});
@@ -57,18 +62,18 @@ class UserInfoViewBody extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      buildUserInfo('صورة المستخدم'),
-
-                      SizedBox( height: SizeConfig.height*0.01,),
-
-                      Image(
-                        fit: BoxFit.cover,
-                        width:  SizeConfig.height*0.6,
-                        height:  SizeConfig.height*0.3,
-                        image: NetworkImage('https://cdn.pixabay.com/photo/2021/09/20/03/24/skeleton-6639547_1280.png'),
-                      ),
-
-                      SizedBox( height: SizeConfig.height*0.025,),
+                      // buildUserInfo('صورة المستخدم'),
+                      //
+                      // SizedBox( height: SizeConfig.height*0.01,),
+                      //
+                      // Image(
+                      //   fit: BoxFit.cover,
+                      //   width:  SizeConfig.height*0.6,
+                      //   height:  SizeConfig.height*0.3,
+                      //   image: NetworkImage('https://cdn.pixabay.com/photo/2021/09/20/03/24/skeleton-6639547_1280.png'),
+                      // ),
+                      //
+                      // SizedBox( height: SizeConfig.height*0.025,),
 
                       Row(
                         children: [
@@ -162,19 +167,34 @@ class UserInfoViewBody extends StatelessWidget {
                           width: SizeConfig.height*0.2,
                           child: DefaultButton(
                               buttonText: 'ارسال الاشعارات',
-                              onPressed: (){
+                              onPressed: ()async {
                                 showDialogWidget(
                                     context: context,
                                     controller: messageController,
                                     buttonText: 'ارسال اشعار',
                                     title: 'ارسال اشعار',
                                     body: 'ادخل الرسالة التي تريد ارسالها',
-                                    onPressed: (){
+                                    onPressed: () async {
                                       Navigator.pop(context);
-                                      cubit.sendNotification(
-                                          message: messageController.text,
-                                          userId: userEntities.uId
-                                      );
+                                      if(messageController.text.isEmpty) {
+                                        toastificationWidget(context: context, title: 'حدث خطا', body: 'ادخل الرسالة التي تريد ارسالها', type: ToastificationType.error);
+                                      }else {
+                                        // FirebaseMessaging messaging = FirebaseMessaging.instance;
+                                        //
+                                        // String? token = await messaging.getToken();
+                                        // NotificationServices().sendNotifications(
+                                        //     fcmToken: "cxKma7_0SciOIcQ3wWNF41:APA91bEOso3mv9T1nJeC496Tlf5VqeaEHowYsoTmyTyBWrnbyf--nH6UKJxWpgJSweRQrWr8FMniCDhh-lQ9o-s9uWoEYa3MMhj4crEcntj3GiIJCC2DkMI",
+                                        //     title: 'رسالة جديدة',
+                                        //     body: messageController.text,
+                                        //     userId: "l1gimdGsKHa8d2WBsiwvqHSlt7N2"
+                                        // );
+                                        cubit.sendNotification(
+                                            message: messageController.text,
+                                            userId: userEntities.uId
+                                        );
+                                        messageController.clear();
+                                      }
+
                                     }
                                 );
                               },
@@ -196,7 +216,13 @@ class UserInfoViewBody extends StatelessWidget {
                                      title: 'حذف المستخدم',
                                      body: 'ادخل الرسالة التي تريد ارسالها',
                                      onPressed:  (){
-                                       cubit.deleteUser(userId: userEntities.uId);
+                                       if(messageController.text.isEmpty) {
+                                         toastificationWidget(context: context, title: 'حدث خطا', body: 'ادخل الرسالة التي تريد ارسالها', type: ToastificationType.error);
+                                       }else{
+                                         cubit.deleteUser(userId: userEntities.uId,message: messageController.text);
+                                         messageController.clear();
+                                       }
+
                                      }
                                  ).then((value) => Navigator.pop(context));
                               },
@@ -217,7 +243,12 @@ class UserInfoViewBody extends StatelessWidget {
                                   title: 'حظر المستخدم',
                                   body: 'ادخل الرسالة التي تريد ارسالها',
                                   onPressed:  (){
-                                    cubit.blockUser(userId: userEntities.uId);
+                                    if(messageController.text.isEmpty) {
+                                      toastificationWidget(context: context, title: 'حدث خطا', body: 'ادخل الرسالة التي تريد ارسالها', type: ToastificationType.error);
+                                    }else{
+                                      cubit.blockUser(userId: userEntities.uId,message: messageController.text);
+                                      messageController.clear();
+                                    }
                                   }
                                 ).then((value) => Navigator.pop(context));
                               },

@@ -9,8 +9,8 @@ class GetAllUsersUseCases{
 
   GetAllUsersUseCases({required this.userRepo});
 
-  Future<Either<Faliure, List<UserModel>>> call() async {
-    return await userRepo.getAllUsers();
+  Future<Either<Faliure, List<UserModel>>> call({required bool desending}) async {
+    return await userRepo.getAllUsers(desending: desending);
   }
 
 }

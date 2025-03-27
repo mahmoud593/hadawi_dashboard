@@ -9,8 +9,8 @@ class BlockUserUseCases{
 
   BlockUserUseCases({required this.userRepo});
 
-  Future<Either<Faliure, void>> call({ required String userId}) async {
-    return await userRepo.blockUser(userId: userId);
+  Future<Either<Faliure, void>> call({ required String userId,required String message}) async {
+    return await userRepo.blockUser(userId: userId,message: message);
   }
 
 }

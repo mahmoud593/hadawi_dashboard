@@ -30,6 +30,7 @@ class _TaxsViewBodyState extends State<TaxsViewBody> {
   TextEditingController packingController = TextEditingController();
   TextEditingController packing2Controller = TextEditingController();
   TextEditingController occasionController = TextEditingController();
+  TextEditingController editOccasionController = TextEditingController();
   String image1='';
   String image2='';
   List<String> occasionsType=[];
@@ -164,7 +165,51 @@ class _TaxsViewBodyState extends State<TaxsViewBody> {
                                   occasionsType.remove(occasionsType[index]);
                                   toastificationWidget(context: context, title: 'حذف مناسبه', body: 'تم حذف المناسبه بنجاج لتاكيد قم بالحفظ', type: ToastificationType.success);
                                 });
-                              }, icon: Icon(Icons.delete,color: ColorManager.primaryBlue,))
+                              }, icon: Icon(Icons.delete,color: ColorManager.error,)),
+                              SizedBox(width:  SizeConfig.width*0.02,),
+                              IconButton(onPressed: (){
+                                setState(() {
+                                  editOccasionController.text= occasionsType[index];
+                                  showDialog(context: context, builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('تعديل المناسبه',style:  TextStyles.textStyle18Medium,),
+                                      content: Container(
+                                        height: SizeConfig.height*0.1,
+                                        child: DefaultTextField(
+                                            controller: editOccasionController,
+                                            hintText: 'ادخل نوع المناسبه',
+                                            validator: (value) {},
+                                            keyboardType: TextInputType.text,
+                                            textInputAction: TextInputAction.done,
+                                            fillColor: ColorManager.gray
+                                        ),
+                                      ),
+                                      actions: [
+                                        DefaultButton(
+                                            buttonText: 'تعديل',
+                                            onPressed: (){
+                                              setState(() {
+                                                occasionsType.remove(occasionsType[index]);
+                                                occasionsType.add(editOccasionController.text);
+                                                toastificationWidget(context: context, title: 'تعديل مناسبه', body: 'تم تعديل المناسبه بنجاج لتاكيد قم بالحفظ', type: ToastificationType.success);
+                                                Navigator.pop(context);
+                                              });
+                                            },
+                                            buttonColor: ColorManager.primaryBlue
+                                        ),
+                                        SizedBox(height:  SizeConfig.width*0.02,),
+                                        DefaultButton(
+                                            buttonText: 'الغاء',
+                                            onPressed: (){
+                                              Navigator.pop(context);
+                                            },
+                                            buttonColor: ColorManager.error
+                                        ),
+                                      ],
+                                    );
+                                  });
+                                });
+                              }, icon: Icon(Icons.edit,color: ColorManager.primaryBlue,)),
                             ],
                           ),
                         ),

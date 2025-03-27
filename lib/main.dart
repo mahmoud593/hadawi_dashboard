@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Hadawi Dashboard',
             theme: getApplicationTheme(context),
-            home:  const LoginScreen(),
+            home: UserDataFromStorage.userIsGuest? const HomeScreen():  const LoginScreen(),
           );
         },
       ),

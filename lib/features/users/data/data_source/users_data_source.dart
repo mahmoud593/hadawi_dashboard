@@ -5,7 +5,7 @@ import 'package:hadawi_dathboard/utiles/error_handling/exceptions/exceptions.dar
 
 abstract class UsersDataSource {
 
-  Future<List<UserModel>> getAllUsers();
+  Future<List<UserModel>> getAllUsers({required bool desending});
 
   Future<void> sendNotification({
     required String message,
@@ -14,17 +14,19 @@ abstract class UsersDataSource {
 
   Future<void> deleteUser({
     required String userId,
+    required String message
   });
 
   Future<void>  blockUser({
     required String userId,
+    required String message
   });
 }
 
 class UsersDataSourceImpl extends UsersDataSource {
 
   @override
-  Future<List<UserModel>> getAllUsers()async {
+  Future<List<UserModel>> getAllUsers({required bool desending})async {
     try{
       List<UserModel> users = [];
 
@@ -32,6 +34,12 @@ class UsersDataSourceImpl extends UsersDataSource {
 
       for (var element in res.docs) {
         users.add(UserModel.fromJson(element.data()));
+      }
+
+      if(desending){
+        users.sort((UserModel a, UserModel b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)));
+      }else{
+        users.sort((UserModel a, UserModel b) => DateTime.parse(a.date).compareTo(DateTime.parse(b.date)));
       }
 
       return users;
@@ -61,18 +69,20 @@ class UsersDataSourceImpl extends UsersDataSource {
   }
 
   @override
-  Future<void> blockUser({required String userId})async {
+  Future<void> blockUser({required String userId,required String message})async {
     try{
       await FirebaseFirestore.instance.collection('users').doc(userId).update({'block': true});
+      sendNotification(message: message, userId: userId);
     }on FireStoreException catch(e){
       throw FireStoreException(firebaseException: e.firebaseException);
     }
   }
 
   @override
-  Future<void> deleteUser({required String userId})async {
+  Future<void> deleteUser({required String userId,required String message})async {
     try{
       await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+      sendNotification(message: message, userId: userId);
     }on FireStoreException catch(e){
       throw FireStoreException(firebaseException: e.firebaseException);
     }

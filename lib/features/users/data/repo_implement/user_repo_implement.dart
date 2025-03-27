@@ -13,9 +13,9 @@ class UserRepoImplement extends UserRepo{
   UserRepoImplement({required this.usersDataSource});
 
   @override
-  Future<Either<Faliure, List<UserModel>>> getAllUsers() async{
+  Future<Either<Faliure, List<UserModel>>> getAllUsers({required bool desending}) async{
    try{
-     return Right(await usersDataSource.getAllUsers());
+     return Right(await usersDataSource.getAllUsers(desending: desending));
 
    }on FireStoreException catch(e){
      throw FireStoreFaliure.fromMessage(e);
@@ -36,18 +36,18 @@ class UserRepoImplement extends UserRepo{
   }
 
   @override
-  Future<Either<Faliure, void>> blockUser({required String userId})async {
+  Future<Either<Faliure, void>> blockUser({required String userId,required String message})async {
     try{
-      return Right(await usersDataSource.blockUser(userId: userId));
+      return Right(await usersDataSource.blockUser(userId: userId,message: message));
     }on FireStoreException catch(e){
     throw FireStoreFaliure.fromMessage(e);
     }
   }
 
   @override
-  Future<Either<Faliure, void>> deleteUser({required String userId})async {
+  Future<Either<Faliure, void>> deleteUser({required String userId,required String message})async {
     try{
-      return Right(await usersDataSource.deleteUser(userId: userId));
+      return Right(await usersDataSource.deleteUser(userId: userId,message: message));
     }on FireStoreException catch(e){
     throw FireStoreFaliure.fromMessage(e);
     }
