@@ -69,6 +69,7 @@ class UserCubit extends Cubit<UserStates>{
     if(value.isEmpty){
       getAllUsers(desending: desending);
     }else{
+
       Set<UserEntities> items = users.where((item)=> item.name.toLowerCase().
       contains(value.toLowerCase())).toSet();
       items.addAll(users.where((item)=> item.email.toLowerCase().
