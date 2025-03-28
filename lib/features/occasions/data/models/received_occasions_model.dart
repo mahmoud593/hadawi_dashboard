@@ -7,8 +7,8 @@ class ReceivedOccasionsModel extends ReceivedOccasionsEntities {
   factory ReceivedOccasionsModel.fromJson(Map<String, dynamic> json) {
     return ReceivedOccasionsModel(
       id: json['occasionId'] as String,
-      imageUrls: List<String>.from(json['imagesUrl'] as List),
-      finalPrice: json['finalPrice'] as String,
+      imageUrls: json['imagesUrl'] as String,
+      finalPrice: json['finalPrice'] as double,
     );
   }
   Map<String, dynamic> toJson() {

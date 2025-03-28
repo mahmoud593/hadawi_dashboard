@@ -39,6 +39,7 @@ class OccasionsCubit extends Cubit<OccasionsState> {
   TextEditingController receivingDateController = TextEditingController();
 
   TextEditingController finalPriceController = TextEditingController();
+  GlobalKey<FormState> receivedOccasionsFormKey = GlobalKey<FormState>();
 String? selectedValue;
   List<OccasionEntity> occasions = [];
 
@@ -112,13 +113,13 @@ String? selectedValue;
       occasionName: occasionNameController.text,
       occasionDate: occasionDateController.text,
       occasionType: occasionTypeController.text,
-      moneyGiftAmount: moneyAmountController.text,
+      moneyGiftAmount: double.parse(moneyAmountController.text),
       personName: personNameController.text,
       personPhone: personPhoneController.text,
       personEmail: personEmailController.text,
       giftName: giftNameController.text,
       giftLink: giftLinkController.text,
-      giftPrice:  giftPriceController.text,
+      giftPrice:  double.parse(giftPriceController.text),
       bankName: bankNameController.text,
       city: cityController.text,
       district: districtController.text,
@@ -149,12 +150,12 @@ String? selectedValue;
 
   Future<void> openExerciseLink(String url) async {
     try {
-      final Uri uri = Uri.parse(Uri.encodeFull(url)); // Ensure proper encoding
+      final Uri uri = Uri.parse(Uri.encodeFull(url));
 
       if (await canLaunchUrl(uri)) {
         await launchUrl(
           uri,
-          mode: LaunchMode.externalApplication, // Open in external browser
+          mode: LaunchMode.externalApplication,
         );
       } else {
         debugPrint('Could not launch $url');
@@ -165,85 +166,73 @@ String? selectedValue;
   }
   var picker = ImagePicker();
 
-  List<File> imageFiles = []; // For mobile (changed to List)
-  List<Uint8List.Uint8List> webImageBytes = []; // For web (changed to List)
+
+
+  File? imageFile; // For mobile
+  Uint8List.Uint8List? webImageBytes; // For web
 
   Future<void> pickGiftImage() async {
+
     emit(PickGiftImageLoadingState());
+        final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
-    // Use pickMultiImage to allow selecting multiple images
-    final List<XFile> pickedImages = await picker.pickMultiImage();
-
-    if (pickedImages.isNotEmpty) {
-      if (kIsWeb) {
-        // Web: Read bytes for each image
-        webImageBytes = [];
-        for (var image in pickedImages) {
-          final bytes = await image.readAsBytes();
-          webImageBytes.add(bytes);
+        if (pickedImage != null) {
+          if (kIsWeb) {
+            webImageBytes = await pickedImage.readAsBytes();
+            emit(PickGiftImageSuccessState());
+          } else {
+            imageFile = File(pickedImage.path);
+            emit(PickGiftImageSuccessState());
+          }
+        } else {
+          emit(PickGiftImageErrorState());
         }
-        emit(PickGiftImageSuccessState());
-      } else {
-        // Mobile: Convert paths to File objects
-        imageFiles = pickedImages.map((image) => File(image.path)).toList();
-        emit(PickGiftImageSuccessState());
-      }
-    } else {
-      emit(PickGiftImageErrorState());
-    }
+
   }
 
-  Future<List<String>> uploadImage() async {
+  Future<String> uploadImage() async {
     emit(UploadGiftImageLoadingState());
 
     try {
-      List<String> downloadUrls = [];
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('Banners/${DateTime.now().millisecondsSinceEpoch}');
+
+      firebase_storage.UploadTask uploadTask;
 
       if (kIsWeb) {
-        // Web: Upload each Uint8List
-        for (var bytes in webImageBytes) {
-          firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-              .ref()
-              .child('doneOccasions/${DateTime.now().millisecondsSinceEpoch}');
-          firebase_storage.UploadTask uploadTask = ref.putData(bytes);
-          final snapshot = await uploadTask;
-          final downloadUrl = await snapshot.ref.getDownloadURL();
-          downloadUrls.add(downloadUrl);
-        }
+        // Web: Upload from Uint8List
+        uploadTask = ref.putData(webImageBytes!);
       } else {
-        for (var file in imageFiles) {
-          firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-              .ref()
-              .child('doneOccasions/${DateTime.now().millisecondsSinceEpoch}');
-          firebase_storage.UploadTask uploadTask = ref.putFile(file);
-          final snapshot = await uploadTask;
-          final downloadUrl = await snapshot.ref.getDownloadURL();
-          downloadUrls.add(downloadUrl);
-        }
+        // Mobile: Upload from File
+        uploadTask = ref.putFile(imageFile!);
       }
 
+      final snapshot = await uploadTask;
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+
       emit(UploadGiftImageSuccessState());
-      return downloadUrls;
+      return downloadUrl;
     } catch (error) {
       emit(UploadGiftImageErrorState());
-      throw Exception("Failed to upload images: $error");
+      throw Exception("Failed to upload image: $error");
     }
   }
 
   void clearImage() {
-    imageFiles = [];
-    webImageBytes = [];
+    imageFile = null;
+    webImageBytes = null;
     emit(ClearImageState());
   }
 
 Future<void> addReceivedOccasions({required String occasionId}) async {
      emit(AddReceivedOccasionsLoadingState());
     try {
-      final List<String> imageUrls = await uploadImage();
+      final imageUrl = await uploadImage();
       final result = await OccasionRepoImp().addReceivedOccasions(
         occasionId: occasionId,
-        images: imageUrls,
-        finalPrice: finalPriceController.text,
+        images: imageUrl,
+        finalPrice: double.parse(finalPriceController.text),
       );
       result.fold(
             (failure){
@@ -269,5 +258,19 @@ Future<void> getReceivedOccasions({ required String occasionId}) async {
       emit(GetReceivedOccasionsSuccessState(receivedOccasionsEntities: receivedOccasions!));
     });
 }
+
+  Future<void> editReceivedOccasion({required String occasionId, String? image,double? finalPrice}) async {
+    emit(UpdateOccasionsLoadingState());
+    final result = await OccasionRepoImp().editReceivedOccasions(
+      occasionId: occasionId,
+      images: webImageBytes != null ? await uploadImage() : image,
+      finalPrice: finalPrice,
+    );
+    result.fold((failure) {
+      emit(UpdateOccasionsErrorState(error: failure.message));
+    }, (occasion) {
+      emit(UpdateOccasionSuccess(occasions: occasion));
+    });
+  }
 
 }

@@ -43,12 +43,15 @@ class OccasionDataSource {
     try {
       final querySnapshot = await fireStore
           .collection('Occasions')
-          .where('moneyGiftAmount', isEqualTo: 0)
           .get();
 
-      final occasions = querySnapshot.docs
-          .map((doc) => OccasionModel.fromJson(doc.data()))
-          .toList();
+      List<OccasionModel> occasions = [];
+
+      querySnapshot.docs.map((doc) {
+        if((doc['moneyGiftAmount']).toInt() >= (doc['giftPrice']).toInt()) {
+          return occasions.add(OccasionModel.fromJson(doc.data()));
+        }
+      }).toList();
 
       return occasions;
     } catch (e) {
@@ -56,21 +59,24 @@ class OccasionDataSource {
     }
   }
 
+
   Future<List<OccasionModel>> filterNotCompletedOccasions() async {
     try {
       final querySnapshot = await fireStore
           .collection('Occasions')
-          .where('moneyGiftAmount', isNotEqualTo: 0)
           .get();
 
-      final occasions = querySnapshot.docs
-          .map((doc) => OccasionModel.fromJson(doc.data()))
-          .toList();
+      List<OccasionModel> occasions = [];
+
+      querySnapshot.docs.map((doc) {
+        if((doc['moneyGiftAmount']).toInt() < (doc['giftPrice']).toInt()) {
+          return occasions.add(OccasionModel.fromJson(doc.data()));
+        }}).toList();
 
       return occasions;
     } catch (e) {
-      throw Exception("Failed to fetch occasions: $e");
-    }
+      throw Exception("Failed to fetch occasions:$e");
+  }
   }
 
   Future<Either<Faliure, bool>> updateOccasion({
@@ -78,13 +84,13 @@ class OccasionDataSource {
     String? occasionName,
     String? occasionDate,
     String? occasionType,
-    dynamic moneyGiftAmount,
+    double? moneyGiftAmount,
     String? personName,
     String? personPhone,
     String? personEmail,
     String? giftName,
     String? giftLink,
-    dynamic giftPrice,
+    double? giftPrice,
     String? giftType,
     String? bankName,
     String? city,
@@ -136,18 +142,17 @@ class OccasionDataSource {
 
   Future<Either<Faliure, ReceivedOccasionsModel>> addReceivedOccasion({
     required String occasionId,
-    required List<String> imagesUrl,
-    required String finalPrice,
+    required String imagesUrl,
+    required double finalPrice,
   }) async {
     try {
-      if (occasionId.isEmpty || finalPrice.isEmpty || imagesUrl.isEmpty) {
+      if (occasionId.isEmpty || finalPrice <= 0 || imagesUrl.isEmpty) {
         return Left(Faliure(message: 'Invalid input: Fields cannot be empty'));
       }
       final data = {
         'occasionId': occasionId,
         'imagesUrl': imagesUrl,
         'finalPrice': finalPrice,
-        'timestamp': FieldValue.serverTimestamp(),
       };
 
       final docRef = fireStore
@@ -170,8 +175,8 @@ class OccasionDataSource {
 
   Future<Either<Faliure, bool>> editReceivedOccasions({
     required String occasionId,
-    List<String>? imagesUrl,
-    String? finalPrice,
+    String? imagesUrl,
+    double? finalPrice,
   }) async {
     try {
       final docRef = fireStore

@@ -19,13 +19,13 @@ abstract class OccasionRepo {
     String? occasionName,
     String? occasionDate,
     String? occasionType,
-    dynamic moneyGiftAmount,
+    double? moneyGiftAmount,
     String? personName,
     String? personPhone,
     String? personEmail,
     String? giftName,
     String? giftLink,
-    dynamic giftPrice,
+    double? giftPrice,
     String? giftType,
     String bankName,
     String city,
@@ -41,12 +41,12 @@ abstract class OccasionRepo {
 
   Future<Either<Faliure, ReceivedOccasionsEntities>> addReceivedOccasions(
       {required String occasionId,
-      required List<String> images,
-      required String finalPrice});
+      required String images,
+      required double finalPrice});
   Future<Either<Faliure, ReceivedOccasionsEntities>> getReceivedOccasions({required String occasionId});
 
   Future<Either<Faliure, bool>> editReceivedOccasions(
       {required String occasionId,
-        List<String>? images,
-        String? finalPrice});
+       String? images,
+        double? finalPrice});
 }

@@ -17,30 +17,32 @@ class OccasionInfoColumn extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 4,
-            child: Text(
-              occasionValue,
-              textAlign: TextAlign.end,
-              style: TextStyles.textStyle18Bold.copyWith(
-                color: ColorManager.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
           Expanded(
             child: Text(
               ":$title",
-              textAlign: TextAlign.end,
+              textAlign: TextAlign.start,
               style: TextStyles.textStyle18Medium.copyWith(
                 color: ColorManager.black,
                 fontWeight: FontWeight.normal,
               ),
             ),
           ),
+          const SizedBox(width: 8),
+
+          Expanded(
+            flex: 4,
+            child: Text(
+              occasionValue,
+              textAlign: TextAlign.start,
+              style: TextStyles.textStyle18Bold.copyWith(
+                color: ColorManager.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
         ],
       ),
     );
