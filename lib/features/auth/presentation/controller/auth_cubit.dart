@@ -16,6 +16,8 @@ class AuthCubit extends Cubit<AuthState> {
   TextEditingController  emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+
   bool rememberMe = false;
   Future<void> login({required String email, required String password}) async {
     emit(LoginLoading());

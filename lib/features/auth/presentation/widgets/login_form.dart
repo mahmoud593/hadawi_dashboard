@@ -24,6 +24,11 @@ class _LoginFormState extends State<LoginForm> {
     super.initState();
     formKey = GlobalKey<FormState>();
     // context.read<AuthCubit>().loadSavedCredentials();
+    if(UserDataFromStorage.isReminder==true){
+      context.read<AuthCubit>().emailController.text = UserDataFromStorage.emailFromStorage;
+      context.read<AuthCubit>().passwordController.text = UserDataFromStorage.password;
+      context.read<AuthCubit>().rememberMe = true;
+    }
   }
 
   @override
@@ -106,14 +111,17 @@ class _LoginFormState extends State<LoginForm> {
                   Checkbox(
                     value: cubit.rememberMe,
                     onChanged: (value) {
-                      cubit.rememberMe = value ?? false;
                       setState(() {
-                        if (cubit.rememberMe == true) {
-                          cubit.emailController.text = UserDataFromStorage.emailFromStorage;
-                          cubit.passwordController.text = UserDataFromStorage.password;
-                        } else {
-                          cubit.emailController.text = '';
-                          cubit.passwordController.text = '';
+                        cubit.rememberMe = value ?? false;
+                        print('Value is $value');
+                        if(value==true){
+                          UserDataFromStorage.setIsReminder(true);
+                        }else{
+                          UserDataFromStorage.setIsReminder(false);
+                        }
+                        if (value == true) {
+                          UserDataFromStorage.setEmail(cubit.emailController.text);
+                          UserDataFromStorage.setPassword(cubit.passwordController.text);
                         }
                       });
                     },

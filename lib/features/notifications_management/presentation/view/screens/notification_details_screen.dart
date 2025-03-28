@@ -11,11 +11,14 @@ import 'package:hadawi_dathboard/widgets/dashboard_app_bar_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class NotificationDetailsScreen extends StatelessWidget {
-  const NotificationDetailsScreen({super.key,required this.message,required this.purpose,required this.status,required this.type,required this.isEdit});
+  const NotificationDetailsScreen({super.key,required this.message,required this.uId,required this.purpose,required this.status,required this.isEdit,required this.remind12,required this.remind24,required this.remind48});
   final String message;
+  final String uId;
   final String purpose;
   final bool status;
-  final int type;
+  final bool remind12;
+  final bool remind24;
+  final bool remind48;
   final bool isEdit;
   @override
   Widget build(BuildContext context) {
@@ -32,8 +35,11 @@ class NotificationDetailsScreen extends StatelessWidget {
                     message: message,
                     purpose:purpose ,
                     status: status,
-                    type: type,
                     isEdit: isEdit,
+                    remind12: remind12,
+                    remind24: remind24,
+                    remind48: remind48,
+                    uId: uId,
                   )
               ),
             ),

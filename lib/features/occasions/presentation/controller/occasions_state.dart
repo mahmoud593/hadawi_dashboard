@@ -50,10 +50,12 @@ final class AddReceivedOccasionsErrorState extends OccasionsState {
 }
 final class GetReceivedOccasionsLoadingState extends OccasionsState {}
 final class GetReceivedOccasionsSuccessState extends OccasionsState {
-  final ReceivedOccasionsEntities receivedOccasionsEntities;
-  GetReceivedOccasionsSuccessState({required this.receivedOccasionsEntities});
+  ReceivedOccasionsEntities receivedOccasions;
+
+  GetReceivedOccasionsSuccessState(this.receivedOccasions);
 }
 final class GetReceivedOccasionsErrorState extends OccasionsState {
-  final String error;
+  String error;
   GetReceivedOccasionsErrorState({required this.error});
 }
+

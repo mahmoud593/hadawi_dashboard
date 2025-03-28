@@ -9,6 +9,7 @@ import 'package:hadawi_dathboard/features/occasions/presentation/occasions_scree
 import 'package:hadawi_dathboard/styles/theme_manger/theme_manager.dart';
 import 'package:hadawi_dathboard/utiles/cashe_helper/cashe_helper.dart';
 import 'package:hadawi_dathboard/utiles/services/dio_helper.dart';
+import 'package:hadawi_dathboard/utiles/services/notification_services.dart';
 import 'package:hadawi_dathboard/utiles/services/service_locator.dart';
 import 'package:hadawi_dathboard/utiles/shared_preferences/shared_preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +27,8 @@ void main()async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  NotificationServices().getAccessToken();
+
   String languageCode = CashHelper.getData(key: CashHelper.languageKey).toString();
   debugPrint('debug $languageCode');
   runApp(const MyApp());
@@ -46,7 +49,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Hadawi Dashboard',
             theme: getApplicationTheme(context),
-            home: UserDataFromStorage.userIsGuest? const HomeScreen():  const LoginScreen(),
+            home:  const LoginScreen(),
           );
         },
       ),

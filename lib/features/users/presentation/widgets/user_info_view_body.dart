@@ -3,15 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hadawi_dathboard/features/home/presentation/view/screens/home_screen.dart';
 import 'package:hadawi_dathboard/features/home/presentation/view/widgets/home_view_body.dart';
+import 'package:hadawi_dathboard/features/notifications_management/presentation/controller/notification_cubit.dart';
 import 'package:hadawi_dathboard/features/users/domain/entities/user_entities.dart';
 import 'package:hadawi_dathboard/features/users/presentation/controller/user_cubit.dart';
 import 'package:hadawi_dathboard/features/users/presentation/controller/user_states.dart';
+import 'package:hadawi_dathboard/features/users/presentation/screens/send_user_notification_screen.dart';
+import 'package:hadawi_dathboard/features/users/presentation/screens/send_user_notification_screen.dart';
 import 'package:hadawi_dathboard/features/users/presentation/widgets/show_dialog_widget.dart';
 import 'package:hadawi_dathboard/styles/assets/asset_manager.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 import 'package:hadawi_dathboard/styles/size_config/app_size_config.dart';
 import 'package:hadawi_dathboard/utiles/helper/material_navigation.dart';
 import 'package:hadawi_dathboard/utiles/services/notification_services.dart';
+import 'package:hadawi_dathboard/utiles/services/service_locator.dart';
 import 'package:hadawi_dathboard/utiles/shared_preferences/shared_preference.dart';
 import 'package:hadawi_dathboard/widgets/default_button.dart';
 import 'package:hadawi_dathboard/widgets/default_text_field.dart';
@@ -167,36 +171,39 @@ class UserInfoViewBody extends StatelessWidget {
                           child: DefaultButton(
                               buttonText: 'ارسال الاشعارات',
                               onPressed: ()async {
-                                showDialogWidget(
-                                    context: context,
-                                    controller: messageController,
-                                    buttonText: 'ارسال اشعار',
+                                customPushNavigator(context, MultiBlocProvider(
+                                    providers: [
 
-                                    title: 'ارسال اشعار',
-                                    body: 'ادخل الرسالة التي تريد ارسالها',
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-                                      if(messageController.text.isEmpty) {
-                                        toastificationWidget(context: context, title: 'حدث خطا', body: 'ادخل الرسالة التي تريد ارسالها', type: ToastificationType.error);
-                                      }else {
-                                        // FirebaseMessaging messaging = FirebaseMessaging.instance;
-                                        //
-                                        // String? token = await messaging.getToken();
-                                        // NotificationServices().sendNotifications(
-                                        //     fcmToken: "cxKma7_0SciOIcQ3wWNF41:APA91bEOso3mv9T1nJeC496Tlf5VqeaEHowYsoTmyTyBWrnbyf--nH6UKJxWpgJSweRQrWr8FMniCDhh-lQ9o-s9uWoEYa3MMhj4crEcntj3GiIJCC2DkMI",
-                                        //     title: 'رسالة جديدة',
-                                        //     body: messageController.text,
-                                        //     userId: "l1gimdGsKHa8d2WBsiwvqHSlt7N2"
-                                        // );
-                                        cubit.sendNotification(
-                                            message: messageController.text,
-                                            userId: userEntities.uId
-                                        );
-                                        messageController.clear();
-                                      }
-
-                                    }
-                                );
+                                      BlocProvider(create:  (context) => UserCubit(getIt(),getIt(),getIt(),getIt(),),),
+                                      BlocProvider(create:  (context) => NotificationCubit(getIt(),getIt(),getIt(),getIt(),getIt(),getIt(),getIt(),getIt(),)..getNotification()),
+                                    ],
+                                    child: SendUserNotificationScreen(userEntities:  userEntities,)));
+                                // showDialogWidget(
+                                //     context: context,
+                                //     controller: messageController,
+                                //     buttonText: 'ارسال اشعار',
+                                //     title: 'ارسال اشعار',
+                                //     body: 'ادخل الرسالة التي تريد ارسالها',
+                                //     onPressed: () async {
+                                //       Navigator.pop(context);
+                                //       if(messageController.text.isEmpty) {
+                                //         toastificationWidget(context: context, title: 'حدث خطا', body: 'ادخل الرسالة التي تريد ارسالها', type: ToastificationType.error);
+                                //       }else {
+                                //         NotificationServices().sendNotifications(
+                                //             fcmToken:userEntities.token,
+                                //             title: 'اشعار جديد',
+                                //             body: messageController.text,
+                                //             userId: userEntities.uId
+                                //         );
+                                //         cubit.sendNotification(
+                                //             message: messageController.text,
+                                //             userId: userEntities.uId
+                                //         );
+                                //         messageController.clear();
+                                //       }
+                                //
+                                //     }
+                                // );
                               },
                               buttonColor: ColorManager.success
                           ),
@@ -219,6 +226,12 @@ class UserInfoViewBody extends StatelessWidget {
                                        if(messageController.text.isEmpty) {
                                          toastificationWidget(context: context, title: 'حدث خطا', body: 'ادخل الرسالة التي تريد ارسالها', type: ToastificationType.error);
                                        }else{
+                                         NotificationServices().sendNotifications(
+                                             fcmToken:userEntities.token,
+                                             title: 'حذف الحساب',
+                                             body: messageController.text,
+                                             userId: userEntities.uId
+                                         );
                                          cubit.deleteUser(userId: userEntities.uId,message: messageController.text);
                                          messageController.clear();
                                        }
@@ -246,6 +259,12 @@ class UserInfoViewBody extends StatelessWidget {
                                     if(messageController.text.isEmpty) {
                                       toastificationWidget(context: context, title: 'حدث خطا', body: 'ادخل الرسالة التي تريد ارسالها', type: ToastificationType.error);
                                     }else{
+                                      NotificationServices().sendNotifications(
+                                          fcmToken:userEntities.token,
+                                          title: 'حظر الحساب',
+                                          body: messageController.text,
+                                          userId: userEntities.uId
+                                      );
                                       cubit.blockUser(userId: userEntities.uId,message: messageController.text);
                                       messageController.clear();
                                     }

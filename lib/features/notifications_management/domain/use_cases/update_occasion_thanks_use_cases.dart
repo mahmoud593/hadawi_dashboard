@@ -12,8 +12,11 @@ class UpdateOccasionThanksUseCases{
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   }) async {
-    return await notificationRepo.updatePaymentThanks(description: description, title: title, status: status);
+    return await notificationRepo.updatePaymentThanks(description: description, title: title, status: status, remind12: remind12, remind24: remind24, remind48: remind48);
   }
 
 }

@@ -16,24 +16,36 @@ abstract class NotificationsDataSource {
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
 });
 
   Future<void> updatePaymentDone({
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   });
 
   Future<void> updatePaymentRemember({
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   });
 
   Future<void> updatePaymentThanks({
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   });
 }
 
@@ -85,13 +97,20 @@ class NotificationsDataSourceImpl extends NotificationsDataSource {
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   })async {
     try{
       await FirebaseFirestore.instance.collection('notification_messages').doc('occasion_complete').update(
         {
           'description': description,
           'title': title,
-          'status': status
+          'status': status,
+          'remind12': remind12,
+          'remind24': remind24,
+          'remind48': remind48
+
         }
       );
     }on FireStoreException catch(e){
@@ -104,13 +123,19 @@ class NotificationsDataSourceImpl extends NotificationsDataSource {
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   })async {
     try{
       await FirebaseFirestore.instance.collection('notification_messages').doc('payment_done').update(
           {
             'description': description,
             'title': title,
-            'status': status
+            'status': status,
+            'remind12': remind12,
+            'remind24': remind24,
+            'remind48': remind48
           }
       );
     }on FireStoreException catch(e){
@@ -123,13 +148,19 @@ class NotificationsDataSourceImpl extends NotificationsDataSource {
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   })async {
     try{
       await FirebaseFirestore.instance.collection('notification_messages').doc('payment_remember').update(
           {
             'description': description,
             'title': title,
-            'status': status
+            'status': status,
+            'remind12': remind12,
+            'remind24': remind24,
+            'remind48': remind48
           }
       );
     }on FireStoreException catch(e){
@@ -142,13 +173,19 @@ class NotificationsDataSourceImpl extends NotificationsDataSource {
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   }) async{
     try{
       await FirebaseFirestore.instance.collection('notification_messages').doc('payment_thanks').update(
           {
             'description': description,
             'title': title,
-            'status': status
+            'status': status,
+            'remind12': remind12,
+            'remind24': remind24,
+            'remind48': remind48
           }
       );
     }on FireStoreException catch(e){

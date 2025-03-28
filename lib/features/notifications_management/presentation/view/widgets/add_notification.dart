@@ -16,22 +16,15 @@ import 'package:hadawi_dathboard/widgets/default_text_field.dart';
 import 'package:hadawi_dathboard/widgets/toast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class NotificationDetailsViewBody extends StatefulWidget {
-  const NotificationDetailsViewBody({super.key,required this.message,required this.purpose,required this.uId,required this.status,required this.isEdit,required this.remind12,required this.remind24,required this.remind48});
-  final String message;
-  final String purpose;
-  final String uId;
-  final bool status;
-  final bool remind12;
-  final bool remind24;
-  final bool remind48;
-  final bool isEdit;
+class AddNotificationScreen extends StatefulWidget {
+  const AddNotificationScreen({super.key,});
+
 
   @override
-  State<NotificationDetailsViewBody> createState() => _TaxsViewBodyState();
+  State<AddNotificationScreen> createState() => _TaxsViewBodyState();
 }
 
-class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
+class _TaxsViewBodyState extends State<AddNotificationScreen> {
 
   TextEditingController messageController = TextEditingController();
   TextEditingController purposeController = TextEditingController();
@@ -44,10 +37,6 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
   @override
   void initState() {
     super.initState();
-    messageController.text= widget.message;
-    purposeController.text= widget.purpose;
-    statusValue= widget.status;
-    checkList=[widget.remind12,widget.remind24,widget.remind48];
   }
 
 
@@ -57,7 +46,7 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
       builder:  (context, state) {
         var cubit = context.read<NotificationCubit>();
         return ModalProgressHUD(
-          inAsyncCall: state is UpdateNewNotificationLoadingState,
+          inAsyncCall: state is AddNewNotificationLoadingState,
           child: Container(
             margin:  EdgeInsets.symmetric(
                 horizontal: SizeConfig.height*0.05,
@@ -82,7 +71,6 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
 
                 DefaultTextField(
                     maxLines: 3,
-                    enable: widget.isEdit==true?true:false,
                     controller: purposeController,
                     hintText: 'ادخل الهدف من الاشعار',
                     validator: (value) {},
@@ -99,7 +87,6 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
 
                 DefaultTextField(
                     maxLines: 3,
-                    enable: widget.isEdit==true?true:false,
                     controller: messageController,
                     hintText: 'ادخل الرساله',
                     validator: (value) {},
@@ -120,13 +107,11 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
                       inactiveTrackColor: ColorManager.gray,
                       value: statusValue,
                       onChanged: (value){
-                        if(widget.isEdit==true){
+
                           setState(() {
                             statusValue=value;
                           });
-                        }else{
 
-                        }
                       }
                   ),
                 ),
@@ -144,13 +129,10 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
                             Checkbox(
                                 value: checkList[index],
                                 onChanged: (value){
-                                  if(widget.isEdit==true){
-                                    setState(() {
-                                      checkList=[false,false,false];
-                                      checkList[index]=value!;
-                                    });
-                                  }
-
+                                  setState(() {
+                                    checkList=[false,false,false];
+                                    checkList[index]=value!;
+                                  });
                                 }
                             ),
                             SizedBox(width: SizeConfig.height*0.02,),
@@ -168,29 +150,27 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
 
                 SizedBox( height: SizeConfig.height*0.03,),
 
-                widget.isEdit==true?
+
                 Align(
                   alignment: Alignment.center,
                   child: SizedBox(
                     width: SizeConfig.height*0.5,
                     child: DefaultButton(
-                        buttonText: 'حفظ',
+                        buttonText: 'اضافه',
                         onPressed: (){
-                          cubit.updateNotification(
-                            remind48: checkList[2],
-                            remind24: checkList[1],
-                            remind12: checkList[0],
-                            uId: widget.uId,
-                            title: purposeController.text,
-                            status: statusValue,
-                            description: messageController.text
+                          cubit.addNewNotification(
+                              description: messageController.text,
+                              title: purposeController.text,
+                              status: statusValue,
+                              remind12: checkList[0],
+                                remind24: checkList[1],
+                              remind48: checkList[2]
                           );
                         },
                         buttonColor: ColorManager.primaryBlue
                     ),
                   ),
-                ):
-                    Container(),
+                )
 
               ],
             ),
@@ -198,20 +178,9 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
         );
       },
       listener: (context, state) {
-        if(state is UpdateOccasionsCompleteErrorState ){
-          customToast(title: state.error, color: ColorManager.error);
-        }
-        if(state is UpdateOccasionsDoneErrorState ){
-          customToast(title: state.error, color: ColorManager.error);
-        }
-        if(state is UpdateOccasionsRememberErrorState ){
-          customToast(title: state.error, color: ColorManager.error);
-        }
-        if(state is UpdateOccasionsThanksErrorState ){
-          customToast(title: state.error, color: ColorManager.error);
-        }
-        if(state is UpdateNewNotificationSuccessState){
-          customToast(title: 'تم تعديل الاشعار بنجاح', color: ColorManager.primaryBlue);
+
+        if(state is AddNewNotificationSuccessState){
+          customToast(title: 'تم اضافه الاشعار بنجاح', color: ColorManager.primaryBlue);
           customPushAndRemoveUntil(context, NotificationManagementScreen() );
         }
       },
@@ -221,6 +190,6 @@ class _TaxsViewBodyState extends State<NotificationDetailsViewBody> {
 
 Widget buildTextField(String text) {
   return Text(text,style: TextStyles.textStyle18Medium.copyWith(
-    color: ColorManager.black
+      color: ColorManager.black
   ),);
 }

@@ -15,24 +15,36 @@ abstract class NotificationRepo {
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   });
 
   Future<Either<Faliure, void>> updatePaymentDone({
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   });
 
   Future<Either<Faliure, void>> updatePaymentRemember({
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   });
 
   Future<Either<Faliure, void>> updatePaymentThanks({
     required String description,
     required String title,
     required bool status,
+    required bool remind12,
+    required bool remind24,
+    required bool remind48,
   });
 
 

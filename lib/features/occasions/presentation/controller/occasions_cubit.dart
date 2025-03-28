@@ -255,7 +255,7 @@ Future<void> getReceivedOccasions({ required String occasionId}) async {
       emit(GetReceivedOccasionsErrorState(error: failure.message));
     }, (entity) {
       receivedOccasions = entity;
-      emit(GetReceivedOccasionsSuccessState(receivedOccasionsEntities: receivedOccasions!));
+      emit(GetReceivedOccasionsSuccessState(receivedOccasions!));
     });
 }
 

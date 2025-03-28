@@ -47,7 +47,7 @@ class UserDataFromStorage {
   static late String giftName;
   static late String link;
   static late String giftAmount;
-  static late bool isForMe;
+  static late bool isReminder;
 
   static setFirstTimeApp(bool value) {
     firstTime = value;
@@ -252,8 +252,8 @@ class UserDataFromStorage {
       giftAmount = value;
       _setData();
     }
-  static setIsForMe(bool value) {
-    isForMe = value;
+  static setIsReminder(bool value) {
+    isReminder = value;
     _setData();
   }
 
@@ -334,7 +334,7 @@ class UserDataFromStorage {
       prefs.setString("giftName", giftName);
       prefs.setString("link", link);
       prefs.setString("giftAmount", giftAmount);
-      prefs.setBool("isForMe", isForMe);
+      prefs.setBool("isReminder", isReminder);
     }
 
     static getData() async {
@@ -406,9 +406,8 @@ class UserDataFromStorage {
       cReductionFromStorage = prefs.getDouble("cReductionFromStorage") ?? 0.0;
       balanceFromStorage = prefs.getDouble("balanceFromStorage") ?? 0.0;
       detectionFromStorage = prefs.getDouble("detectionFromStorage") ?? 0.0;
-      suspendedBalanceFromStorage =
-          prefs.getDouble("suspendedBalanceFromStorage") ?? 0.0;
-      isForMe = prefs.getBool("isForMe") ?? false;
+      suspendedBalanceFromStorage = prefs.getDouble("suspendedBalanceFromStorage") ?? 0.0;
+      isReminder = prefs.getBool("isReminder") ?? false;
     }
 
 

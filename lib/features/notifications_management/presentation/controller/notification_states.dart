@@ -57,3 +57,19 @@ class UpdateOccasionsDoneErrorState extends NotificationStates {
    String error;
   UpdateOccasionsDoneErrorState(this.error);
 }
+
+class AddNewNotificationLoadingState extends NotificationStates {}
+class AddNewNotificationSuccessState extends NotificationStates {}
+class AddNewNotificationErrorState extends NotificationStates {}
+
+class UpdateNewNotificationLoadingState extends NotificationStates {}
+class UpdateNewNotificationSuccessState extends NotificationStates {}
+class UpdateNewNotificationErrorState extends NotificationStates {}
+
+class DeleteNewNotificationLoadingState extends NotificationStates {}
+class DeleteNewNotificationSuccessState extends NotificationStates {}
+class DeleteNewNotificationErrorState extends NotificationStates {}
+
+class GetNewNotificationLoadingState extends NotificationStates {}
+class GetNewNotificationSuccessState extends NotificationStates {}
+class GetNewNotificationErrorState extends NotificationStates {}

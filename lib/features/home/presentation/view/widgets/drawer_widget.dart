@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hadawi_dathboard/constants/app_constants.dart';
+import 'package:hadawi_dathboard/features/auth/presentation/login_screen.dart';
 import 'package:hadawi_dathboard/features/banners/presentation/banners_screen.dart';
 import 'package:hadawi_dathboard/features/notifications_management/presentation/view/screens/notification_management_screen.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/occasions_screen.dart';
@@ -77,6 +78,8 @@ class DrawerWidget extends StatelessWidget {
                         customPushNavigator(context, PrivacyScreen());
                       } else if(index == 6){
                         customPushNavigator(context, PromoCodeScreen());
+                      } else if(index == 8){
+                        customPushAndRemoveUntil(context, LoginScreen());
                       }
                     },
                     child: Row(
