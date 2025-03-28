@@ -60,13 +60,13 @@ class OccasionRepoImp extends OccasionRepo {
     String? occasionName,
     String? occasionDate,
     String? occasionType,
-    dynamic moneyGiftAmount,
+    double? moneyGiftAmount,
     String? personName,
     String? personPhone,
     String? personEmail,
     String? giftName,
     String? giftLink,
-    dynamic giftPrice,
+    double? giftPrice,
     String? giftType,
     String? bankName,
     String? city,
@@ -120,8 +120,8 @@ class OccasionRepoImp extends OccasionRepo {
   @override
   Future<Either<Faliure, ReceivedOccasionsEntities>> addReceivedOccasions({
     required String occasionId,
-    required List<String> images,
-    required String finalPrice,
+    required String images,
+    required double finalPrice,
   }) async {
     final result = await _dataSource.addReceivedOccasion(
       occasionId: occasionId,
@@ -139,7 +139,7 @@ class OccasionRepoImp extends OccasionRepo {
 
   @override
   Future<Either<Faliure, bool>> editReceivedOccasions(
-      {required String occasionId, List<String>? images, String? finalPrice}) async {
+      {required String occasionId, String? images, double? finalPrice}) async {
     try {
       final result = await _dataSource.editReceivedOccasions(
         occasionId: occasionId,

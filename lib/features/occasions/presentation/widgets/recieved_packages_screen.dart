@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hadawi_dathboard/features/occasions/domain/entities/recieved_occastions_entity.dart';
 import 'package:hadawi_dathboard/features/occasions/presentation/controller/occasions_cubit.dart';
 import 'package:hadawi_dathboard/generated/assets.dart';
 import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
@@ -155,105 +153,114 @@ class ReceivedPackagesScreen extends StatelessWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (cubit.webImageBytes.isEmpty) {
-      return Row(
-        children: [
-          Container(
-            height: MediaQuery.sizeOf(context).height * 0.3,
-            width: MediaQuery.sizeOf(context).width * 0.3,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  Assets.imagesEmptyImage,
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(width: 10),
-                Flexible(
-                  child: Text(
-                    'قم بإرفاق صورة الهدية بعد التغليف',
-                    style: TextStyles.textStyle18Medium
-                        .copyWith(color: Colors.black),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 20),
-          IconButton(
-            onPressed: () => cubit.pickGiftImage(),
-            icon: Icon(
-              Icons.upload,
-              color: ColorManager.primaryBlue,
-            ),
-          ),
-        ],
-      );
-    }
+
+
+
 
     return Column(
       children: [
-        SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.4,
-          width: MediaQuery.sizeOf(context).height * 0.6,
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: .3,
-                mainAxisExtent: 100),
-            itemCount: cubit.receivedOccasions!.imageUrls.isEmpty
-                ? cubit.webImageBytes.length
-                : cubit.receivedOccasions?.imageUrls.length,
-            itemBuilder: (context, index) {
-              return Stack(
+        cubit.webImageBytes == null
+            ? Row(
+          children: [
+            Container(
+              height:
+              MediaQuery.sizeOf(context).height * 0.3,
+              width:
+              MediaQuery.sizeOf(context).height * 0.6,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    height: MediaQuery.sizeOf(context).height * 0.4,
-                    width: MediaQuery.sizeOf(context).height * 0.6,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: cubit.receivedOccasions == null
-                        ? Image.memory(
-                            cubit.webImageBytes[index],
-                            height: MediaQuery.sizeOf(context).height * .4,
-                            width: MediaQuery.sizeOf(context).height * 0.6,
-                            fit: BoxFit.fill,
-                          )
-                        : CachedNetworkImage(
-                            imageUrl: cubit.receivedOccasions!.imageUrls[index],
-                            height: MediaQuery.sizeOf(context).height * .4,
-                            width: MediaQuery.sizeOf(context).height * 0.6,
-                            fit: BoxFit.fill,
-                            placeholder: (context, url) =>
-                                const Center(child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),),
+                  Image.asset(
+                    Assets.imagesEmptyImage,
+                    height:
+                    MediaQuery.sizeOf(context).height *
+                        0.3,
+                    width:
+                    MediaQuery.sizeOf(context).height *
+                        0.3,
                   ),
-                  Positioned(
-                    top: 5,
-                    child: IconButton(
-                      onPressed: () {
-                        cubit.webImageBytes.removeAt(index);
-                        cubit.emit(ClearImageState());
-                      },
-                      icon: const Icon(Icons.close, color: Colors.black),
-                    ),
+                  Text(
+                    ' قم بإرفاق صورة الهدية بعد التغليف',
+                    style: TextStyles.textStyle18Medium
+                        .copyWith(color: Colors.black),
                   ),
                 ],
-              );
-            },
-          ),
+              ),
+            ),
+            SizedBox(
+              width:
+              MediaQuery.sizeOf(context).height * 0.02,
+            ),
+            IconButton(
+                onPressed: () {
+                  cubit.pickGiftImage();
+                },
+                icon: Icon(
+                  Icons.upload,
+                  color: ColorManager.primaryBlue,
+                ))
+          ],
+        )
+            : Row(
+          children: [
+            Stack(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: MediaQuery.sizeOf(context)
+                          .height *
+                          0.3,
+                      width: MediaQuery.sizeOf(context)
+                          .height *
+                          0.6,
+                      decoration: BoxDecoration(
+                        border:
+                        Border.all(color: Colors.grey),
+                        borderRadius:
+                        BorderRadius.circular(5.0),
+                      ),
+                      child: Image.memory(
+                        cubit.webImageBytes!,
+                        fit: BoxFit.fill,
+                        height: MediaQuery.sizeOf(context)
+                            .height *
+                            .3,
+                        width: MediaQuery.sizeOf(context)
+                            .height *
+                            0.6,
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context)
+                          .height *
+                          0.02,
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          cubit.pickGiftImage();
+                        },
+                        icon: Icon(
+                          Icons.upload,
+                          color: ColorManager.primaryBlue,
+                        ))
+                  ],
+                ),
+                IconButton(
+                    onPressed: () {
+                      cubit.clearImage();
+                    },
+                    icon: Icon(
+                      Icons.close,
+                      color: ColorManager.black,
+                    )),
+              ],
+            )
+          ],
         ),
       ],
     );

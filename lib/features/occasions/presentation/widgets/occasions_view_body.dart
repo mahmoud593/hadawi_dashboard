@@ -9,6 +9,7 @@ import 'package:hadawi_dathboard/widgets/icon_button.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../../../styles/colors/color_manager.dart';
+import '../../../../styles/size_config/app_size_config.dart';
 import '../../../../styles/text_styles/text_styles.dart';
 
 class OccasionsViewBody extends StatefulWidget {
@@ -115,6 +116,7 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    buildHeaderText('رقم المناسبة'),
                     buildHeaderText('المناسبة'),
                     buildHeaderText('الرقم المرجعي للمناسبة'),
                     buildHeaderText('تاريخ المناسبة'),
@@ -145,6 +147,18 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
+                          Container(
+                            width:  SizeConfig.height*0.05,
+                            height:  SizeConfig.height*0.05,
+                            decoration: BoxDecoration(
+                                color: ColorManager.primaryBlue,
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Center(
+                              child: Text('${index+1}',style: TextStyles.textStyle18Medium.copyWith(color: ColorManager.white),),
+                            ),
+                          ),
+                          SizedBox( width:  SizeConfig.height*0.2,),
                           Expanded(
                               child: Text(occasion.occasionName,
                                   style: TextStyles.textStyle18Medium)),
@@ -193,29 +207,26 @@ class _OccasionsViewBodyState extends State<OccasionsViewBody> {
                                   showDeleteDialog(
                                       context, cubit, occasion.occasionId);
                                 }),
-                                // cubit.occasions[index].moneyGiftAmount == 0
-                                //     ?  buildIconButton(Icons.wallet_giftcard_rounded,
-                                //   ColorManager.warning, () {
-                                //       cubit.receivedOccasions == null? Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //           builder: (_) => ReceivedPackagesScreen(
-                                //             occasionId:  occasion.occasionId,
-                                //           ),
-                                //         ),
-                                //       ):
-                                //       cubit.getReceivedOccasions(occasionId: occasion.occasionId).then((value) {
-                                //         Navigator.push(
-                                //           context,
-                                //           MaterialPageRoute(
-                                //             builder: (_) => ReceivedPackagesScreen(
-                                //               occasionId:  occasion.occasionId,
-                                //             ),
-                                //           ),
-                                //         );
-                                //       },);
-                                //
-                                //   },): SizedBox.shrink(),
+                                cubit.occasions[index].moneyGiftAmount > cubit.occasions[index].giftPrice
+                                    ?  buildIconButton(Icons.wallet_giftcard_rounded,
+                                  ColorManager.warning, () {
+                                      // cubit.receivedOccasions == null? Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (_) => ReceivedPackagesScreen(
+                                      //       occasionId:  occasion.occasionId,
+                                      //     ),
+                                      //   ),
+                                      // ):
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => ReceivedPackagesScreen(
+                                          occasionId:  occasion.occasionId,
+                                        ),
+                                      ),
+                                    );
+                                  },): SizedBox.shrink(),
                               ],
                             ),
                           ),
