@@ -57,4 +57,27 @@ class PromoCodeDataSource {
       throw FireStoreException(firebaseException: e.firebaseException);
     }
   }
+
+  Future<Either<Faliure, bool>> editPromoCodeData({
+    String? code,
+    double? discount,
+    String? expireDate,
+    int? maxUsage,
+    int? used,
+    required String promoCodeId,
+  }) async {
+    try {
+      await fireStore.collection('PromoCodes').doc(promoCodeId).update({
+        'code': code,
+        'discount': discount,
+        'expiryDate': expireDate,
+        'maxUsage': maxUsage,
+        'used': used,
+      });
+      return const Right(true);
+
+    } on FireStoreException catch (e) {
+      throw FireStoreException(firebaseException: e.firebaseException);
+    }
+  }
 }

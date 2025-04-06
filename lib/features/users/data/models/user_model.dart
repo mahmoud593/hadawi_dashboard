@@ -11,7 +11,9 @@ class UserModel extends UserEntities{
     required super.gender,
     required super.date,
     required super.uId,
-    required super.token
+    required super.token,
+    required super.block
+
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -22,7 +24,8 @@ class UserModel extends UserEntities{
       gender: json['gender'],
       date: json['date'],
       token: json['token'],
-      uId: json['uId']
+      uId: json['uId'],
+      block: json['block'],
   );
 
   Map<String, dynamic> toMap() => {
@@ -34,6 +37,7 @@ class UserModel extends UserEntities{
     'token': token,
     'date': date,
     'uId': uId,
+    'block': block,
   };
 
 

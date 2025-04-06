@@ -15,4 +15,12 @@ abstract class PromoCodeRepo {
   Future<Either<Faliure, List<CodeEntity>>> getPromoCodes();
 
   Future<Either<Faliure, bool>> deletePromoCode({required String promoCodeId});
+  Future<Either<Faliure, bool>> editPromoCodeData({
+     String? code,
+     double? discount,
+     String? expireDate,
+     int? maxUsage,
+     int? used,
+    required String promoCodeId,
+  });
 }

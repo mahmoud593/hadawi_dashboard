@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hadawi_dathboard/features/promocode/presentation/controller/promocode_cubit.dart';
 import 'package:hadawi_dathboard/features/promocode/presentation/widgets/cpromo_code_bottom_sheet.dart';
+import 'package:hadawi_dathboard/features/promocode/presentation/widgets/edit_promocode_bottom_sheet.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../styles/colors/color_manager.dart';
 import '../../../../styles/text_styles/text_styles.dart';
@@ -18,15 +20,30 @@ class PromoCodeBodyView extends StatelessWidget {
 
     return BlocConsumer<PromoCodeCubit, PromoCodeState>(
       listener: (context, state) {
-        if(state is AddPromoCodeSuccessState){
+        if (state is AddPromoCodeSuccessState) {
           cubit.clearControllers();
           cubit.getPromoCodes().then((value) {
             Navigator.pop(context);
           },);
         }
+        if (state is EditCodeSuccessState) {
+          cubit.clearControllers();
+          cubit.getPromoCodes().then((value) {
+            Navigator.pop(context);
+          },);
+          toastification.show(
+            context: context,
+            type: ToastificationType.success,
+            autoCloseDuration:  const Duration(seconds: 5),
+            title: Text(
+              'تم  تعديل تفاصيل الكود بنجاح',
+              style: TextStyles.textStyle18Medium
+                  .copyWith(color: ColorManager.primaryBlue),
+            ),
+          );
+        }
       },
       builder: (context, state) {
-
         if (state is GetPromoCodesLoadingState) {
           return Center(child: CircularProgressIndicator());
         }
@@ -46,26 +63,32 @@ class PromoCodeBodyView extends StatelessWidget {
                         cubit.generateRandomCode(length: 6);
                       },
                       addPromoCode: () {
-                         if(cubit.bottomSheetFormKey.currentState!.validate()){
-                           cubit.addPromoCode();
-                         }
+                        if (cubit.bottomSheetFormKey.currentState!.validate()) {
+                          cubit.addPromoCode();
+                        }
                       },
                       onChooseDate: () {
                         showDatePicker(
                           helpText: 'اختر تاريخ انتهاء الكود',
                           context: context,
-                          firstDate: DateTime(1920),
+                          barrierDismissible: true,
+                          firstDate: DateTime.now(),
+                          initialDate: DateTime.now(),
+                          currentDate: DateTime.now(),
                           lastDate:
                           DateTime.now().add(const Duration(days: 365)),
-                        ).then((value) => cubit.setCodeExpirationDate(
-                            expirationDate: value!));
+                        ).then((value) =>
+                            cubit.setCodeExpirationDate(
+                                expirationDate: value!));
                       },
                     );
                   },
                   child: Align(
                     alignment: Alignment.center,
                     child: Container(
-                      height: MediaQuery.sizeOf(context).height * 0.05,
+                      height: MediaQuery
+                          .sizeOf(context)
+                          .height * 0.05,
                       padding:
                       EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                       decoration: BoxDecoration(
@@ -110,19 +133,24 @@ class PromoCodeBodyView extends StatelessWidget {
                         context: context,
                         firstDate: DateTime(1920),
                         lastDate:
-                            DateTime.now().add(const Duration(days: 365)),
-                      ).then((value) => cubit.setCodeExpirationDate(
-                          expirationDate: value!));
+                        DateTime.now().add(const Duration(days: 365)),
+                      ).then((value) =>
+                          cubit.setCodeExpirationDate(
+                              expirationDate: value!));
                     },
                   );
                 },
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Container(
-                    width: MediaQuery.sizeOf(context).height * 0.24,
-                    height: MediaQuery.sizeOf(context).height * 0.08,
+                    width: MediaQuery
+                        .sizeOf(context)
+                        .height * 0.24,
+                    height: MediaQuery
+                        .sizeOf(context)
+                        .height * 0.08,
                     padding:
-                        EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12.0),
@@ -140,10 +168,14 @@ class PromoCodeBodyView extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.02,
+                height: MediaQuery
+                    .sizeOf(context)
+                    .height * 0.02,
               ),
               Container(
-                height: MediaQuery.sizeOf(context).height * 0.05,
+                height: MediaQuery
+                    .sizeOf(context)
+                    .height * 0.05,
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   color: ColorManager.primaryBlue,
@@ -157,7 +189,7 @@ class PromoCodeBodyView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       buildHeaderText('كود الخصم'),
-                      buildHeaderText('الرقم المرجعي لكود الخصم'),
+                      buildHeaderText('نسبة الخصم'),
                       buildHeaderText('عدد مرات استخدام الكود'),
                       buildHeaderText('أقصي عدد مرات الاستخدام'),
                       buildHeaderText('تاريخ الانتهاء'),
@@ -190,7 +222,7 @@ class PromoCodeBodyView extends StatelessWidget {
                                 child: Text(promoCodesList.code,
                                     style: TextStyles.textStyle18Medium)),
                             Expanded(
-                                child: Text(promoCodesList.id,
+                                child: Text(promoCodesList.discount.toString(),
                                     style: TextStyles.textStyle18Medium)),
                             Expanded(
                                 child: Text(promoCodesList.used.toString(),
@@ -199,19 +231,38 @@ class PromoCodeBodyView extends StatelessWidget {
                                 child: Text(promoCodesList.maxUsage.toString(),
                                     style: TextStyles.textStyle18Medium)),
                             Expanded(
-                                child: Text(promoCodesList.expiryDate ,
+                                child: Text(promoCodesList.expiryDate,
                                     style: TextStyles.textStyle18Medium)),
                             Expanded(
-                                child: Text(promoCodesList.occasions.join(',') ,
+                                child: Text(promoCodesList.occasions.join(','),
                                     style: TextStyles.textStyle18Medium)),
                             Expanded(
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: buildIconButton(
-                                    Icons.delete, Colors.red, () {
-                                  showDeleteDialog(
-                                      context, cubit, promoCodesList.id);
-                                }),
+                              child: Row(
+                                children: [
+                                  buildIconButton(
+                                      Icons.edit, ColorManager.primaryBlue, () {
+                                    editPromoCodeBottomSheet(context: context,
+                                        cubit: cubit,
+                                        onChooseDate
+                                        :() {
+                                          showDatePicker(
+                                            helpText: 'اختر تاريخ انتهاء الكود',
+                                            context: context,
+                                            firstDate: DateTime(1920),
+                                            lastDate:
+                                            DateTime.now().add(const Duration(days: 365)),
+                                          ).then((value) =>
+                                              cubit.setCodeExpirationDate(
+                                                  expirationDate: value!));
+                                        },
+                                        codeEntity: promoCodesList);
+                                  }),
+                                  buildIconButton(
+                                      Icons.delete, Colors.red, () {
+                                    showDeleteDialog(
+                                        context, cubit, promoCodesList.id);
+                                  }),
+                                ],
                               ),
                             ),
                           ],
@@ -228,8 +279,9 @@ class PromoCodeBodyView extends StatelessWidget {
     );
   }
 }
-void showDeleteDialog(
-    BuildContext context, PromoCodeCubit cubit, String promoCodeId) {
+
+void showDeleteDialog(BuildContext context, PromoCodeCubit cubit,
+    String promoCodeId) {
   showAdaptiveDialog(
     context: context,
     builder: (context) {

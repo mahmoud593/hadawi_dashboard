@@ -30,14 +30,14 @@ class PromoCodeRepoImp extends PromoCodeRepo {
   }
 
   @override
-  Future<Either<Faliure, CodeEntity>> addPromoCode(
-      {required String code,
-      required double discount,
-      required String expireDate,
-      required int maxUsage,
-      required int used,
-        required List<String> occasions,
-      }) async {
+  Future<Either<Faliure, CodeEntity>> addPromoCode({
+    required String code,
+    required double discount,
+    required String expireDate,
+    required int maxUsage,
+    required int used,
+    required List<String> occasions,
+  }) async {
     final result = await _promoCodeDataSource.addPromoCode(
         code: code,
         discount: discount,
@@ -47,6 +47,28 @@ class PromoCodeRepoImp extends PromoCodeRepo {
         occasions: occasions);
     try {
       return Right(result);
+    } on Exception catch (e) {
+      return Left(Faliure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Faliure, bool>> editPromoCodeData(
+      {String? code,
+      double? discount,
+      String? expireDate,
+      int? maxUsage,
+      int? used,
+      required String promoCodeId})async {
+      await _promoCodeDataSource.editPromoCodeData(
+        code: code,
+        discount: discount,
+        expireDate: expireDate,
+        maxUsage: maxUsage,
+        used: used,
+        promoCodeId: promoCodeId);
+    try {
+      return Right(true);
     } on Exception catch (e) {
       return Left(Faliure(message: e.toString()));
     }

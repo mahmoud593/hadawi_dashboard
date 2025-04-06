@@ -10,6 +10,7 @@ class UserEntities  extends Equatable{
   final String uId;
   final String date;
   final String token;
+  final bool block;
 
   const UserEntities({
     required this.name,
@@ -20,10 +21,11 @@ class UserEntities  extends Equatable{
     required this.uId,
     required this.date,
     required this.token,
+    required this.block,
   });
 
   @override
   // TODO: implement props
-  List<Object?> get props => [name,phone,email,brithDate,gender,uId,date,token];
+  List<Object?> get props => [name,phone,email,brithDate,gender,uId,date,token,block];
 
 }

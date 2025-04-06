@@ -503,7 +503,7 @@ class _TaxsViewBodyState extends State<TaxsViewBody> {
                                 [ cubit.webImageBytes1!]: cubit.webImageBytes1 == null && cubit.webImageBytes2 != null?[cubit.webImageBytes2!]:[],
                                 deliveryTax: deliveryController.text,
                                 occasionType: occasionsType,
-                                serviceTax: serviceController.text,
+                                serviceTax: (double.parse(serviceController.text) / 1000).toString(),
                                 packageTax: [packingController.text, packing2Controller.text]
                             );
                           },
