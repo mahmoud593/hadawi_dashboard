@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hadawi_dathboard/features/promocode/domain/entities/code_entity.dart';
 import 'package:hadawi_dathboard/features/promocode/presentation/controller/promocode_cubit.dart';
 import 'package:hadawi_dathboard/styles/colors/color_manager.dart';
 import 'package:hadawi_dathboard/styles/text_styles/text_styles.dart';
 import 'package:hadawi_dathboard/widgets/default_button.dart';
 import 'package:hadawi_dathboard/widgets/default_text_field.dart';
 
-Future createPromoCodeBottomSheet({
+Future editPromoCodeBottomSheet({
   required BuildContext context,
   required PromoCodeCubit cubit,
-  required void Function() onGenerateCode,
-  required void Function() addPromoCode,
   required void Function() onChooseDate,
+  required CodeEntity codeEntity,
 }) async {
   await showModalBottomSheet<void>(
       context: context,
@@ -31,7 +31,7 @@ Future createPromoCodeBottomSheet({
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Form(
-                key: cubit.bottomSheetFormKey,
+                key: cubit.editBottomSheetFormKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -58,7 +58,7 @@ Future createPromoCodeBottomSheet({
                         textDirection: TextDirection.rtl,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('اضافة كود خصم',
+                          child: Text('تعديل كود الخصم',
                               style: TextStyles.textStyle18Medium),
                         )),
                     SizedBox(
@@ -69,12 +69,13 @@ Future createPromoCodeBottomSheet({
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                        width: MediaQuery.sizeOf(context).width,
+                        width: MediaQuery.sizeOf(context).width * 0.35,
                         height: MediaQuery.sizeOf(context).height * 0.1,
                         child: DefaultTextField(
                             controller: cubit.codeController,
                             hintText: 'أدخل كود الخصم',
                             enable: true,
+                            initialValue: codeEntity.code,
                             validator: (value) {
                               if (!cubit.validateCode(value: value ?? '')) {
                                 return cubit.state is ValidateCodeFailureState
@@ -104,6 +105,7 @@ Future createPromoCodeBottomSheet({
                               }
                               return null;
                             },
+                            initialValue: codeEntity.maxUsage.toString(),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.next,
                             fillColor: Colors.transparent),
@@ -119,6 +121,7 @@ Future createPromoCodeBottomSheet({
                         child: DefaultTextField(
                             controller: cubit.discountController,
                             hintText: 'أدخل الخصم',
+                            initialValue: codeEntity.discount.toString(),
                             validator: (value) {
                               if(value!.trim().isEmpty){
                                 return 'الرجاء ادخال الخصم';
@@ -141,10 +144,11 @@ Future createPromoCodeBottomSheet({
                           height: MediaQuery.sizeOf(context).height * 0.1,
                           child: DefaultTextField(
                               controller: cubit.expirationDateController,
+                              initialValue: codeEntity.expiryDate,
                               hintText: 'تاريخ انتهاء الكود',
                               validator: (value) {
-                                  return cubit.validateExpirationDate();
-                                },
+                                return cubit.validateExpirationDate();
+                              },
                               enable: false,
                               keyboardType: TextInputType.number,
                               textInputAction: TextInputAction.next,
@@ -156,15 +160,15 @@ Future createPromoCodeBottomSheet({
                     /// add button
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),
                       child: SizedBox(
                         width: double.infinity,
                         height: MediaQuery.sizeOf(context).height * 0.06,
                         child: DefaultButton(
-                          buttonText: 'اضافة',
+                          buttonText: 'تعديل',
                           onPressed: () {
-                            if (cubit.bottomSheetFormKey.currentState!.validate()) {
-                              cubit.addPromoCode();
+                            if (cubit.editBottomSheetFormKey.currentState!.validate()) {
+                              cubit.editPromoCode(codeId: codeEntity.id);
                             }
                           },
                           buttonColor: ColorManager.primaryBlue,

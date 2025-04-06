@@ -16,6 +16,7 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
   TextEditingController maxUseController = TextEditingController();
   TextEditingController expirationDateController = TextEditingController();
   GlobalKey<FormState> bottomSheetFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> editBottomSheetFormKey = GlobalKey<FormState>();
 
   String generateRandomCode({int length = 6}) {
     const String chars =
@@ -36,10 +37,6 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
       emit(ValidateCodeFailureState('الكود لا يمكن أن يكون فارغًا'));
       return false;
     }
-    if (trimmedValue.length != 6) {
-      emit(ValidateCodeFailureState('يجب أن يكون الكود 6 أحرف'));
-      return false;
-    }
     emit(ValidateCodeSuccessState());
     return true;
   }
@@ -49,7 +46,22 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
         DateFormat('yyyy-MM-dd').format(expirationDate);
     emit(SetExpirationDate());
   }
+  String? validateExpirationDate() {
+    if (expirationDateController.text == null || expirationDateController.text.isEmpty) {
+      return 'يرجى اختيار تاريخ انتهاء الكود';
+    }
+    try {
+      final selectedDate = DateTime.parse(expirationDateController.text);
+      final today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
+      if (selectedDate.isBefore(today)) {
+        return 'لا يمكن أن يكون تاريخ انتهاء الكود قبل اليوم الحالي';
+      }
+      return null;
+    } catch (e) {
+      return 'تاريخ غير صالح';
+    }
+  }
   Future<void> addPromoCode() async {
     emit(AddPromoCodeLoadingState());
     final result = await PromoCodeRepoImp().addPromoCode(
@@ -89,6 +101,28 @@ class PromoCodeCubit extends Cubit<PromoCodeState> {
     }, (occasion) {
       promoCodes.removeWhere((element) => element.id == codeId);
       emit(DeleteCodeSuccessState(promoCodes: promoCodes));
+    });
+  }
+
+  Future<void> editPromoCode({
+    required String codeId,
+    String? code,
+    double? discount,
+    String? expireDate,
+    int? maxUsage,
+  }) async {
+    emit(EditCodeLoadingState());
+    final result = await PromoCodeRepoImp().editPromoCodeData(
+      promoCodeId: codeId,
+      code: codeController.text,
+      discount: double.parse(discountController.text),
+      expireDate: expirationDateController.text,
+      maxUsage: int.parse(maxUseController.text),
+    );
+    result.fold((failure) {
+      emit(EditCodeErrorState(message: failure.message));
+    }, (occasion) {
+      emit(EditCodeSuccessState());
     });
   }
 
